@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LuxuryBiker.Data.Entities.Compras
-{s
+{ 
     public class Compras : ComprasInterface
     {
         public int IdCompra { get; set; }

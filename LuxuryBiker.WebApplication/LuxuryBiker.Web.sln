@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentacion", "Presentacion", "{C473206E-9945-4E94-8841-55B36EB5AA31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.Web", "LuxuryBiker.Web\LuxuryBiker.Web.csproj", "{84301422-50CB-4E0C-BE4F-6DAE4E121EE8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServicesReferences", "ServicesReferences", "{CC12C119-3D65-48AA-BA53-4AF4B1EE300E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.Data.Entities", "LuxuryBiker.Data.Entities\LuxuryBiker.Data.Entities.csproj", "{B2D44A2C-0EB7-4E58-B706-6F9E277CBD52}"
@@ -19,16 +17,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.Data.Model", "L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.Data.Repositry", "LuxuryBiker.Data.Repositry\LuxuryBiker.Data.Repositry.csproj", "{1F29AB40-8258-4A87-BC5E-512031EF734C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuxuryBiker.Web", "LuxuryBiker.Web\LuxuryBiker.Web.csproj", "{B4DC98EA-F521-425E-BE14-1B002827EE6B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.Logic", "LuxuryBiker.Logic\LuxuryBiker.Logic.csproj", "{795481AA-EF5F-4462-9400-47A8D84518C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{84301422-50CB-4E0C-BE4F-6DAE4E121EE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84301422-50CB-4E0C-BE4F-6DAE4E121EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84301422-50CB-4E0C-BE4F-6DAE4E121EE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84301422-50CB-4E0C-BE4F-6DAE4E121EE8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B2D44A2C-0EB7-4E58-B706-6F9E277CBD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2D44A2C-0EB7-4E58-B706-6F9E277CBD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2D44A2C-0EB7-4E58-B706-6F9E277CBD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,17 +47,26 @@ Global
 		{1F29AB40-8258-4A87-BC5E-512031EF734C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F29AB40-8258-4A87-BC5E-512031EF734C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F29AB40-8258-4A87-BC5E-512031EF734C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4DC98EA-F521-425E-BE14-1B002827EE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4DC98EA-F521-425E-BE14-1B002827EE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4DC98EA-F521-425E-BE14-1B002827EE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4DC98EA-F521-425E-BE14-1B002827EE6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{795481AA-EF5F-4462-9400-47A8D84518C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{795481AA-EF5F-4462-9400-47A8D84518C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{795481AA-EF5F-4462-9400-47A8D84518C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{795481AA-EF5F-4462-9400-47A8D84518C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{84301422-50CB-4E0C-BE4F-6DAE4E121EE8} = {C473206E-9945-4E94-8841-55B36EB5AA31}
 		{B2D44A2C-0EB7-4E58-B706-6F9E277CBD52} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
 		{A6EEDF5F-43D0-4760-AB4E-13A7C0932543} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
 		{8A795BAF-FA7A-4602-B8E4-076934E636AE} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
 		{71FBDA9D-BDEE-4873-918C-8DA2A356C155} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
 		{1F29AB40-8258-4A87-BC5E-512031EF734C} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
+		{B4DC98EA-F521-425E-BE14-1B002827EE6B} = {C473206E-9945-4E94-8841-55B36EB5AA31}
+		{795481AA-EF5F-4462-9400-47A8D84518C1} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11087D79-ABE8-4C29-9E72-4BCBDF7E0033}
