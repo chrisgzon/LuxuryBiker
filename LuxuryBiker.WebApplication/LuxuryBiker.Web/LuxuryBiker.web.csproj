@@ -4,4 +4,81 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="wwwroot\obj\Debug\net5.0\.NETCoreApp,Version=v5.0.AssemblyAttributes.cs" />
+    <Compile Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.AssemblyInfo.cs" />
+    <Compile Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.RazorAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\.env" />
+    <None Include="wwwroot\.gitignore" />
+    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.AssemblyInfoInputs.cache" />
+    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.assets.cache" />
+    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.csprojAssemblyReference.cache" />
+    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.RazorAssemblyInfo.cache" />
+    <None Include="wwwroot\obj\LuxuryBiker.Web.csproj.nuget.g.props" />
+    <None Include="wwwroot\obj\LuxuryBiker.Web.csproj.nuget.g.targets" />
+    <None Include="wwwroot\obj\project.nuget.cache" />
+    <None Include="wwwroot\public\favicon.ico" />
+    <None Include="wwwroot\public\index.html" />
+    <None Include="wwwroot\public\login.html" />
+    <None Include="wwwroot\public\logo192.png" />
+    <None Include="wwwroot\public\logo512.png" />
+    <None Include="wwwroot\public\robots.txt" />
+    <None Include="wwwroot\README.md" />
+    <None Include="wwwroot\src\App.js" />
+    <None Include="wwwroot\src\Images\Motorbike.jpg" />
+    <None Include="wwwroot\src\Images\motorbike2.jpg" />
+    <None Include="wwwroot\src\index.js" />
+    <None Include="wwwroot\src\js\demo\chart-area-demo.js" />
+    <None Include="wwwroot\src\js\demo\chart-bar-demo.js" />
+    <None Include="wwwroot\src\js\demo\chart-pie-demo.js" />
+    <None Include="wwwroot\src\js\demo\datatables-demo.js" />
+    <None Include="wwwroot\src\js\LuxuryBiker.js" />
+    <None Include="wwwroot\src\logo.svg" />
+    <None Include="wwwroot\src\reportWebVitals.js" />
+    <None Include="wwwroot\src\setupTests.js" />
+    <None Include="wwwroot\src\styles\styles.css" />
+    <None Include="wwwroot\src\styles\styles.min.css" />
+    <None Include="wwwroot\src\styles\vendor\css\all.min.css" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-brands-400.eot" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-brands-400.ttf" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-brands-400.woff" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-regular-400.eot" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-regular-400.ttf" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-regular-400.woff" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-solid-900.eot" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-solid-900.ttf" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-solid-900.woff" />
+    <None Include="wwwroot\src\styles\vendor\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\src\vendor\bootstrap\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\src\vendor\bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\src\vendor\chart.js\Chart.bundle.js" />
+    <None Include="wwwroot\src\vendor\chart.js\Chart.bundle.min.js" />
+    <None Include="wwwroot\src\vendor\chart.js\Chart.js" />
+    <None Include="wwwroot\src\vendor\chart.js\Chart.min.js" />
+    <None Include="wwwroot\src\vendor\datatables\dataTables.bootstrap4.css" />
+    <None Include="wwwroot\src\vendor\datatables\dataTables.bootstrap4.js" />
+    <None Include="wwwroot\src\vendor\datatables\dataTables.bootstrap4.min.css" />
+    <None Include="wwwroot\src\vendor\datatables\dataTables.bootstrap4.min.js" />
+    <None Include="wwwroot\src\vendor\datatables\jquery.dataTables.js" />
+    <None Include="wwwroot\src\vendor\datatables\jquery.dataTables.min.js" />
+    <None Include="wwwroot\src\vendor\jquery-easing\jquery.easing.compatibility.js" />
+    <None Include="wwwroot\src\vendor\jquery-easing\jquery.easing.js" />
+    <None Include="wwwroot\src\vendor\jquery-easing\jquery.easing.min.js" />
+    <None Include="wwwroot\src\vendor\jquery\jquery.js" />
+    <None Include="wwwroot\src\vendor\jquery\jquery.min.js" />
+    <None Include="wwwroot\src\vendor\jquery\jquery.min.map" />
+    <None Include="wwwroot\src\vendor\jquery\jquery.slim.js" />
+    <None Include="wwwroot\src\vendor\jquery\jquery.slim.min.js" />
+    <None Include="wwwroot\src\vendor\jquery\jquery.slim.min.map" />
+  </ItemGroup>
+
 </Project>
