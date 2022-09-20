@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LuxuryBiker1
+namespace LuxuryBiker.Web
 {
     public class Program
     {

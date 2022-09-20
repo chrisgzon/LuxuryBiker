@@ -5,22 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="wwwroot\obj\Debug\net5.0\.NETCoreApp,Version=v5.0.AssemblyAttributes.cs" />
-    <Compile Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.AssemblyInfo.cs" />
-    <Compile Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.RazorAssemblyInfo.cs" />
+    <Compile Remove="wwwroot\obj\**" />
+    <Content Remove="wwwroot\obj\**" />
+    <EmbeddedResource Remove="wwwroot\obj\**" />
+    <None Remove="wwwroot\obj\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\.env" />
     <None Include="wwwroot\.gitignore" />
-    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.AssemblyInfoInputs.cache" />
-    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.assets.cache" />
-    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.csprojAssemblyReference.cache" />
-    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.GeneratedMSBuildEditorConfig.editorconfig" />
-    <None Include="wwwroot\obj\Debug\net5.0\LuxuryBiker.Web.RazorAssemblyInfo.cache" />
-    <None Include="wwwroot\obj\LuxuryBiker.Web.csproj.nuget.g.props" />
-    <None Include="wwwroot\obj\LuxuryBiker.Web.csproj.nuget.g.targets" />
-    <None Include="wwwroot\obj\project.nuget.cache" />
     <None Include="wwwroot\public\favicon.ico" />
     <None Include="wwwroot\public\index.html" />
     <None Include="wwwroot\public\login.html" />
@@ -79,6 +72,22 @@
     <None Include="wwwroot\src\vendor\jquery\jquery.slim.js" />
     <None Include="wwwroot\src\vendor\jquery\jquery.slim.min.js" />
     <None Include="wwwroot\src\vendor\jquery\jquery.slim.min.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.2.2" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.29" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.47.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LuxuryBiker.Data.CustomTypes\LuxuryBiker.Data.CustomTypes.csproj" />
+    <ProjectReference Include="..\LuxuryBiker.Logic\LuxuryBiker.Logic.csproj" />
   </ItemGroup>
 
 </Project>

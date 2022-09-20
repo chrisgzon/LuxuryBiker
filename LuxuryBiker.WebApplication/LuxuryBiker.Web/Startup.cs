@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using LuxuryBiker.Data.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,8 +13,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LuxuryBiker.Data.CustomTypes.Users;
+using LuxuryBiker.web;
+using Microsoft.AspNetCore.Authentication;
+using LuxuryBiker.web.Security;
 
-namespace LuxuryBiker1
+namespace LuxuryBiker.Web
 {
     public class Startup
     {
@@ -23,7 +32,17 @@ namespace LuxuryBiker1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+
+            services.AddDbContext<LuxuryBikerDBContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString(Configuration.GetConnectionString("LuxuryBiker")));
+            });
+
+            services.AddScoped<ILuxuryBikerService, LuxuryBikerService>();
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuthentication", null);
+            services.AddAuthorization();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,12 +64,25 @@ namespace LuxuryBiker1
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapRazorPages();
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controlller=Home}/{action=Index}/{id?}");
             });
+
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = Configuration.GetValue<string>("client");
+
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
         }
     }
 }

@@ -4,4 +4,14 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="6.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LuxuryBiker.Data.CustomTypes\LuxuryBiker.Data.CustomTypes.csproj" />
+    <ProjectReference Include="..\LuxuryBiker.Data.Repositry\LuxuryBiker.Data.Repositry.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LuxuryBiker.Data.CustomTypes\LuxuryBiker.Data.CustomTypes.csproj" />
+    <ProjectReference Include="..\LuxuryBiker.Data.Model\LuxuryBiker.Data.Model.csproj" />
+  </ItemGroup>
+
 </Project>
