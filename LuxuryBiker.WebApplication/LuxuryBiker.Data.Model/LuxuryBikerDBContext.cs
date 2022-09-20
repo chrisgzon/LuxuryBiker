@@ -68,5 +68,14 @@ namespace LuxuryBiker.Data.Model
 
             base.OnModelCreating(modelBuilder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-TERFBNJ\\MSSQLSERVER2019;Initial Catalog=LuxuryBiker;User ID=sa;Password=D@v1d*21;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            }
+            base.OnConfiguring(optionsBuilder);
+        }
     }
 }
