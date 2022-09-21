@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,6 +16,9 @@ using LuxuryBiker.Data.CustomTypes.Users;
 using LuxuryBiker.web;
 using Microsoft.AspNetCore.Authentication;
 using LuxuryBiker.web.Security;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LuxuryBiker.Web
 {
@@ -32,17 +34,30 @@ namespace LuxuryBiker.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<LuxuryBikerDBContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString(Configuration.GetConnectionString("LuxuryBiker")));
-            });
-
             services.AddScoped<ILuxuryBikerService, LuxuryBikerService>();
-            services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuthentication", null);
+            var keyToken = Configuration.GetValue<string>("keyToken");
+            var bytesKeyToken = Encoding.ASCII.GetBytes(keyToken);
+            services.AddAuthentication(e =>
+            {
+                e.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                e.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(e=>
+            {
+                e.RequireHttpsMetadata = false;
+                e.SaveToken = true;
+                e.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(bytesKeyToken),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
             services.AddAuthorization();
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,29 +75,27 @@ namespace LuxuryBiker.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controlller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
 
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = Configuration.GetValue<string>("client");
 
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseReactDevelopmentServer(npmScript: "start");
-            //    }
-            //});
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = Configuration.GetValue<string>("client");
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
         }
     }
 }

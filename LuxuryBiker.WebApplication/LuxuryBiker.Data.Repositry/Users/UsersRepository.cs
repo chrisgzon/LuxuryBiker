@@ -24,6 +24,7 @@ namespace LuxuryBiker.Data.Repositry.Users
                 return ctx.Users.Where(x => x.UserName == username)
                     .Select(x => new CustomTypes.Users.Users
                     {
+                        IdUsuario = x.IdUsuario,
                         UserName = x.UserName,
                         Email = x.Email,
                         Roles = x.Roles.Select(r => new CustomTypes.Users.UsrUsuario_UsrRol
