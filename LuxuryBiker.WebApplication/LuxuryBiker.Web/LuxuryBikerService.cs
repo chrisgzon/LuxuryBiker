@@ -27,7 +27,7 @@ namespace LuxuryBiker.web
 
         public ActionResult<Users> Login(string username, string password)
         {
-            return new LoginLogic().CheckLogin(username, password);
+            return null;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LuxuryBiker.Data.CustomTypes.Users;
+﻿using LuxuryBiker.Data.CustomTypes.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;

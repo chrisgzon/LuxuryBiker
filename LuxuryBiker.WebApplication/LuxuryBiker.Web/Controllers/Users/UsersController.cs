@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LuxuryBiker.web.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,23 @@ namespace LuxuryBiker.web.Controllers.Users
     {
         [Route("getUsers")]
         [HttpGet]
-        public List<string> getUsers()
+        public ActionResult<List<string>> getUsers()
         {
             var list = new List<string>();
             list.Add("Jose");
             list.Add("Andres");
             list.Add("Manuel");
-            return list;
+            return Ok(list);
+        }
+        [Route("Login")]
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult<Data.CustomTypes.Users.Users> Login(Data.CustomTypes.Users.Users user)
+        {
+            var usuario = new LoginLogic().CheckLogin(user.UserName, user.PasswordHash);
+            if (usuario != null) return Ok(usuario);
+
+            return BadRequest("Usuario y/o contraseña ivalidas");
         }
     }
 }
