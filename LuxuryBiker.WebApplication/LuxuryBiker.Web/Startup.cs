@@ -34,7 +34,6 @@ namespace LuxuryBiker.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ILuxuryBikerService, LuxuryBikerService>();
             var keyToken = Configuration.GetValue<string>("keyToken");
             var bytesKeyToken = Encoding.ASCII.GetBytes(keyToken);
             services.AddAuthentication(e =>
@@ -53,6 +52,7 @@ namespace LuxuryBiker.Web
                     ValidateAudience = false
                 };
             });
+            services.AddHttpContextAccessor();
             services.AddAuthorization();
             services.AddControllers(options => options.EnableEndpointRouting = false);
 

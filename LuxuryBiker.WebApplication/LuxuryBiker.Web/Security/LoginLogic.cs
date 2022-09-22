@@ -34,7 +34,7 @@ namespace LuxuryBiker.web.Security
 
                 return usuario;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -71,7 +71,7 @@ namespace LuxuryBiker.web.Security
                     new Claim[]
                     {
                         new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario),
-                        new Claim(ClaimTypes.Email, usuario.Email)
+                        new Claim(ClaimTypes.Name, usuario.UserName)
                     }),
                 Expires = DateTime.UtcNow.AddDays(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(bytesKeyToken), SecurityAlgorithms.HmacSha256)
@@ -85,6 +85,24 @@ namespace LuxuryBiker.web.Security
             PasswordHasher<string> pw = new PasswordHasher<string>();
             string passwordHashed = pw.HashPassword(userName, password);
             return passwordHashed;
+        }
+        public Data.CustomTypes.Users.Users Whoami()
+        {
+            try
+            {
+                var user = new HttpContextAccessor().HttpContext.User;
+                var idUsuario = user.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(x => x.Value).FirstOrDefault();
+                if (String.IsNullOrEmpty(idUsuario)) return null;
+
+                var usuario = _usersLogic.getUserById(idUsuario);
+                usuario.Claims = user.Claims.Select(s => new Claim(s.Type, s.Value)).ToList();
+                return usuario;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
         }
     }
 }
