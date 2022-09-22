@@ -27,6 +27,8 @@ namespace LuxuryBiker.Data.Repositry.Users
                         IdUsuario = x.IdUsuario,
                         UserName = x.UserName,
                         Email = x.Email,
+                        Apellidos = x.Apellidos,
+                        Nombres = x.Nombres,
                         Roles = x.Roles.Select(r => new CustomTypes.Users.UsrUsuario_UsrRol
                         {
                             Rol = new CustomTypes.Users.UsrRoles
@@ -48,13 +50,15 @@ namespace LuxuryBiker.Data.Repositry.Users
                         IdUsuario = x.IdUsuario,
                         UserName = x.UserName,
                         Email = x.Email,
+                        Apellidos = x.Apellidos,
+                        Nombres = x.Nombres,
                         Roles = x.Roles.Select(r => new CustomTypes.Users.UsrUsuario_UsrRol
-                            {
-                                Rol = new CustomTypes.Users.UsrRoles
                                 {
-                                    NombreRol = r.Rol.NombreRol,
-                                    IdRol = r.Rol.IdRol
-                                }
+                                    Rol = new CustomTypes.Users.UsrRoles
+                                    {
+                                        NombreRol = r.Rol.NombreRol,
+                                        IdRol = r.Rol.IdRol
+                                    }
                             }).ToList(),
                     }).FirstOrDefault();
             }

@@ -20,7 +20,7 @@ namespace LuxuryBiker.web.Security
         {
             _usersLogic = new UsersLogic();
         }
-        public Data.CustomTypes.Users.Users CheckLogin(string username, string password)
+        public Data.CustomTypes.Users.Users CheckLogin(string username, string password, bool rememberme)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace LuxuryBiker.web.Security
                 if (validUser)
                 {
                     usuario = _usersLogic.getUserByEmail(username);
-                    usuario.Token = GetToken(usuario);
+                    usuario.Token = GetToken(usuario, rememberme);
                 }
 
                 return usuario;
@@ -59,7 +59,7 @@ namespace LuxuryBiker.web.Security
                 return false;
             }
         }
-        private string GetToken(Data.CustomTypes.Users.Users usuario)
+        private string GetToken(Data.CustomTypes.Users.Users usuario, bool rememberme)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -73,7 +73,7 @@ namespace LuxuryBiker.web.Security
                         new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario),
                         new Claim(ClaimTypes.Name, usuario.UserName)
                     }),
-                Expires = DateTime.UtcNow.AddDays(60),
+                Expires = rememberme ? DateTime.UtcNow.AddDays(2) : DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(bytesKeyToken), SecurityAlgorithms.HmacSha256)
             };
 

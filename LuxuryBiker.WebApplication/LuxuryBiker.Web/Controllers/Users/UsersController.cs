@@ -26,10 +26,10 @@ namespace LuxuryBiker.web.Controllers.Users
         [AllowAnonymous]
         public ActionResult<Data.CustomTypes.Users.Users> Login(Data.CustomTypes.Users.Users user)
         {
-             var usuario = new LoginLogic().CheckLogin(user.UserName, user.PasswordHash);
+             var usuario = new LoginLogic().CheckLogin(user.UserName, user.PasswordHash, user.Rememberme);
             if (usuario != null) return Ok(usuario);
 
-            return BadRequest("Usuario y/o contraseña ivalidas");
+            return BadRequest("Usuario y/o Contraseña invalidas");
         }
         [Route("Usuarios/Whoami")]
         [HttpGet]
