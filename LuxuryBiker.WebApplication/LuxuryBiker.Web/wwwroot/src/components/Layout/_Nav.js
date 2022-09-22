@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default function Nav() {
+export default function Nav({usuario, logout}) {
     return(
         /* Topbar */
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -12,7 +12,7 @@ export default function Nav() {
         {/*Topbar Search*/}
         <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div className="input-group">
-                <input type="text" className="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                <input type="text" className="form-control bg-light border-0 small" placeholder="Realizar busqueda..." aria-label="Search" aria-describedby="basic-addon2" />
                 <div className="input-group-append">
                     <button className="btn btn-primary" type="button">
                         <i className="fas fa-search fa-sm"></i>
@@ -107,7 +107,7 @@ export default function Nav() {
                     </h6>
                     <a className="dropdown-item d-flex align-items-center" href="#">
                         <div className="dropdown-list-image mr-3">
-                            <img className="rounded-circle" src="img/undraw_profile_1.svg" alt="..." />
+                            <img className="rounded-circle" src="/src/Images/undraw_profile_1.svg" alt="..." />
                             <div className="status-indicator bg-success"></div>
                         </div>
                         <div className="font-weight-bold">
@@ -118,7 +118,7 @@ export default function Nav() {
                     </a>
                     <a className="dropdown-item d-flex align-items-center" href="#">
                         <div className="dropdown-list-image mr-3">
-                            <img className="rounded-circle" src="img/undraw_profile_2.svg" alt="..." />
+                            <img className="rounded-circle" src="/../src/Images/undraw_profile_2.svg" alt="..." />
                             <div className="status-indicator"></div>
                         </div>
                         <div>
@@ -129,7 +129,7 @@ export default function Nav() {
                     </a>
                     <a className="dropdown-item d-flex align-items-center" href="#">
                         <div className="dropdown-list-image mr-3">
-                            <img className="rounded-circle" src="img/undraw_profile_3.svg" alt="..." />
+                            <img className="rounded-circle" src="/src/Images/undraw_profile_3.svg" alt="..." />
                             <div className="status-indicator bg-warning"></div>
                         </div>
                         <div>
@@ -158,8 +158,8 @@ export default function Nav() {
             {/* Nav Item - User Information  */}
             <li className="nav-item dropdown no-arrow">
                 <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span className="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                    <img className="img-profile rounded-circle" src="img/undraw_profile.svg" />
+                    <span className="mr-2 d-none d-lg-inline text-gray-600 small">{usuario.nombres} {usuario.apellidos}</span>
+                    <img className="img-profile rounded-circle" src={window.location.origin + '/Images/undraw_profile.svg'} />
                 </a>
                 {/* Dropdown - User Information  */}
                 <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -176,9 +176,9 @@ export default function Nav() {
                         Activity Log
                     </a>
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <a href='#' className="dropdown-item" onClick={logout} data-toggle="modal" data-target="#logoutModal">
                         <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Logout
+                        Cerrar sesión
                     </a>
                 </div>
             </li>

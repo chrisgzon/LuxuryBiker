@@ -3,16 +3,18 @@ import $ from 'jquery';
 import Main from './components/Main';
 import { Link } from 'react-router-dom';
 
-const Login = ({ loggin, mostrarAlert }) => {
+const Login = ({ loggin }) => {
 	const [login, setLogin] = useState({
 		username: 'Email...',
 		password: 'Password...',
+		rememberme: false
 	});
+	const [error, setError] = useState(null)
 
 	const handleInputChange = (event) => {
 		setLogin({
 			...login,
-			[event.target.name]: event.target.value,
+			[event.target.name]: event.target.name == "rememberme" ? event.target.checked : event.target.value,
 		});
 	};
 
@@ -20,10 +22,9 @@ const Login = ({ loggin, mostrarAlert }) => {
 		e.preventDefault();
 
 		try {
-			await loggin(login.username, login.password);
+			await loggin(login.username, login.password, login.rememberme);
 		} catch (error) {
-			// mostrarAlert(error.response.data)
-			console.log(error);
+			setError(error.response.data)
 		}
 	};
 
@@ -43,6 +44,9 @@ const Login = ({ loggin, mostrarAlert }) => {
 									<div className="p-5">
 										<div className="text-center">
 											<h1 className="h4 text-gray-900 mb-4">¡Bienvenido de vuelta!</h1>
+											{(error) ? (
+												<p>{error}</p>
+											):""}
 										</div>
 										<form className="user" onSubmit={handleSubmit}>
 											<div className="form-group">
@@ -66,7 +70,8 @@ const Login = ({ loggin, mostrarAlert }) => {
 											</div>
 											<div className="form-group">
 												<div className="custom-control custom-checkbox small">
-													<input type="checkbox" className="custom-control-input" id="customCheck" />
+													<input type="checkbox" className="custom-control-input" id="customCheck" name="rememberme"
+													onChange={handleInputChange} />
 													<label className="custom-control-label" htmlFor="customCheck">Recordarme</label>
 												</div>
 											</div>

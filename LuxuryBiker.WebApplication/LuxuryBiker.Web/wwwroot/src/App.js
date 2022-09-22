@@ -25,20 +25,17 @@ initAxiosInterceptors();
 
 export default function App () {
     const [usuario, setUsuario] = useState(null);
-    const [cargandoUsuario, setCargandoUsuario] = useState(true);
     const [alert, setAlert] = useState(null);
 
     useEffect (() => {
         const cargaUsuario = async () => {
             if (!getToken()) {
-                setCargandoUsuario(false);
                 return;
             }
             
             try {
                 const { data: usuario } = await Axios.get('/Usuarios/Whoami')
                 setUsuario(usuario);
-                setCargandoUsuario(false);
             } catch (error) {
                 console.log(error)
             }
@@ -47,52 +44,42 @@ export default function App () {
         cargaUsuario();
     }, []);
 
-    const login = async (username, password) => {
+    const login = async (username, password, rememberme) => {
         const { data: usuario } = await Axios.post('/Usuarios/Login',
             {
                 UserName: username,
-                PasswordHash: password
+                PasswordHash: password,
+                rememberme: rememberme
             }
         );
         setUsuario(usuario);
         setToken(usuario.token);
     }
 
-    const signup = async (usuario) => {
-		const { data } = await axios.post(
-			'/api/usuarios/signup',
-			usuario
-		);
-
-		setUsuario(usuario);
-		setToken(usuario.token);
-	};
-
     const mostrarAlert = (mensaje) => {
 		setAlert(mensaje);
 	};
+
+    const ocultarAlert = () => {
+        setAlert(null);
+    }
 
 	const logout = () => {
 		setUsuario(null);
 		deleteToken();
 	};
 
-    if (cargandoUsuario) {
-		return (
-			<Main center>
-			</Main>
-		);
-	}
-
     return (
         <Routes>
+            <Alert mensaje={alert} typeAlert={""} ocultarAlert={ocultarAlert}/>
 			{usuario ? (
+                // si el usuario esta logueado se renderiza layout
 				 <div id='wrapper'>
-                    <Sidebar />
+                    <Sidebar usuario={usuario} />
                     <div id="content-wrapper" className="d-flex flex-column">
                         {/* Main Content */}
                         <div id="content">
-                            <Nav />
+                            <Nav usuario={usuario} logout={logout} />
                             {/* Begin Page Content  */}
                             <div className="container-fluid">
                                 <Main center />
@@ -103,9 +90,9 @@ export default function App () {
                     </div> 
                 </div>
 			) : (
+                // si el usuario no esta logueado renderiza el login
 				<Login loggin={login} />
 			)}
 		</Routes>
 	);
-
 }
