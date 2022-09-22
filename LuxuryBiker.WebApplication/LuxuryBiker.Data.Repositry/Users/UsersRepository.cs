@@ -35,9 +35,28 @@ namespace LuxuryBiker.Data.Repositry.Users
                                 IdRol = r.Rol.IdRol
                             }
                         }).ToList(),
-
                     })
                     .FirstOrDefault();
+            }
+        }
+        public CustomTypes.Users.Users getUserById(string idUsuario)
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                return ctx.Users.Where(x => x.IdUsuario.Equals(idUsuario)).Select(x => new CustomTypes.Users.Users
+                    {
+                        IdUsuario = x.IdUsuario,
+                        UserName = x.UserName,
+                        Email = x.Email,
+                        Roles = x.Roles.Select(r => new CustomTypes.Users.UsrUsuario_UsrRol
+                            {
+                                Rol = new CustomTypes.Users.UsrRoles
+                                {
+                                    NombreRol = r.Rol.NombreRol,
+                                    IdRol = r.Rol.IdRol
+                                }
+                            }).ToList(),
+                    }).FirstOrDefault();
             }
         }
     }

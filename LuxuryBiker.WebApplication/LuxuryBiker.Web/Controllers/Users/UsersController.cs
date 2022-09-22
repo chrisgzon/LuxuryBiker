@@ -11,7 +11,7 @@ namespace LuxuryBiker.web.Controllers.Users
     [Authorize]
     public class UsersController : ControllerBase
     {
-        [Route("getUsers")]
+        [Route("Usuarios/getUsers")]
         [HttpGet]
         public ActionResult<List<string>> getUsers()
         {
@@ -21,15 +21,23 @@ namespace LuxuryBiker.web.Controllers.Users
             list.Add("Manuel");
             return Ok(list);
         }
-        [Route("Login")]
+        [Route("Usuarios/Login")]
         [HttpPost]
         [AllowAnonymous]
         public ActionResult<Data.CustomTypes.Users.Users> Login(Data.CustomTypes.Users.Users user)
         {
-            var usuario = new LoginLogic().CheckLogin(user.UserName, user.PasswordHash);
+             var usuario = new LoginLogic().CheckLogin(user.UserName, user.PasswordHash);
             if (usuario != null) return Ok(usuario);
 
             return BadRequest("Usuario y/o contraseña ivalidas");
+        }
+        [Route("Usuarios/Whoami")]
+        [HttpGet]
+        public ActionResult whoami()
+        {
+            var user = new LoginLogic().Whoami();
+            if (user == null) return BadRequest(null);
+            return Ok(user);
         }
     }
 }

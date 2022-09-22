@@ -20,7 +20,7 @@ namespace LuxuryBiker.Logic.Users
             try
             {
                 return _usersRepository.getPasswordByEmail(username);
-            } catch (Exception ex)
+            } catch (Exception)
             {
                 return null;
             }
@@ -30,6 +30,17 @@ namespace LuxuryBiker.Logic.Users
             try
             {
                 return _usersRepository.getUserByEmail(username);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public Data.CustomTypes.Users.Users getUserById(string idUsuario)
+        {
+            try
+            {
+                return _usersRepository.getUserById(idUsuario);
             }
             catch (Exception)
             {
