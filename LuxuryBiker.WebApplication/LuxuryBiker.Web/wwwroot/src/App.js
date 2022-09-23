@@ -13,7 +13,7 @@ import {
 } from './helpers/auth-helpers';
 
 import Login from './views/Login';
-import Signup from './views/Signup';
+import Register from './views/Register';
 import Layout from './components/Layout/Layout';
 import Home from './views/Home';
 import Loading from "./components/Loading";
@@ -56,9 +56,10 @@ export default function App () {
     }
 
     const signup = async (usuario) => {
-        const { data } = await Axios.post("/api/usuarios/signup", usuario);
-        setUsuario(data);
+        const { data } = await Axios.post("/Usuarios/register", usuario);
+        setUsuario({data});
         setToken(data.token);
+        window.location.href = "/";
     };
 
 	const logout = () => {
@@ -103,8 +104,8 @@ const LogoutRoutes = ({ login, signup }) => {
     return (
         <Routes>
             <Route
-                path="/signup"
-                element={<Signup signup={signup} />}
+                path="/register"
+                element={<Register signup={signup} />}
             />
             <Route path='/'
                 element={<Login loggin={login} />}

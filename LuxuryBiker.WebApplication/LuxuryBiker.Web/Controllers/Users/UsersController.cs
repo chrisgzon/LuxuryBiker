@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.web.Security;
+﻿using LuxuryBiker.Logic.Users;
+using LuxuryBiker.web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,15 +12,10 @@ namespace LuxuryBiker.web.Controllers.Users
     [Authorize]
     public class UsersController : ControllerBase
     {
-        [Route("Usuarios/getUsers")]
-        [HttpGet]
-        public ActionResult<List<string>> getUsers()
+        private readonly UsersLogic _usersLogic;
+        public UsersController()
         {
-            var list = new List<string>();
-            list.Add("Jose");
-            list.Add("Andres");
-            list.Add("Manuel");
-            return Ok(list);
+            _usersLogic = new UsersLogic();
         }
         [Route("Usuarios/Login")]
         [HttpPost]
@@ -37,6 +33,18 @@ namespace LuxuryBiker.web.Controllers.Users
         {
             var user = new LoginLogic().Whoami();
             if (user == null) return BadRequest(null);
+            return Ok(user);
+        }
+        [Route("Usuarios/register")]
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Register(Data.CustomTypes.Users.Users usuario)
+        {
+            var user = _usersLogic.getPasswordByEmail(usuario.UserName);
+            if (user != null)
+            {
+                return BadRequest("Ya existe un usuario registrado con este email");
+            }
             return Ok(user);
         }
     }

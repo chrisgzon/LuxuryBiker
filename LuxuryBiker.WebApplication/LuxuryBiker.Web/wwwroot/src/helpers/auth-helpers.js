@@ -34,7 +34,7 @@ export function initAxiosInterceptors() {
         function(error) {
             if (error.response.status === 401) {
 				deleteToken();
-				window.location = '/login';
+				window.location = '/';
 			} else {
 				return Promise.reject(error);
 			}
