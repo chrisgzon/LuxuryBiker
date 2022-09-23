@@ -1,7 +1,53 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Link from 'react-router-dom';
+import $ from 'jquery';
 
 export default function Sidebar({ usuario }) {
+
+    // Toggle the side navigation
+    const onClickSidebar = () => {
+        $("body").toggleClass("sidebar-toggled");
+        $(".sidebar").toggleClass("toggled");
+    }
+
+    // Close any open menu accordions when window is resized below 768px
+    $(window).on('resize', function() {        
+        // Toggle the side navigation when window is resized below 480px
+        if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
+        $("body").addClass("sidebar-toggled");
+        $(".sidebar").addClass("toggled");
+        };
+    });
+
+    // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
+    $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
+        if ($(window).width() > 768) {
+        var e0 = e.originalEvent,
+            delta = e0.wheelDelta || -e0.detail;
+        this.scrollTop += (delta < 0 ? 1 : -1) * 30;
+        e.preventDefault();
+        }
+    });
+  
+    // Scroll to top button appear
+    $(document).on('scroll', function() {
+        var scrollDistance = $(this).scrollTop();
+        if (scrollDistance > 100) {
+        $('.scroll-to-top').fadeIn();
+        } else {
+        $('.scroll-to-top').fadeOut();
+        }
+    });
+    
+    // Smooth scrolling using jQuery easing
+    $(document).on('click', 'a.scroll-to-top', function(e) {
+        var $anchor = $(this);
+        $('html, body').stop().animate({
+        scrollTop: ($($anchor.attr('href')).offset().top)
+        }, 1000, 'easeInOutExpo');
+        e.preventDefault();
+    });
+
     return (
         <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             {/*Sidebar - Brand*/}
@@ -105,7 +151,7 @@ export default function Sidebar({ usuario }) {
 
             {/*Sidebar Toggler (Sidebar)*/}
             <div className="text-center d-none d-md-inline">
-                <button className="rounded-circle border-0" id="sidebarToggle"></button>
+                <button className="rounded-circle border-0" id="sidebarToggle" onClick={onClickSidebar}></button>
             </div>    
         </ul>
     )
