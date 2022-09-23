@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import $ from 'jquery';
-import Main from './components/Main';
 import { Link } from 'react-router-dom';
 
 const Login = ({ loggin }) => {
@@ -81,10 +80,10 @@ const Login = ({ loggin }) => {
 										</form>
 										<hr />
 										<div className="text-center">
-											<p className="small"><Link to="/Index">¿Olvidaste tu contraseña?</Link></p>
+											<p className="small">¿Olvidaste tu contraseña?</p>
 										</div>
 										<div className="text-center">
-											<p className="small"><Link to="/Index">¡Crear una cuenta!</Link></p>
+											<p className="small"><Link to="/signup">¡Crear una cuenta!</Link></p>
 										</div>
 									</div>
 								</div>

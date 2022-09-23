@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import {
-	BrowserRouter as Routes,
+	BrowserRouter as Router,
 	Route,
-	Switch,
+	Routes
 } from 'react-router-dom';
 import {
 	setToken,
@@ -11,31 +11,30 @@ import {
 	initAxiosInterceptors,
     deleteToken
 } from './helpers/auth-helpers';
-import Nav from './components/Layout/_Nav';
-import Sidebar from './components/Layout/_Sidebar';
-import Footer from './components/Layout/_Footer';
-import Main from './components/Main';
-import Alert from "./components/Alert";
 
-import Login from './Login';
-// import Signup from './view/Signup';
-// import Upload from './view/Upload';
+import Login from './views/Login';
+import Signup from './views/Signup';
+import Layout from './components/Layout/Layout';
+import Home from './views/Home';
+import Loading from "./components/Loading";
 
 initAxiosInterceptors();
 
 export default function App () {
     const [usuario, setUsuario] = useState(null);
-    const [alert, setAlert] = useState(null);
+    const [cargandoUsuario, setCargandoUsuario] = useState(true);
 
     useEffect (() => {
         const cargaUsuario = async () => {
             if (!getToken()) {
+               setCargandoUsuario(false);
                 return;
             }
             
             try {
                 const { data: usuario } = await Axios.get('/Usuarios/Whoami')
                 setUsuario(usuario);
+                setCargandoUsuario(false);
             } catch (error) {
                 console.log(error)
             }
@@ -56,43 +55,60 @@ export default function App () {
         setToken(usuario.token);
     }
 
-    const mostrarAlert = (mensaje) => {
-		setAlert(mensaje);
-	};
-
-    const ocultarAlert = () => {
-        setAlert(null);
-    }
+    const signup = async (usuario) => {
+        const { data } = await Axios.post("/api/usuarios/signup", usuario);
+        setUsuario(data);
+        setToken(data.token);
+    };
 
 	const logout = () => {
 		setUsuario(null);
 		deleteToken();
 	};
 
+  if (cargandoUsuario) {
     return (
-        <Routes>
-            <Alert mensaje={alert} typeAlert={""} ocultarAlert={ocultarAlert}/>
-			{usuario ? (
-                // si el usuario esta logueado se renderiza layout
-				 <div id='wrapper'>
-                    <Sidebar usuario={usuario} />
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        {/* Main Content */}
-                        <div id="content">
-                            <Nav usuario={usuario} logout={logout} />
-                            {/* Begin Page Content  */}
-                            <div className="container-fluid">
-                                <Main center />
-                            </div>
-                        </div>
-                        {/* End of Main Content  */}
-                        <Footer />
-                    </div> 
-                </div>
-			) : (
-                // si el usuario no esta logueado renderiza el login
-				<Login loggin={login} />
-			)}
-		</Routes>
+        <Loading />
+    );
+  }
+
+    return (
+      <Router>
+        {usuario ? (
+          // si el usuario esta logueado se renderiza layout y habilitan rutas
+          <LoginRoutes
+              usuario={usuario}
+              logout={logout}
+          />
+        ) : (
+          // si el usuario no esta logueado solo se habilitan rutas de registro y login
+          <LogoutRoutes login={login} signup={signup} />
+        )}
+		  </Router>
 	);
 }
+
+const LoginRoutes = ({ usuario, logout }) => {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={<Layout usuario={usuario} logout={logout} replace><Home /></Layout>}
+      />
+    </Routes>
+  );
+};
+  
+const LogoutRoutes = ({ login, signup }) => {
+    return (
+        <Routes>
+            <Route
+                path="/signup"
+                element={<Signup signup={signup} />}
+            />
+            <Route path='/'
+                element={<Login loggin={login} />}
+            />
+        </Routes>
+    );
+};
