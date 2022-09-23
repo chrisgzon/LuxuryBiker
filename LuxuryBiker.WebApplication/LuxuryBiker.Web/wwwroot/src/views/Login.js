@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 const Login = ({ loggin }) => {
 	const [login, setLogin] = useState({
-		username: 'Email...',
-		password: 'Password...',
+		username: 'Usuario...',
+		password: 'Contraseña...',
 		rememberme: false
 	});
 	const [error, setError] = useState(null)
@@ -83,7 +83,7 @@ const Login = ({ loggin }) => {
 											<p className="small">¿Olvidaste tu contraseña?</p>
 										</div>
 										<div className="text-center">
-											<p className="small"><Link to="/signup">¡Crear una cuenta!</Link></p>
+											<p className="small"><Link to="/register">¡Crear una cuenta!</Link></p>
 										</div>
 									</div>
 								</div>
