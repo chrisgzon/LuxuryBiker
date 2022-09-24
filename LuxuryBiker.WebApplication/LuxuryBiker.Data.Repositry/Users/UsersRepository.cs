@@ -1,6 +1,8 @@
 ﻿using LuxuryBiker.Data.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,6 +63,51 @@ namespace LuxuryBiker.Data.Repositry.Users
                                     }
                             }).ToList(),
                     }).FirstOrDefault();
+            }
+        }
+        public bool registerNewUser(Data.CustomTypes.Users.Users usuario)
+        {
+            using (var ctx = new LuxuryBikerDBContext()) {
+                var username = new SqlParameter
+                {
+                    ParameterName = "@USERNAME",
+                    Value = usuario.UserName,
+                    SqlDbType = System.Data.SqlDbType.VarChar,
+                    DbType = System.Data.DbType.String
+                };
+                var password = new SqlParameter
+                {
+                    ParameterName = "@PASSWORD",
+                    Value = usuario.PasswordHash,
+                    SqlDbType = System.Data.SqlDbType.VarChar,
+                    DbType = System.Data.DbType.String
+                };
+                var nombres = new SqlParameter
+                {
+                    ParameterName = "@NOMBRES",
+                    Value = usuario.Nombres,
+                    SqlDbType = System.Data.SqlDbType.VarChar,
+                    DbType = System.Data.DbType.String
+                };
+                var apellidos = new SqlParameter
+                {
+                    ParameterName = "@APELLIDOS",
+                    Value = usuario.Apellidos,
+                    SqlDbType = System.Data.SqlDbType.VarChar,
+                    DbType = System.Data.DbType.String
+                };
+                var identificacion = new SqlParameter
+                {
+                    ParameterName = "@IDENTIFICACION",
+                    Value = usuario.Identificacion,
+                    SqlDbType = System.Data.SqlDbType.VarChar,
+                    DbType = System.Data.DbType.String
+                };
+
+                String sql = "EXEC REGISTER_NEW_USER @USERNAME, @PASSWORD, @NOMBRES, @APELLIDOS, @IDENTIFICACION";
+
+                var c = ctx.Database.ExecuteSqlRaw(sql, username, password, nombres, apellidos, identificacion);
+                return true;
             }
         }
     }

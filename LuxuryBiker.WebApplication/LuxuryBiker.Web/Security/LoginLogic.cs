@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Logic.Users;
+﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Logic.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -20,23 +21,38 @@ namespace LuxuryBiker.web.Security
         {
             _usersLogic = new UsersLogic();
         }
-        public Data.CustomTypes.Users.Users CheckLogin(string username, string password, bool rememberme)
+        public ResponseGeneric<Data.CustomTypes.Users.Users> CheckLogin(string username, string password, bool rememberme)
         {
             try
             {
-                Data.CustomTypes.Users.Users usuario = null;
+                username = username.Trim();
+                /* -------------------------------- Se valida si las credenciales son correctas ------------------------*/
                 var validUser = CheckPassword(username, password);
-                if (validUser)
+                if (!validUser)
                 {
-                    usuario = _usersLogic.getUserByEmail(username);
-                    usuario.Token = GetToken(usuario, rememberme);
+                    return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                    {
+                        Error = true,
+                        Mensaje = "Usuario y/o Contraseña invalidas"
+                    };
                 }
 
-                return usuario;
+                /* ------------------------ Se obtienen datos del usuario autenticado y se crea Token con JWT -------------- */
+                var usuario = _usersLogic.getUserByEmail(username);
+                usuario.Token = GetToken(usuario, rememberme);
+                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                {
+                    Error = false,
+                    Result = usuario
+                };
             }
             catch (Exception)
             {
-                return null;
+                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                {
+                    Error = true,
+                    Mensaje = "Error al realizar el ingreso"
+                };
             }
         }
         public bool CheckPassword(string userName, string password)
@@ -45,8 +61,12 @@ namespace LuxuryBiker.web.Security
             {
                 string passwordDB = null;
                 bool loggedIn = false;
+
+                /* ---------------- Se obtiene contraseña registrada en BD del username que se haya recibido desde el login ------- */
                 passwordDB = _usersLogic.getPasswordByEmail(userName);
                 PasswordHasher<string> pw = new PasswordHasher<string>();
+
+                /* ----------------------------- Se valida si las credenciales son correctas --------------------------------- */
                 var verificationResult = pw.VerifyHashedPassword(userName, passwordDB, password);
                 if (verificationResult == PasswordVerificationResult.Success)
                     loggedIn = true;
@@ -86,22 +106,41 @@ namespace LuxuryBiker.web.Security
             string passwordHashed = pw.HashPassword(userName, password);
             return passwordHashed;
         }
-        public Data.CustomTypes.Users.Users Whoami()
+        public ResponseGeneric<Data.CustomTypes.Users.Users> Whoami()
         {
             try
             {
+                /*---------------------------------- Se busca IdUsuario en cookies -----------------------------*/
                 var user = new HttpContextAccessor().HttpContext.User;
                 var idUsuario = user.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(x => x.Value).FirstOrDefault();
-                if (String.IsNullOrEmpty(idUsuario)) return null;
+                
+                /*-------------------------- No se encontro un usuario autenticado -----------------------------*/
+                if (String.IsNullOrEmpty(idUsuario)) {
+                    return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                    {
+                        Error = true,
+                        Mensaje = "No hay un usario autenticado"
+                    };
+                }
 
+                /*--------------------------- Se Obtienen datos del usuario logueado para retornarlos --------------*/
                 var usuario = _usersLogic.getUserById(idUsuario);
                 usuario.Claims = user.Claims.Select(s => new Claim(s.Type, s.Value)).ToList();
-                return usuario;
+
+                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                {
+                    Error = false,
+                    Result = usuario
+                };
             }
             catch (Exception)
             {
 
-                return null;
+                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                {
+                    Error = true,
+                    Mensaje = "Ocurrio un error al consultar cookies"
+                };
             }
         }
     }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
+import Swal from 'sweetalert2'
 
 export default function Register ({signup}) {
     const [usuario, setUsuario] = useState({
@@ -11,7 +12,8 @@ export default function Register ({signup}) {
         PasswordHash: "",
         repeatPassword: ""
     });
-    const [error, setError] = useState(null)
+    const [Alert, setAlert] = useState({isError: null, mensaje:"", show:false})
+    const [loading, setLoading] = useState(false);
     
     $("body").addClass("bg-gradient-primary");
 
@@ -27,21 +29,21 @@ export default function Register ({signup}) {
         var result = true;
         Object.values(usuario).forEach((item) => {
             if (item == null || item == "") {
-                setError("Todos los campos son obligatorios");
+                setAlert({isError: true, mensaje: "Todos los campos son obligatorios", show:true})
                 result = false;
                 return;
             }
         });
         if (result && isNaN(usuario.Identificacion)) {
-            setError("La identificacion debecontener solo números");
+            setAlert({isError: true, mensaje: "La identificacion debecontener solo números", show:true})
             result = false;
         }
         if (result && usuario.PasswordHash.length <= 6) {
-            setError("La contraseña debe ser superior a 6 digitos");
+            setAlert({isError: true, mensaje: "La contraseña debe ser superior a 6 digitos", show:true})
             result = false;
         }
         if (result && usuario.PasswordHash != usuario.repeatPassword) {
-            setError("Las contraseñas no coinciden");
+            setAlert({isError: true, mensaje: "Las contraseñas no coinciden", show:true})
             result = false;
         }
          return result;
@@ -55,10 +57,17 @@ export default function Register ({signup}) {
         }
 
         try {
+            Swal.fire({
+                title: 'Cargando informacion ...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false
+              })
             await signup(usuario);
         } catch (error) {
-            setError(error.response.data)
-            console.log(error);
+            Swal.close();
+            setAlert({isError: error.data.error, mensaje: error.data.mensaje, show:true})
         }
     };
 
@@ -73,7 +82,9 @@ export default function Register ({signup}) {
                             <div className="p-5">
                                 <div className="text-center">
                                     <h1 className="h4 text-gray-900 mb-4">Crear una cuenta!</h1>
-                                    <p>{error}</p>
+                                    {Alert.show && <div className={`alert ${Alert.isError ? "alert-danger" : "alert-success"} alert-dismissible fade show`} id="alert-register" role="alert">
+                                        <strong>{Alert.isError ? ("Error!" ): "Excelente!"}</strong> {Alert.mensaje}
+                                    </div>}
                                 </div>
                                 <form className="user" onSubmit={handleSubmit}>
                                     <div className="form-group row">

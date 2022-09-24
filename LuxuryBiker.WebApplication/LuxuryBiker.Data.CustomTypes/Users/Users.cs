@@ -15,7 +15,7 @@ namespace LuxuryBiker.Data.CustomTypes.Users
         public string PasswordHash { get; set; }
         public string Identificacion {get;set;}
         public bool SenActivo { get; set; }
-        public DateTime FechaNacimiento { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string UserName { get; set; }
         public string PhoneNumber { get; set; }

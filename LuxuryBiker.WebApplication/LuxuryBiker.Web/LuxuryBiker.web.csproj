@@ -29,10 +29,7 @@
     <None Include="wwwroot\src\js\demo\chart-bar-demo.js" />
     <None Include="wwwroot\src\js\demo\chart-pie-demo.js" />
     <None Include="wwwroot\src\js\demo\datatables-demo.js" />
-    <None Include="wwwroot\src\js\LuxuryBiker.js" />
     <None Include="wwwroot\src\logo.svg" />
-    <None Include="wwwroot\src\reportWebVitals.js" />
-    <None Include="wwwroot\src\setupTests.js" />
     <None Include="wwwroot\src\styles\styles.css" />
     <None Include="wwwroot\src\styles\styles.min.css" />
     <None Include="wwwroot\src\styles\vendor\css\all.min.css" />
