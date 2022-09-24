@@ -36,6 +36,9 @@ export function initAxiosInterceptors() {
 				deleteToken();
 				window.location = '/';
 			} else {
+                error.Data = {
+                    mensaje: "Error interno en el servidor"
+                };
 				return Promise.reject(error);
 			}
         }

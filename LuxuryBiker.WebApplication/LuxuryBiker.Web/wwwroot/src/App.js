@@ -16,7 +16,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import Layout from './components/Layout/Layout';
 import Home from './views/Home';
-import Loading from "./components/Loading";
+import Swal from 'sweetalert2';
 
 initAxiosInterceptors();
 
@@ -32,9 +32,19 @@ export default function App () {
             }
             
             try {
-                const { data: usuario } = await Axios.get('/Usuarios/Whoami')
-                setUsuario(usuario);
+                Swal.fire({
+                  title: 'Cargando informacion ...',
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  allowEnterKey: false,
+                  showConfirmButton: false
+                })
+                const { data: response } = await (await Axios.get('/Usuarios/Whoami'))
                 setCargandoUsuario(false);
+                Swal.close();
+                if (!response.error) {
+                  setUsuario(response.result);
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -44,22 +54,26 @@ export default function App () {
     }, []);
 
     const login = async (username, password, rememberme) => {
-        const { data: usuario } = await Axios.post('/Usuarios/Login',
+        await Axios.post('/Usuarios/Login',
             {
                 UserName: username,
                 PasswordHash: password,
                 rememberme: rememberme
             }
-        );
-        setUsuario(usuario);
-        setToken(usuario.token);
+        ).then((response => {
+          if (response.data.error) {
+            throw response;
+          }
+          setUsuario(response.data.result);
+          setToken(response.data.result.token);
+        }));
     }
 
     const signup = async (usuario) => {
-        const { data } = await Axios.post("/Usuarios/register", usuario);
-        setUsuario({data});
-        setToken(data.token);
-        window.location.href = "/";
+        await Axios.post("/Usuarios/register", usuario)
+        .then((response)=>{
+            throw response;
+        });
     };
 
 	const logout = () => {
@@ -68,8 +82,8 @@ export default function App () {
 	};
 
   if (cargandoUsuario) {
-    return (
-        <Loading />
+    return(
+      <div></div>
     );
   }
 

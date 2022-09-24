@@ -19,6 +19,7 @@ using LuxuryBiker.web.Security;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace LuxuryBiker.Web
 {
@@ -31,9 +32,16 @@ namespace LuxuryBiker.Web
 
         public IConfiguration Configuration { get; }
 
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<LuxuryBikerDBContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("LuxuryBiker"));
+            });
+
             var keyToken = Configuration.GetValue<string>("keyToken");
             var bytesKeyToken = Encoding.ASCII.GetBytes(keyToken);
             services.AddAuthentication(e =>

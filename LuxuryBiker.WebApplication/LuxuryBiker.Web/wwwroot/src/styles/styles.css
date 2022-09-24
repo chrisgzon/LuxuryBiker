@@ -10878,29 +10878,6 @@ a:focus {
   background-position: center;
   background-size: cover;
 }
-.Loading {
-  margin: 0 auto;
-  width: 70px;
-  text-align: center;
-}
-.Loading > div {
-  width: 18px;
-  height: 18px;
-  background-color: #333;
-  border-radius: 100%;
-  display: inline-block;
-  -webkit-animation: sk-bouncedelay 1.4s ease-in-out infinite both;
-  animation: sk-bouncedelay 1.4s ease-in-out infinite both;
-}
-.Loading .Loading__dot-1 {
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-.Loading .Loading__dot-2 {
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-}
-
 form.user .custom-checkbox.small label {
   line-height: 1.5rem;
 }

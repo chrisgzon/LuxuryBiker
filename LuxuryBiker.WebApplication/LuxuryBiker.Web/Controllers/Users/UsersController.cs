@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Logic.Users;
+﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Logic.Users;
 using LuxuryBiker.web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,32 +21,22 @@ namespace LuxuryBiker.web.Controllers.Users
         [Route("Usuarios/Login")]
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult<Data.CustomTypes.Users.Users> Login(Data.CustomTypes.Users.Users user)
+        public ResponseGeneric<Data.CustomTypes.Users.Users> Login(Data.CustomTypes.Users.Users user)
         {
-             var usuario = new LoginLogic().CheckLogin(user.UserName, user.PasswordHash, user.Rememberme);
-            if (usuario != null) return Ok(usuario);
-
-            return BadRequest("Usuario y/o Contraseña invalidas");
+             return new LoginLogic().CheckLogin(user.UserName, user.PasswordHash, user.Rememberme);
         }
         [Route("Usuarios/Whoami")]
         [HttpGet]
-        public ActionResult whoami()
+        public ResponseGeneric<Data.CustomTypes.Users.Users> whoami()
         {
-            var user = new LoginLogic().Whoami();
-            if (user == null) return BadRequest(null);
-            return Ok(user);
+            return new LoginLogic().Whoami();
         }
         [Route("Usuarios/register")]
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Register(Data.CustomTypes.Users.Users usuario)
+        public ResponseGeneric<Data.CustomTypes.Users.Users> Register(Data.CustomTypes.Users.Users usuario)
         {
-            var user = _usersLogic.getPasswordByEmail(usuario.UserName);
-            if (user != null)
-            {
-                return BadRequest("Ya existe un usuario registrado con este email");
-            }
-            return Ok(user);
+            return _usersLogic.RegisterNewUser(usuario);
         }
     }
 }

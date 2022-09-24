@@ -23,7 +23,7 @@ const Login = ({ loggin }) => {
 		try {
 			await loggin(login.username, login.password, login.rememberme);
 		} catch (error) {
-			setError(error.response.data)
+			setError(error.data.mensaje)
 		}
 	};
 
