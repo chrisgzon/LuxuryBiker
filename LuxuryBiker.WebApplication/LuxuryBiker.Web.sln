@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.Data.Repositry"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.Logic", "LuxuryBiker.Logic\LuxuryBiker.Logic.csproj", "{795481AA-EF5F-4462-9400-47A8D84518C1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuxuryBiker.web", "LuxuryBiker.Web\LuxuryBiker.web.csproj", "{D3232ED0-79FF-4306-BF3F-720538A47BC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{795481AA-EF5F-4462-9400-47A8D84518C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{795481AA-EF5F-4462-9400-47A8D84518C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{795481AA-EF5F-4462-9400-47A8D84518C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3232ED0-79FF-4306-BF3F-720538A47BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3232ED0-79FF-4306-BF3F-720538A47BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3232ED0-79FF-4306-BF3F-720538A47BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3232ED0-79FF-4306-BF3F-720538A47BC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{71FBDA9D-BDEE-4873-918C-8DA2A356C155} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
 		{1F29AB40-8258-4A87-BC5E-512031EF734C} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
 		{795481AA-EF5F-4462-9400-47A8D84518C1} = {CC12C119-3D65-48AA-BA53-4AF4B1EE300E}
+		{D3232ED0-79FF-4306-BF3F-720538A47BC3} = {C473206E-9945-4E94-8841-55B36EB5AA31}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11087D79-ABE8-4C29-9E72-4BCBDF7E0033}
