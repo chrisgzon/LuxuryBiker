@@ -13,7 +13,6 @@ export default function Register ({signup}) {
         repeatPassword: ""
     });
     const [Alert, setAlert] = useState({isError: null, mensaje:"", show:false})
-    const [loading, setLoading] = useState(false);
     
     $("body").addClass("bg-gradient-primary");
 
@@ -152,9 +151,9 @@ export default function Register ({signup}) {
                                     </button>
                                 </form>
                                 <hr />
-                                <div className="text-center">
+                                {/* <div className="text-center">
                                     <Link className="small">Olvidaste tu contraseña?</Link>
-                                </div>
+                                </div> */}
                                 <div className="text-center">
                                     <Link className="small" to={"/"}>Ya tienes una cuenta? Ingresar!</Link>
                                 </div>

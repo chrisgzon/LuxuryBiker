@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import $ from 'jquery';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Login = ({ loggin }) => {
 	const [login, setLogin] = useState({
@@ -21,8 +22,17 @@ const Login = ({ loggin }) => {
 		e.preventDefault();
 
 		try {
+			Swal.fire({
+                title: 'Cargando...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false
+              })
 			await loggin(login.username, login.password, login.rememberme);
+			Swal.close();
 		} catch (error) {
+			Swal.close();
 			setError(error.data.mensaje)
 		}
 	};
@@ -79,9 +89,9 @@ const Login = ({ loggin }) => {
 											</button>
 										</form>
 										<hr />
-										<div className="text-center">
+										{/* <div className="text-center">
 											<p className="small">¿Olvidaste tu contraseña?</p>
-										</div>
+										</div> */}
 										<div className="text-center">
 											<p className="small"><Link to="/register">¡Crear una cuenta!</Link></p>
 										</div>
