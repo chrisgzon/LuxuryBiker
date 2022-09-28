@@ -14,6 +14,7 @@ namespace LuxuryBiker.Data.Entities.Terceros
         public string Direccion { get; set; }
         public bool SenActivo { get; set; }
         public int TipoIdTipo { get; set; }
+        public string Celular { get; set; }
 
         public TiposTercero Tipo { get; set; }
         public List<Compras.Compras> VentasProveedor { get; set; } // Ventas del proveedor a la empresa

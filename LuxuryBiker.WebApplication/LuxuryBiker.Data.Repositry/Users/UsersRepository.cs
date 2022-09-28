@@ -39,6 +39,7 @@ namespace LuxuryBiker.Data.Repositry.Users
                                 IdRol = r.Rol.IdRol
                             }
                         }).ToList(),
+                        isAdministrador = (x.Roles.Where(r => r.Rol.NombreRol.Equals("Super Administrador")).FirstOrDefault() != null)
                     })
                     .FirstOrDefault();
             }
@@ -62,6 +63,7 @@ namespace LuxuryBiker.Data.Repositry.Users
                                         IdRol = r.Rol.IdRol
                                     }
                             }).ToList(),
+                        isAdministrador = (x.Roles.Where(r=>r.Rol.NombreRol.Equals("Super Administrador")).FirstOrDefault() != null)
                     }).FirstOrDefault();
             }
         }

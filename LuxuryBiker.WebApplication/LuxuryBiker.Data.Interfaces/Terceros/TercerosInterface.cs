@@ -15,5 +15,6 @@ namespace LuxuryBiker.Data.Interfaces.Terceros
         string Direccion { get; set; }
         bool SenActivo { get; set; }
         int TipoIdTipo { get; set; }
+        string Celular { get; set; }
     }
 }

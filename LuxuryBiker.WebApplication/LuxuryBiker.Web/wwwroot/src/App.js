@@ -18,6 +18,7 @@ import Layout from './components/Layout/Layout';
 import Home from './views/Home';
 import Swal from 'sweetalert2';
 import PageNotFound from './views/404'
+import RegisterTercero from './views/Terceros/RegisterTercero'
 
 initAxiosInterceptors();
 
@@ -111,6 +112,7 @@ const LoginRoutes = ({ usuario, logout }) => {
         path="/"
         element={<Layout usuario={usuario} logout={logout} replace><Home /></Layout>}
       />
+      <Route path="/RegistrarTercero" element={<Layout usuario={usuario} logout={logout}><RegisterTercero /></Layout>} />
       <Route path="*" element={<Layout usuario={usuario} logout={logout}><PageNotFound /></Layout>} />
     </Routes>
   );
