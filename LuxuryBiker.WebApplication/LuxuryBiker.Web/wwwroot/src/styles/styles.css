@@ -10899,7 +10899,18 @@ form.user .btn-user {
   background-color: #ea4335;
   border-color: #fff;
 }
+.box-gray {
+  background-color: #e3e6f099;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 15px;
+  padding: 15px;
+}
+.label-red {
+  color: #9b0100;
+  font-weight: bold;
 
+}
 .btn-google:hover {
   color: #fff;
   background-color: #e12717;
