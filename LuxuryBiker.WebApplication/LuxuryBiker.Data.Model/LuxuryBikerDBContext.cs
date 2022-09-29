@@ -27,7 +27,7 @@ namespace LuxuryBiker.Data.Model
         public DbSet<ComprasDetails> DetailsCompras { get; set; }
         #endregion
         #region Productos
-        DbSet<Productos> Productos { get; set; }
+        public DbSet<Productos> Productos { get; set; }
         #endregion
         #region Terceros
         public DbSet<Terceros> Terceros { get; set; }

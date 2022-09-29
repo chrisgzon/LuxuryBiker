@@ -11,6 +11,7 @@ namespace LuxuryBiker.Data.Interfaces.Productos
         int IdProducto { get; set; }
         string Nombre { get; set; }
         string Codigo { get; set; }
+        string Referencia { get; set; }
         string Descripcion { get; set; }
         bool Estado { get; set; }
         DateTime FechaRegistro { get; set; }

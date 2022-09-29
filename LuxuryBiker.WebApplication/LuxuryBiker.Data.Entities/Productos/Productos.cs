@@ -17,6 +17,7 @@ namespace LuxuryBiker.Data.Entities.Productos
         public DateTime FechaRegistro { get; set; }
         public decimal Stock { get; set; }
         public decimal ValorProducto { get; set; }
+        public string Referencia { get; set; }
 
         public List<Compras.ComprasDetails> DetallesCompra { get; set; }
         public List<Ventas.VentasDetails> DetallesVenta { get; set; }
