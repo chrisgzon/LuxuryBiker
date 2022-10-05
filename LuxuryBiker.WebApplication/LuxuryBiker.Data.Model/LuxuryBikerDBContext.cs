@@ -18,23 +18,23 @@ namespace LuxuryBiker.Data.Model
     public class LuxuryBikerDBContext : DbContext
     {
         #region Users
-        public DbSet<Users> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<UsrRoles> Roles { get; set; }
         public DbSet<UsrUsuario_UsrRol> UsrUsuarios_UsrRoles { get; set; }
         #endregion
         #region Compras
-        public DbSet<Compras> Compras { get; set; }
+        public DbSet<Compra> Compras { get; set; }
         public DbSet<ComprasDetails> DetailsCompras { get; set; }
         #endregion
         #region Productos
-        public DbSet<Productos> Productos { get; set; }
+        public DbSet<Producto> Productos { get; set; }
         #endregion
         #region Terceros
-        public DbSet<Terceros> Terceros { get; set; }
+        public DbSet<Tercero> Terceros { get; set; }
         public DbSet<TiposTercero> TiposTercero { get; set; }
         #endregion
         #region Ventas
-        public DbSet<Ventas> Ventas { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
         public DbSet<VentasDetails> DetailsVentas { get; set; }
         #endregion
         public LuxuryBikerDBContext(DbContextOptions options) : base(options) { }
@@ -46,24 +46,24 @@ namespace LuxuryBiker.Data.Model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region UsersMetadata
-            UsersMetadata.SetEntityBuilder(modelBuilder.Entity<Users>());
+            UsersMetadata.SetEntityBuilder(modelBuilder.Entity<User>());
             UsrRolesMetadata.SetEntityBuilder(modelBuilder.Entity<UsrRoles>());
             UsrUsuario_UsrRolMetadata.SetEntityBuilder(modelBuilder.Entity<UsrUsuario_UsrRol>());
             #endregion
             #region Terceros
-            TercerosMetadata.SetEntityBuilder(modelBuilder.Entity<Terceros>());
+            TercerosMetadata.SetEntityBuilder(modelBuilder.Entity<Tercero>());
             TiposTerceroMetadata.SetEntityBuilder(modelBuilder.Entity<TiposTercero>());
             #endregion
             #region Compras
-            ComprasMetadata.SetEntityBuilder(modelBuilder.Entity<Compras>());
+            ComprasMetadata.SetEntityBuilder(modelBuilder.Entity<Compra>());
             ComprasDetailsMetadata.SetEntityBuilder(modelBuilder.Entity<ComprasDetails>());
             #endregion
             #region Ventas
-            VentasMetadata.SetEntityBuilder(modelBuilder.Entity<Ventas>());
+            VentasMetadata.SetEntityBuilder(modelBuilder.Entity<Venta>());
             VentasDetailsMetadata.SetEntityBuilder(modelBuilder.Entity<VentasDetails>());
             #endregion
             #region Productos
-            ProductosMetadata.SetEntityBuilder(modelBuilder.Entity<Productos>());
+            ProductosMetadata.SetEntityBuilder(modelBuilder.Entity<Producto>());
             #endregion
 
             base.OnModelCreating(modelBuilder);

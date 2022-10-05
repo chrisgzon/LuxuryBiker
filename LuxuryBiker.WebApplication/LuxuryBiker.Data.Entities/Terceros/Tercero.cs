@@ -1,11 +1,13 @@
-﻿using LuxuryBiker.Data.Interfaces.Terceros;
+﻿using LuxuryBiker.Data.Entities.Compras;
+using LuxuryBiker.Data.Entities.Ventas;
+using LuxuryBiker.Data.Interfaces.Terceros;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LuxuryBiker.Data.Entities.Terceros
 {
-    public class Terceros : TercerosInterface
+    public class Tercero : TerceroInterface
     {
         public int IdTercero { get; set; }
         public string Email { get; set; }
@@ -17,7 +19,7 @@ namespace LuxuryBiker.Data.Entities.Terceros
         public string Celular { get; set; }
 
         public TiposTercero Tipo { get; set; }
-        public List<Compras.Compras> VentasProveedor { get; set; } // Ventas del proveedor a la empresa
-        public List<Ventas.Ventas> ComprasCliente { get; set; } // Compras de los clientes a la empresa
+        public List<Compra> VentasProveedor { get; set; } // Ventas del proveedor a la empresa
+        public List<Venta> ComprasCliente { get; set; } // Compras de los clientes a la empresa
     }
 }

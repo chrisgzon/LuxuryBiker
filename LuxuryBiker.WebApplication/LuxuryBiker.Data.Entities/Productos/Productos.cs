@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LuxuryBiker.Data.Entities.Productos
 {
-    public class Productos : ProductosInterface
+    public class Producto : ProductoInterface
     {
         public int IdProducto { get; set; }
         public string Nombre { get; set; }

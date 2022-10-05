@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Data.Interfaces.Ventas;
+﻿using LuxuryBiker.Data.Entities.Productos;
+using LuxuryBiker.Data.Interfaces.Ventas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace LuxuryBiker.Data.Entities.Ventas
         public decimal ValorProducto { get; set; }
         public decimal Cantidad { get; set; }
 
-        public Productos.Productos Producto { get; set; }
-        public Ventas Venta { get; set; }
+        public Producto Producto { get; set; }
+        public Venta Venta { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace LuxuryBiker.Data.CustomTypes.Users
 {
-    public class Users : UsersInterface
+    public class User : UserInterface
     {
         public string IdUsuario { get; set; }
         public string Nombres { get; set; }

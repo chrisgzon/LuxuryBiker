@@ -11,7 +11,7 @@ namespace LuxuryBiker.Data.Model.MetaData.Users
 {
     public class UsersMetadata
     {
-        public static void SetEntityBuilder(EntityTypeBuilder<Entities.Users.Users> entityBuilder)
+        public static void SetEntityBuilder(EntityTypeBuilder<User> entityBuilder)
         {
             entityBuilder.ToTable("Users");
             entityBuilder.HasKey(x=>x.IdUsuario);

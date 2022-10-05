@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LuxuryBiker.Data.Entities.Compras;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LuxuryBiker.Data.Model.MetaData.Compras
 {
     class ComprasMetadata
     {
-        public static void SetEntityBuilder(EntityTypeBuilder<Entities.Compras.Compras> entityBuilder)
+        public static void SetEntityBuilder(EntityTypeBuilder<Compra> entityBuilder)
         {
             // En esta tabla se registran las compras que realiza la empresa para surtir su inventario
             entityBuilder.ToTable("Compras").HasKey(x => x.IdCompra);

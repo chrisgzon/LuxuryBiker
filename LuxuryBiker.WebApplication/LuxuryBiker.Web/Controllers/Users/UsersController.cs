@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Data.CustomTypes.Users;
 using LuxuryBiker.Logic.Users;
 using LuxuryBiker.web.Security;
 using Microsoft.AspNetCore.Authorization;
@@ -21,20 +22,20 @@ namespace LuxuryBiker.web.Controllers.Users
         [Route("Usuarios/Login")]
         [HttpPost]
         [AllowAnonymous]
-        public ResponseGeneric<Data.CustomTypes.Users.Users> Login(Data.CustomTypes.Users.Users user)
+        public ResponseGeneric<User> Login(User user)
         {
              return new LoginLogic().CheckLogin(user.UserName, user.PasswordHash, user.Rememberme);
         }
         [Route("Usuarios/Whoami")]
         [HttpGet]
-        public ResponseGeneric<Data.CustomTypes.Users.Users> whoami()
+        public ResponseGeneric<User> whoami()
         {
             return new LoginLogic().Whoami();
         }
         [Route("Usuarios/register")]
         [AllowAnonymous]
         [HttpPost]
-        public ResponseGeneric<Data.CustomTypes.Users.Users> Register(Data.CustomTypes.Users.Users usuario)
+        public ResponseGeneric<User> Register(User usuario)
         {
             return _usersLogic.RegisterNewUser(usuario);
         }

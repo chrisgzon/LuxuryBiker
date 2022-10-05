@@ -1,13 +1,15 @@
-﻿using LuxuryBiker.Data.Interfaces.Ventas;
+﻿using LuxuryBiker.Data.Entities.Terceros;
+using LuxuryBiker.Data.Entities.Users;
+using LuxuryBiker.Data.Interfaces.Ventas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LuxuryBiker.Data.CustomTypes.Ventas
+namespace LuxuryBiker.Data.Entities.Ventas
 {
-    public class Ventas : VentasInterface
+    public class Venta : VentaInterface
     {
         public int IdVenta { get; set; }
         public string CodVenta { get; set; }
@@ -17,7 +19,8 @@ namespace LuxuryBiker.Data.CustomTypes.Ventas
         public bool Estado { get; set; }
         public decimal Total { get; set; }
 
-        public Users.Users Usuario { get; set; }
-        public Terceros.Terceros Tercero { get; set; }
+        public User Usuario { get; set; }
+        public Tercero Tercero { get; set; }
+        public List<VentasDetails> DetallesVentas { get; set; }
     }
 }

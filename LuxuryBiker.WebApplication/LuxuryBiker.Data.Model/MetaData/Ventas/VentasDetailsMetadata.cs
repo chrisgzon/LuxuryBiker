@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LuxuryBiker.Data.Entities.Ventas;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LuxuryBiker.Data.Model.MetaData.Ventas
 {
     class VentasDetailsMetadata
     {
-        public static void SetEntityBuilder(EntityTypeBuilder<Entities.Ventas.VentasDetails> entityBuilder)
+        public static void SetEntityBuilder(EntityTypeBuilder<VentasDetails> entityBuilder)
         {
             entityBuilder.ToTable("VentasDetails").HasKey(x=>x.Id);
             entityBuilder.Property(x => x.Cantidad).IsRequired().HasPrecision(10, 3);

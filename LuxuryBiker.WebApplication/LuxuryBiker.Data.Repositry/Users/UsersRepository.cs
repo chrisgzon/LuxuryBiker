@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LuxuryBiker.Data.CustomTypes.Users;
 
 namespace LuxuryBiker.Data.Repositry.Users
 {
@@ -18,22 +19,22 @@ namespace LuxuryBiker.Data.Repositry.Users
                 return ctx.Users.Where(x => username.Equals(x.UserName) && x.SenActivo).Select(x => x.PasswordHash).FirstOrDefault();
             }
         }
-        public CustomTypes.Users.Users getUserByEmail(string username)
+        public User getUserByEmail(string username)
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
                 
                 return ctx.Users.Where(x => x.UserName == username)
-                    .Select(x => new CustomTypes.Users.Users
+                    .Select(x => new User
                     {
                         IdUsuario = x.IdUsuario,
                         UserName = x.UserName,
                         Email = x.Email,
                         Apellidos = x.Apellidos,
                         Nombres = x.Nombres,
-                        Roles = x.Roles.Select(r => new CustomTypes.Users.UsrUsuario_UsrRol
+                        Roles = x.Roles.Select(r => new UsrUsuario_UsrRol
                         {
-                            Rol = new CustomTypes.Users.UsrRoles
+                            Rol = new UsrRoles
                             {
                                 NombreRol = r.Rol.NombreRol,
                                 IdRol = r.Rol.IdRol
@@ -44,20 +45,20 @@ namespace LuxuryBiker.Data.Repositry.Users
                     .FirstOrDefault();
             }
         }
-        public CustomTypes.Users.Users getUserById(string idUsuario)
+        public User getUserById(string idUsuario)
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
-                return ctx.Users.Where(x => x.IdUsuario.Equals(idUsuario)).Select(x => new CustomTypes.Users.Users
+                return ctx.Users.Where(x => x.IdUsuario.Equals(idUsuario)).Select(x => new User
                     {
                         IdUsuario = x.IdUsuario,
                         UserName = x.UserName,
                         Email = x.Email,
                         Apellidos = x.Apellidos,
                         Nombres = x.Nombres,
-                        Roles = x.Roles.Select(r => new CustomTypes.Users.UsrUsuario_UsrRol
+                        Roles = x.Roles.Select(r => new UsrUsuario_UsrRol
                                 {
-                                    Rol = new CustomTypes.Users.UsrRoles
+                                    Rol = new UsrRoles
                                     {
                                         NombreRol = r.Rol.NombreRol,
                                         IdRol = r.Rol.IdRol
@@ -67,7 +68,7 @@ namespace LuxuryBiker.Data.Repositry.Users
                     }).FirstOrDefault();
             }
         }
-        public bool registerNewUser(Data.CustomTypes.Users.Users usuario)
+        public bool registerNewUser(User usuario)
         {
             using (var ctx = new LuxuryBikerDBContext()) {
                 var username = new SqlParameter

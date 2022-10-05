@@ -1,4 +1,6 @@
-﻿using LuxuryBiker.Data.Interfaces.Compras;
+﻿using LuxuryBiker.Data.CustomTypes.Terceros;
+using LuxuryBiker.Data.CustomTypes.Users;
+using LuxuryBiker.Data.Interfaces.Compras;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LuxuryBiker.Data.CustomTypes.Compras
 {
-    public class Compras : ComprasInterface
+    public class Compra : CompraInterface
     {
         public int IdCompra { get; set; }
         public string CodCompra { get; set; }
@@ -17,7 +19,7 @@ namespace LuxuryBiker.Data.CustomTypes.Compras
         public decimal Total { get; set; }
         public bool Estado { get; set; }
 
-        public Users.Users Usuario { get; set; }
-        public Terceros.Terceros Tercero { get; set; }
+        public User Usuario { get; set; }
+        public Tercero Tercero { get; set; }
     }
 }

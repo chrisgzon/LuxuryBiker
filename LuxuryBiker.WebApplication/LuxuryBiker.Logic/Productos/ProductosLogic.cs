@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Data.CustomTypes.Productos;
 using LuxuryBiker.Data.Repositry.Productos;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace LuxuryBiker.Logic.Productos
         {
             _productosRepository = new ProductosRepository();
         }
-        public ResponseGeneric<bool> RegisterTercero(Data.CustomTypes.Productos.Productos producto)
+        public ResponseGeneric<bool> RegisterTercero(Producto producto)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace LuxuryBiker.Logic.Productos
                 };
             }
         }
-        private string generateCodeProduct(Data.CustomTypes.Productos.Productos producto)
+        private string generateCodeProduct(Producto producto)
         {
             try
             {
@@ -70,6 +71,18 @@ namespace LuxuryBiker.Logic.Productos
             {
 
                 throw;
+            }
+        }
+        public List<Producto> GetProductos()
+        {
+            try
+            {
+                return _productosRepository.GetProductos();
+            }
+            catch (Exception)
+            {
+
+                return null;
             }
         }
     }

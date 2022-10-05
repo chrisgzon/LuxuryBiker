@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Data.CustomTypes.Productos;
 using LuxuryBiker.Logic.Productos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace LuxuryBiker.web.Controllers.Productos
         }
         [Route("Productos/Register")]
         [HttpPost]
-        public ResponseGeneric<bool> RegisterProducto(Data.CustomTypes.Productos.Productos producto)
+        public ResponseGeneric<bool> RegisterProducto(Producto producto)
         {
             return _productosLogic.RegisterTercero(producto);
         }
