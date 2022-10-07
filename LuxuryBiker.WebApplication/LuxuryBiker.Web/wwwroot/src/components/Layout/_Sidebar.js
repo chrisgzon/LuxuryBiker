@@ -77,11 +77,11 @@ export default function Sidebar({ usuario }) {
             {/*Nav Item - Pages Collapse Menu*/}
             {(!!usuario && (usuario.roles.includes('Administrador') || usuario.isAdministrador)) ? (
             <li className="nav-item">
-                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTerceros" aria-expanded="true" aria-controls="collapseTwo">
                 <i className="fas fa-solid fa-user-tie"></i>
                     <span>Terceros</span>
                 </a>
-                <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseTerceros" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
                         <h6 className="collapse-header">Clientes/Distribuidores:</h6>
                         <Link className="collapse-item" to="/RegistrarTercero">Registrar Tercero</Link>
@@ -114,23 +114,29 @@ export default function Sidebar({ usuario }) {
 
             {(!!usuario && (usuario.roles.includes('Administrador') || usuario.isAdministrador)) ? (
             <li className="nav-item">
-                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProductos" aria-expanded="true" aria-controls="collapsePages">
                 <i className="fas fa-duotone fa-conveyor-belt-boxes"></i>
                     <span>Productos</span>
                 </a>
-                <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseProductos" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
                         <Link className="collapse-item" to="/RegisterProducto">Registrar Producto</Link>
                     </div>
                 </div>
             </li>) : ""}
 
-            {/*Nav Item - Charts*/}
+            {(!!usuario && (usuario.roles.includes('Administrador') || usuario.isAdministrador)) ? (
             <li className="nav-item">
-                <a className="nav-link" href="charts.html">
-                    <i className="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
+                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras" aria-expanded="true" aria-controls="collapsePages">
+                <i className="fas fa-duotone fa-conveyor-belt-boxes"></i>
+                    <span>Compras</span>
+                </a>
+                <div id="collapseCompras" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div className="bg-white py-2 collapse-inner rounded">
+                        <Link className="collapse-item" to="/RegisterCompra">Registrar Compra</Link>
+                    </div>
+                </div>
+            </li>) : ""}
 
             {/*Nav Item - Tables*/}
             <li className="nav-item">

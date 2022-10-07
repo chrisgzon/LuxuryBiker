@@ -10911,6 +10911,10 @@ form.user .btn-user {
   font-weight: bold;
 
 }
+label {
+  color: #484444;
+  font-family: Arial, Helvetica, sans-serif;
+}
 .btn-google:hover {
   color: #fff;
   background-color: #e12717;

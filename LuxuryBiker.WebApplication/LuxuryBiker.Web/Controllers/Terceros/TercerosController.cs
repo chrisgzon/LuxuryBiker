@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace LuxuryBiker.web.Controllers.Terceros
 {
     [Authorize]
+    [ApiController]
     public class TercerosController : ControllerBase
     {
         private readonly TercerosLogic _tercerosLogic;

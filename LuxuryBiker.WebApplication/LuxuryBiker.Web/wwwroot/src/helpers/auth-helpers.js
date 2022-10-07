@@ -22,7 +22,7 @@ export function initAxiosInterceptors() {
             config.headers.Authorization = 'bearer ' + token; 
         }
 
-        config.headers['Content-Type'] = 'multipart/form-data';
+        config.headers['Content-Type'] = 'application/json';
 
         return config;
     });
@@ -36,7 +36,7 @@ export function initAxiosInterceptors() {
 				deleteToken();
 				window.location = '/';
 			} else {
-                error.Data = {
+                error.data = {
                     mensaje: "Error interno en el servidor"
                 };
 				return Promise.reject(error);

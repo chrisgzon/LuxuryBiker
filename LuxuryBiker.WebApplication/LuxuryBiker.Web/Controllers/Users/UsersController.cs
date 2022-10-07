@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace LuxuryBiker.web.Controllers.Users
 {
     [Authorize]
+    [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly UsersLogic _usersLogic;

@@ -47,8 +47,9 @@ namespace LuxuryBiker.Data.Repositry.Productos
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
-                return ctx.Productos.Where(x => x.Estado && x.Stock > 0).Select(x => new Producto()
+                return ctx.Productos.Where(x => x.Estado).Select(x => new Producto()
                 {
+                    IdProducto = x.IdProducto,
                     Codigo = x.Codigo,
                     Descripcion = x.Descripcion,
                     Nombre = x.Nombre,

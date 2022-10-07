@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import PageNotFound from './views/404';
 import RegisterTercero from './views/Terceros/RegisterTercero';
 import RegisterProducto from './views/Productos/RegisterProduct';
+import RegistrarCompra from './views/Compras/RegistrarCompra';
 
 initAxiosInterceptors();
 
@@ -46,6 +47,7 @@ export default function App () {
                 setCargandoUsuario(false);
                 Swal.close();
                 if (!response.error) {
+                  globalThis.LuxuryBiker = {Usuario:response.result }
                   setUsuario(response.result);
                 }
             } catch (error) {
@@ -67,6 +69,7 @@ export default function App () {
           if (response.data.error) {
             throw response;
           }
+          globalThis.LuxuryBiker = {Usuario:response.result }
           setUsuario(response.data.result);
           setToken(response.data.result.token);
         }));
@@ -115,6 +118,7 @@ const LoginRoutes = ({ usuario, logout }) => {
       />
       <Route path="/RegistrarTercero" element={<Layout usuario={usuario} logout={logout}><RegisterTercero /></Layout>} />
       <Route path="/RegisterProducto" element={<Layout usuario={usuario} logout={logout}><RegisterProducto /></Layout>} />
+      <Route path="/RegisterCompra" element={<Layout usuario={usuario} logout={logout}><RegistrarCompra /></Layout>} />
       <Route path="*" element={<Layout usuario={usuario} logout={logout}><PageNotFound /></Layout>} />
     </Routes>
   );

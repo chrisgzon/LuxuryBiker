@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace LuxuryBiker.web.Controllers.Productos
 {
     [Authorize]
+    [ApiController]
     public class ProductosController : ControllerBase
     {
         private readonly ProductosLogic _productosLogic;

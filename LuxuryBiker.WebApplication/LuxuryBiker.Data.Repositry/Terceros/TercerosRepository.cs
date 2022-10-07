@@ -39,6 +39,8 @@ namespace LuxuryBiker.Data.Repositry.Terceros
                     Direccion = tercero.Direccion,
                     Email = tercero.Email,
                     FechaCreacion = DateTime.Now,
+                    Nombres = tercero.Nombres,
+                    Apellidos = tercero.Apellidos,
                     Identificacion = tercero.Identificacion,
                     SenActivo = true,
                     TipoIdTipo = tercero.TipoIdTipo,
@@ -48,6 +50,20 @@ namespace LuxuryBiker.Data.Repositry.Terceros
                 ctx.Terceros.Add(entitie);
 
                 return ctx.SaveChanges() > 0;
+            }
+        }
+        public List<Tercero> GetProviders()
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                return ctx.Terceros.Where(x => x.Tipo.IdTipo.Equals(1) && x.SenActivo).Select(x => new Tercero()
+                {
+                    Nombres = x.Nombres,
+                    Apellidos = x.Apellidos,
+                    Celular = x.Celular,
+                    IdTercero = x.IdTercero,
+                    Email = x.Email
+                }).ToList();
             }
         }
     }
