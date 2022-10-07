@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Data.CustomTypes.Users;
 using LuxuryBiker.Logic.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +22,7 @@ namespace LuxuryBiker.web.Security
         {
             _usersLogic = new UsersLogic();
         }
-        public ResponseGeneric<Data.CustomTypes.Users.Users> CheckLogin(string username, string password, bool rememberme)
+        public ResponseGeneric<User> CheckLogin(string username, string password, bool rememberme)
         {
             try
             {
@@ -30,7 +31,7 @@ namespace LuxuryBiker.web.Security
                 var validUser = CheckPassword(username, password);
                 if (!validUser)
                 {
-                    return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                    return new ResponseGeneric<User>()
                     {
                         Error = true,
                         Mensaje = "Usuario y/o Contraseña invalidas"
@@ -40,7 +41,7 @@ namespace LuxuryBiker.web.Security
                 /* ------------------------ Se obtienen datos del usuario autenticado y se crea Token con JWT -------------- */
                 var usuario = _usersLogic.getUserByEmail(username);
                 usuario.Token = GetToken(usuario, rememberme);
-                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                return new ResponseGeneric<User>()
                 {
                     Error = false,
                     Result = usuario
@@ -48,7 +49,7 @@ namespace LuxuryBiker.web.Security
             }
             catch (Exception)
             {
-                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                return new ResponseGeneric<User>()
                 {
                     Error = true,
                     Mensaje = "Error al realizar el ingreso"
@@ -79,7 +80,7 @@ namespace LuxuryBiker.web.Security
                 return false;
             }
         }
-        private string GetToken(Data.CustomTypes.Users.Users usuario, bool rememberme)
+        private string GetToken(User usuario, bool rememberme)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -106,7 +107,7 @@ namespace LuxuryBiker.web.Security
             string passwordHashed = pw.HashPassword(userName, password);
             return passwordHashed;
         }
-        public ResponseGeneric<Data.CustomTypes.Users.Users> Whoami()
+        public ResponseGeneric<User> Whoami()
         {
             try
             {
@@ -116,7 +117,7 @@ namespace LuxuryBiker.web.Security
                 
                 /*-------------------------- No se encontro un usuario autenticado -----------------------------*/
                 if (String.IsNullOrEmpty(idUsuario)) {
-                    return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                    return new ResponseGeneric<User>()
                     {
                         Error = true,
                         Mensaje = "No hay un usario autenticado"
@@ -127,7 +128,7 @@ namespace LuxuryBiker.web.Security
                 var usuario = _usersLogic.getUserById(idUsuario);
                 usuario.Claims = user.Claims.Select(s => new Claim(s.Type, s.Value)).ToList();
 
-                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                return new ResponseGeneric<User>()
                 {
                     Error = false,
                     Result = usuario
@@ -136,7 +137,7 @@ namespace LuxuryBiker.web.Security
             catch (Exception)
             {
 
-                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                return new ResponseGeneric<User>()
                 {
                     Error = true,
                     Mensaje = "Ocurrio un error al consultar cookies"

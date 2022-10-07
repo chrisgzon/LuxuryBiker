@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Data.CustomTypes.Terceros;
 using LuxuryBiker.Logic.Terceros;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace LuxuryBiker.web.Controllers.Terceros
 {
     [Authorize]
+    [ApiController]
     public class TercerosController : ControllerBase
     {
         private readonly TercerosLogic _tercerosLogic;
@@ -20,7 +22,7 @@ namespace LuxuryBiker.web.Controllers.Terceros
 
         [Route("Terceros/Register")]
         [HttpPost]
-        public ResponseGeneric<bool> Login(Data.CustomTypes.Terceros.Terceros tercero)
+        public ResponseGeneric<bool> Login(Tercero tercero)
         {
             return _tercerosLogic.RegistrarTercero(tercero);
         }

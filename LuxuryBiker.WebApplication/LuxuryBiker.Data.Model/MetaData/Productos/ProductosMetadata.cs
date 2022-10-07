@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LuxuryBiker.Data.Entities.Productos;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LuxuryBiker.Data.Model.MetaData.Productos
 {
     class ProductosMetadata
     {
-        public static void SetEntityBuilder(EntityTypeBuilder<Entities.Productos.Productos> entityTypeBuilder)
+        public static void SetEntityBuilder(EntityTypeBuilder<Producto> entityTypeBuilder)
         {
             entityTypeBuilder.ToTable("Productos").HasKey(x => x.IdProducto);
             entityTypeBuilder.Property(x => x.Codigo).HasMaxLength(60).IsRequired();

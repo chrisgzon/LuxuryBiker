@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LuxuryBiker.Data.Entities.Terceros;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LuxuryBiker.Data.Model.MetaData.Terceros
 {
     class TercerosMetadata
     {
-        public static void SetEntityBuilder(EntityTypeBuilder<Entities.Terceros.Terceros> entityBuilder)
+        public static void SetEntityBuilder(EntityTypeBuilder<Tercero> entityBuilder)
         {
             entityBuilder.ToTable("Terceros").HasKey(x => x.IdTercero);
 

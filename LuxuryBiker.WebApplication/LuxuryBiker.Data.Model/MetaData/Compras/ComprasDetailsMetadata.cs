@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LuxuryBiker.Data.Entities.Compras;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LuxuryBiker.Data.Model.MetaData.Compras
 {
     class ComprasDetailsMetadata
     {
-        public static void SetEntityBuilder(EntityTypeBuilder<Entities.Compras.ComprasDetails> entityBuilder)
+        public static void SetEntityBuilder(EntityTypeBuilder<ComprasDetails> entityBuilder)
         {
             entityBuilder.ToTable("ComprasDetails").HasKey(x => x.Id);
             entityBuilder.Property(x=>x.cantidad).IsRequired().HasPrecision(10, 3);

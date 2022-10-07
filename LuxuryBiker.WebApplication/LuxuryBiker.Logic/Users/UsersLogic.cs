@@ -27,7 +27,7 @@ namespace LuxuryBiker.Logic.Users
                 return null;
             }
         }
-        public Data.CustomTypes.Users.Users getUserByEmail(string username)
+        public User getUserByEmail(string username)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace LuxuryBiker.Logic.Users
                 return null;
             }
         }
-        public Data.CustomTypes.Users.Users getUserById(string idUsuario)
+        public User getUserById(string idUsuario)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace LuxuryBiker.Logic.Users
                 return null;
             }
         }
-        public ResponseGeneric<Data.CustomTypes.Users.Users> RegisterNewUser(Data.CustomTypes.Users.Users usuario)
+        public ResponseGeneric<User> RegisterNewUser(User usuario)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace LuxuryBiker.Logic.Users
                 var existUser = _usersRepository.getUserByEmail(usuario.UserName);
                 if (existUser != null)
                 {
-                    return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                    return new ResponseGeneric<User>()
                     {
                         Error = true,
                         Mensaje = "El email ingresado ya se encuentra registrado"
@@ -75,7 +75,7 @@ namespace LuxuryBiker.Logic.Users
                 var resultRegister = _usersRepository.registerNewUser(usuario);
 
                 /* -------------------- Se valida estado de la transaccion y se retorna resultado ---------------- */
-                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                return new ResponseGeneric<User>()
                 {
                     Error = !resultRegister,
                     Mensaje = resultRegister ? "Usuario creado correctamente" : "Ocurrio un error al registrar el usuario"
@@ -84,7 +84,7 @@ namespace LuxuryBiker.Logic.Users
             catch (Exception ex)
             {
 
-                return new ResponseGeneric<Data.CustomTypes.Users.Users>()
+                return new ResponseGeneric<User>()
                 {
                     Error = true,
                     Mensaje = "Ocurrrio un error al registrar el usuario"

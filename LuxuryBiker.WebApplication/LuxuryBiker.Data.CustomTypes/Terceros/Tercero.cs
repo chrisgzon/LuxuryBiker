@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LuxuryBiker.Data.CustomTypes.Terceros
 {
-    public class Terceros : TercerosInterface
+    public class Tercero : TerceroInterface
     {
         public int IdTercero { get; set; }
         public string Email { get; set; }
@@ -15,6 +15,8 @@ namespace LuxuryBiker.Data.CustomTypes.Terceros
         public bool SenActivo { get; set; }
         public int TipoIdTipo { get; set; }
         public string Celular { get; set; }
+        public string Nombres { get; set; }
+        public string Apellidos { get; set; }
 
         public TiposTercero Tipo { get; set; }
     }

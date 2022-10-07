@@ -62,7 +62,7 @@ namespace LuxuryBiker.Web
             });
             services.AddHttpContextAccessor();
             services.AddAuthorization();
-            services.AddControllers(options => options.EnableEndpointRouting = false);
+            services.AddControllers();
 
 
 

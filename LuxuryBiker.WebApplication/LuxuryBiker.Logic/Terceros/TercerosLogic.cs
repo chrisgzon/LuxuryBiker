@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Data.CustomTypes.Terceros;
 using LuxuryBiker.Data.Repositry.Terceros;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace LuxuryBiker.Logic.Terceros
             _tercerosRepository = new TercerosRepository();
         }
 
-        public ResponseGeneric<bool> RegistrarTercero(Data.CustomTypes.Terceros.Terceros tercero)
+        public ResponseGeneric<bool> RegistrarTercero(Tercero tercero)
         {
             try
             {
@@ -46,6 +47,18 @@ namespace LuxuryBiker.Logic.Terceros
                     Error = true,
                     Mensaje = "Ocurrio un error al registrar el tercero"
                 };
+            }
+        }
+        public List<Tercero> GetProviders()
+        {
+            try
+            {
+                return _tercerosRepository.GetProviders();
+            }
+            catch (Exception)
+            {
+
+                return null;
             }
         }
     }

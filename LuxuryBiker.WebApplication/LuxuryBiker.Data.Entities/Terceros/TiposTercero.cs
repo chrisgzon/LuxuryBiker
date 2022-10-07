@@ -12,6 +12,6 @@ namespace LuxuryBiker.Data.Entities.Terceros
         public string Nombre { get; set; }
         public bool SenActivo { get; set; }
 
-        public List<Terceros> Terceros { get; set; }
+        public List<Tercero> Terceros { get; set; }
     }
 }

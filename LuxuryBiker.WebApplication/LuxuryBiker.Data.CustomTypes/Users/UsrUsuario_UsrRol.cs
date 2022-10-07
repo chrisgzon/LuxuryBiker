@@ -13,7 +13,7 @@ namespace LuxuryBiker.Data.CustomTypes.Users
         public string UsuarioIdUsuario { get; set; }
         public int RolIdRol { get; set; }
 
-        public Users Usuario { get; set; }
+        public User Usuario { get; set; }
         public UsrRoles Rol { get; set; }
     }
 }

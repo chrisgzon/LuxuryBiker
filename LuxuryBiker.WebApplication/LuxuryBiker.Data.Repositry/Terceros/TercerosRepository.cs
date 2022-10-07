@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Data.Model;
+﻿using LuxuryBiker.Data.CustomTypes.Terceros;
+using LuxuryBiker.Data.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace LuxuryBiker.Data.Repositry.Terceros
 {
     public class TercerosRepository
     {
-        public Data.CustomTypes.Terceros.Terceros getTerceroByIdentificacionAndTipo(string identificacion, int IdTipo)
+        public Tercero getTerceroByIdentificacionAndTipo(string identificacion, int IdTipo)
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
-                return ctx.Terceros.Where(x=>x.Identificacion.Equals(identificacion) && x.TipoIdTipo.Equals(IdTipo)).Select(x=>new Data.CustomTypes.Terceros.Terceros()
+                return ctx.Terceros.Where(x=>x.Identificacion.Equals(identificacion) && x.TipoIdTipo.Equals(IdTipo)).Select(x=>new Tercero()
                 {
                     IdTercero = x.IdTercero,
                     Direccion = x.Direccion,
@@ -21,7 +22,7 @@ namespace LuxuryBiker.Data.Repositry.Terceros
                     FechaCreacion = x.FechaCreacion,
                     Identificacion = x.Identificacion,
                     SenActivo = x.SenActivo,
-                    Tipo = new Data.CustomTypes.Terceros.TiposTercero()
+                    Tipo = new TiposTercero()
                     {
                         Nombre = x.Tipo.Nombre
                     },
@@ -29,15 +30,17 @@ namespace LuxuryBiker.Data.Repositry.Terceros
                 }).FirstOrDefault();
             }
         }
-        public bool registrarTercero(Data.CustomTypes.Terceros.Terceros tercero)
+        public bool registrarTercero(Tercero tercero)
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
-                var entitie = new LuxuryBiker.Data.Entities.Terceros.Terceros()
+                var entitie = new Entities.Terceros.Tercero()
                 {
                     Direccion = tercero.Direccion,
                     Email = tercero.Email,
                     FechaCreacion = DateTime.Now,
+                    Nombres = tercero.Nombres,
+                    Apellidos = tercero.Apellidos,
                     Identificacion = tercero.Identificacion,
                     SenActivo = true,
                     TipoIdTipo = tercero.TipoIdTipo,
@@ -47,6 +50,20 @@ namespace LuxuryBiker.Data.Repositry.Terceros
                 ctx.Terceros.Add(entitie);
 
                 return ctx.SaveChanges() > 0;
+            }
+        }
+        public List<Tercero> GetProviders()
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                return ctx.Terceros.Where(x => x.Tipo.IdTipo.Equals(1) && x.SenActivo).Select(x => new Tercero()
+                {
+                    Nombres = x.Nombres,
+                    Apellidos = x.Apellidos,
+                    Celular = x.Celular,
+                    IdTercero = x.IdTercero,
+                    Email = x.Email
+                }).ToList();
             }
         }
     }

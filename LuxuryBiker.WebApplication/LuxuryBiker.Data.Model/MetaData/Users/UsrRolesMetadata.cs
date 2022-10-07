@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LuxuryBiker.Data.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LuxuryBiker.Data.Model.MetaData.Users
 {
     class UsrRolesMetadata
     {
-        public static void SetEntityBuilder(EntityTypeBuilder<Entities.Users.UsrRoles> entityBuilder)
+        public static void SetEntityBuilder(EntityTypeBuilder<UsrRoles> entityBuilder)
         {
             entityBuilder.ToTable("UsrRoles");
             entityBuilder.HasKey(x => x.IdRol);

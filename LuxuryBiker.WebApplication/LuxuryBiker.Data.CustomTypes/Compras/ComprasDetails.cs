@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Data.Interfaces.Compras;
+﻿using LuxuryBiker.Data.CustomTypes.Productos;
+using LuxuryBiker.Data.Interfaces.Compras;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace LuxuryBiker.Data.CustomTypes.Compras
         public decimal ValorProducto { get; set; }
         public decimal cantidad { get; set; }
 
-        public Compras Compra { get; set; }
-        public Productos.Productos Producto  { get; set; }
+        public Compra Compra { get; set; }
+        public Producto Producto  { get; set; }
     }
 }

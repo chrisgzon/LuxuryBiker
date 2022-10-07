@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
-export default function Nav({usuario, logout}) {
+export default function Nav({logout}) {
+    const usuario = LuxuryBiker.Usuario;
     
     // Toggle the side navigation
     const onClickSidebar = () => {

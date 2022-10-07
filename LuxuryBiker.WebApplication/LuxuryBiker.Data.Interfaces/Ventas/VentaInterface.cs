@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LuxuryBiker.Data.Interfaces.Ventas
 {
-    public interface VentasInterface
+    public interface VentaInterface
     {
         int IdVenta { get; set; }
         string CodVenta { get; set; }
