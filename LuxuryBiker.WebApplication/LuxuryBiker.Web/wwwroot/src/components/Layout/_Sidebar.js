@@ -2,8 +2,8 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
-export default function Sidebar({ usuario }) {
-
+export default function Sidebar() {
+    const usuario = LuxuryBiker.Usuario;
     // Toggle the side navigation
     const onClickSidebar = () => {
         $("body").toggleClass("sidebar-toggled");
@@ -64,8 +64,9 @@ export default function Sidebar({ usuario }) {
             {/*Nav Item - Dashboard*/}
             <li className="nav-item active">
                 <Link className="nav-link" to="/">
-                <i className="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></Link>
+                    <i className="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </Link>
             </li>
 
             {/*Divider*/}
@@ -92,8 +93,8 @@ export default function Sidebar({ usuario }) {
             {/*Nav Item - Utilities Collapse Menu*/}
             <li className="nav-item">
                 <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-                    <i className="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
+                <i className="fas fa-solid fa-users"></i>
+                    <span>Usuarios</span>
                 </a>
                 <div id="collapseUtilities" className="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
@@ -115,7 +116,7 @@ export default function Sidebar({ usuario }) {
             {(!!usuario && (usuario.roles.includes('Administrador') || usuario.isAdministrador)) ? (
             <li className="nav-item">
                 <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProductos" aria-expanded="true" aria-controls="collapsePages">
-                <i className="fas fa-duotone fa-conveyor-belt-boxes"></i>
+                <i className="fas fa-solid fa-boxes-stacked"></i>
                     <span>Productos</span>
                 </a>
                 <div id="collapseProductos" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -128,7 +129,7 @@ export default function Sidebar({ usuario }) {
             {(!!usuario && (usuario.roles.includes('Administrador') || usuario.isAdministrador)) ? (
             <li className="nav-item">
                 <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras" aria-expanded="true" aria-controls="collapsePages">
-                <i className="fas fa-duotone fa-conveyor-belt-boxes"></i>
+                <i className="fas fa-solid fa-cart-arrow-down"></i>
                     <span>Compras</span>
                 </a>
                 <div id="collapseCompras" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">

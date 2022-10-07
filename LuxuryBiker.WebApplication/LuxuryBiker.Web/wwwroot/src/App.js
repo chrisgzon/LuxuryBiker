@@ -114,12 +114,12 @@ const LoginRoutes = ({ usuario, logout }) => {
     <Routes>
       <Route
         path="/"
-        element={<Layout usuario={usuario} logout={logout} replace><Home /></Layout>}
+        element={<Layout logout={logout} replace><Home /></Layout>}
       />
-      <Route path="/RegistrarTercero" element={<Layout usuario={usuario} logout={logout}><RegisterTercero /></Layout>} />
-      <Route path="/RegisterProducto" element={<Layout usuario={usuario} logout={logout}><RegisterProducto /></Layout>} />
-      <Route path="/RegisterCompra" element={<Layout usuario={usuario} logout={logout}><RegistrarCompra /></Layout>} />
-      <Route path="*" element={<Layout usuario={usuario} logout={logout}><PageNotFound /></Layout>} />
+      <Route path="/RegistrarTercero" element={<Layout logout={logout}><RegisterTercero /></Layout>} />
+      <Route path="/RegisterProducto" element={<Layout logout={logout}><RegisterProducto /></Layout>} />
+      <Route path="/RegisterCompra" element={<Layout logout={logout}><RegistrarCompra /></Layout>} />
+      <Route path="*" element={<Layout logout={logout}><PageNotFound /></Layout>} />
     </Routes>
   );
 };
