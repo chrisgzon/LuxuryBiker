@@ -10,11 +10,11 @@ namespace LuxuryBiker.Data.Repositry.Productos
 {
     public class ProductosRepository
     {
-        public Producto getProductoByNombreOrReferencia(string nombre, string referencia, string codigo)
+        public Producto getProductoByNombreOrReferencia(string referencia, string codigo)
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
-                return ctx.Productos.Where(x => x.Nombre.Equals(nombre) || x.Referencia.Equals(referencia) || x.Codigo.Equals(codigo))
+                return ctx.Productos.Where(x => x.Referencia.Equals(referencia) || x.Codigo.Equals(codigo))
                                     .Select(x => new Producto()
                                     {
                                         Codigo = x.Codigo,

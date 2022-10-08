@@ -21,7 +21,7 @@ namespace LuxuryBiker.Logic.Productos
             try
             {
                 producto.Codigo = generateCodeProduct(producto);
-                var existProducto = _productosRepository.getProductoByNombreOrReferencia(producto.Nombre, producto.Referencia, producto.Codigo) != null;
+                var existProducto = _productosRepository.getProductoByNombreOrReferencia(producto.Referencia, producto.Codigo) != null;
                 if (existProducto)
                 {
                     return new ResponseGeneric<bool>
@@ -65,7 +65,7 @@ namespace LuxuryBiker.Logic.Productos
                     code += word.Substring(0, 2);
                 }
 
-                return code + producto.Referencia.Replace(" ", String.Empty);
+                return code + producto.Referencia.Replace(" ", String.Empty).ToUpper();
             }
             catch (Exception)
             {

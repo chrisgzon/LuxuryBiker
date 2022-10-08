@@ -62,7 +62,8 @@ namespace LuxuryBiker.Data.Repositry.Terceros
                     Apellidos = x.Apellidos,
                     Celular = x.Celular,
                     IdTercero = x.IdTercero,
-                    Email = x.Email
+                    Email = x.Email,
+                    Identificacion  = x.Identificacion
                 }).ToList();
             }
         }

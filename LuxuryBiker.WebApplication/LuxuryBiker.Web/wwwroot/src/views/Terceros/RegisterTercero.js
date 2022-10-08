@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 
 initAxiosInterceptors();
 
-export default function RegisterTercero() {
+export default function RegisterTercero({callback}) {
     const [form, setForm] = useState({
 		Nombres: '',
 		Apellidos: '',
@@ -75,6 +75,10 @@ export default function RegisterTercero() {
                     Direccion: '',
                     TipoIdTipo: ''
                 });
+
+                if (callback !== void(0)) {
+                    callback();
+                }
             });
 
         } catch(error) {
