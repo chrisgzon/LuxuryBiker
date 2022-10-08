@@ -11296,4 +11296,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
 .fa-boxes-stacked:before {
   content: "\f468";
-  }
+}
+.fa-square-plus:before {
+  content: "\f0fe";
+}

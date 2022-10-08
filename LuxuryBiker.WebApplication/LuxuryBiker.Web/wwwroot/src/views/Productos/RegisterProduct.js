@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 
 initAxiosInterceptors();
 
-export default function RegisterProducto() {
+export default function RegisterProducto({callback}) {
     const [form, setForm] = useState({
 		Nombre: '',
 		Referencia: '',
@@ -37,7 +37,7 @@ export default function RegisterProducto() {
     }
 
 	const handleSubmit = async (e) => {
-		e.preventDefault();
+        e.preventDefault();
         
         if (!validateData()) {
             return;
@@ -67,6 +67,10 @@ export default function RegisterProducto() {
                     Referencia: '',
                     Descripcion: ''
                 });
+
+                if (callback !== void(0)) {
+                    callback();
+                }
             });
 
         } catch(error) {

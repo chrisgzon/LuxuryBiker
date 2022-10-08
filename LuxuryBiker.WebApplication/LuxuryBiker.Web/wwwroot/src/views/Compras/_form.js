@@ -2,7 +2,7 @@ import { data } from "jquery";
 import React, { useState } from "react";
 import Swal from 'sweetalert2';
 
-export default function Form({productos, proveedores, registerCompra}) {
+export default function Form({productos, proveedores, registerCompra, showModalProvider, showModalProduct}) {
     const selectProvider = React.useRef();
     const selectProduct = React.useRef();
     const txtFechaCompra = React.useRef();
@@ -207,17 +207,23 @@ export default function Form({productos, proveedores, registerCompra}) {
                 </div>
                 <div className="form-group">
                     <label htmlFor="provider_id">Proveedor</label>
+                    <button type="button" class="btn btn-success btn-sm btn-circle ml-2" onClick={()=>{showModalProvider(true)}}>
+                        <i className="fas fa-solid fa-user-plus"></i>
+                    </button>
                     <select ref={selectProvider} id="provider_id" className="form-control" name="provider_id">
                         <option value={""} hidden>Seleccionar...</option>
                         {
                             proveedores.map((proveedor, index) => {
-                                return(<option key={index} value={proveedor.idTercero}>{proveedor.nombres + " " + proveedor.apellidos+"("+proveedor.email+")"}</option>);
+                                return(<option key={index} value={proveedor.idTercero}>{proveedor.nombres + (proveedor.apellidos !== "" ? " " + proveedor.apellidos : "") + "("+proveedor.identificacion+")"}</option>);
                             })
                         }
                     </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="ProductoIdProducto">Producto</label>
+                    <button type="button" class="btn btn-success btn-sm btn-circle ml-2" onClick={()=>{showModalProduct(true)}}>
+                        <i class="fas fa-solid fa-square-plus"></i>
+                    </button>
                     <select ref={selectProduct} value={producto.ProductoIdProducto} onChange={handleFieldProductoChange} id="ProductoIdProducto" className="form-control" name="ProductoIdProducto">
                     <option value={""} hidden>Seleccionar...</option>
                         {
