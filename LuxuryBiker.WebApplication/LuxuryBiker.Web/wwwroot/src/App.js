@@ -69,7 +69,7 @@ export default function App () {
           if (response.data.error) {
             throw response;
           }
-          globalThis.LuxuryBiker = {Usuario:response.result }
+          globalThis.LuxuryBiker = {Usuario:response.data.result }
           setUsuario(response.data.result);
           setToken(response.data.result.token);
         }));
@@ -98,7 +98,6 @@ export default function App () {
         {usuario ? (
           // si el usuario esta logueado se renderiza layout y habilitan rutas
           <LoginRoutes
-              usuario={usuario}
               logout={logout}
           />
         ) : (
@@ -109,7 +108,7 @@ export default function App () {
 	);
 }
 
-const LoginRoutes = ({ usuario, logout }) => {
+const LoginRoutes = ({ logout }) => {
   return (
     <Routes>
       <Route
