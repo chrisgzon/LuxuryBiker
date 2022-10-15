@@ -11,7 +11,7 @@ namespace LuxuryBiker.Data.Interfaces.Ventas
         int IdVenta { get; set; }
         string CodVenta { get; set; }
         DateTime FechaVenta { get; set; }
-        int TerceroIdTercero { get; set; }
+        int? TerceroIdTercero { get; set; }
         string UsuarioIdUsuario { get; set; }
         bool Estado { get; set; }
         decimal Total { get; set; }

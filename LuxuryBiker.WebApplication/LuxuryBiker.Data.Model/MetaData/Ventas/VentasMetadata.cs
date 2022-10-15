@@ -19,11 +19,11 @@ namespace LuxuryBiker.Data.Model.MetaData.Ventas
             entityBuilder.Property(x => x.Estado).IsRequired().HasDefaultValue(1);
             entityBuilder.Property(x => x.FechaVenta).IsRequired();
             entityBuilder.Property(x => x.UsuarioIdUsuario).IsRequired();
-            entityBuilder.Property(x => x.TerceroIdTercero);
+            entityBuilder.Property(x => x.TerceroIdTercero).IsRequired(false);
             entityBuilder.Property(x => x.Total).HasPrecision(28, 6);
 
             entityBuilder.HasOne(x => x.Usuario).WithMany(x => x.Ventas);
-            entityBuilder.HasOne(x => x.Tercero).WithMany(x => x.ComprasCliente);
+            entityBuilder.HasOne(x => x.Tercero).WithMany(x => x.ComprasCliente).HasForeignKey(x=>x.TerceroIdTercero).IsRequired(false);
         }
     }
 }

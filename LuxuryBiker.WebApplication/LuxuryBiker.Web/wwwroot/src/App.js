@@ -21,6 +21,7 @@ import PageNotFound from './views/404';
 import RegisterTercero from './views/Terceros/RegisterTercero';
 import RegisterProducto from './views/Productos/RegisterProduct';
 import RegistrarCompra from './views/Compras/RegistrarCompra';
+import RegistrarVenta from './views/Ventas/RegistrarVenta';
 
 initAxiosInterceptors();
 
@@ -118,6 +119,7 @@ const LoginRoutes = ({ logout }) => {
       <Route path="/RegistrarTercero" element={<Layout logout={logout}><RegisterTercero /></Layout>} />
       <Route path="/RegisterProducto" element={<Layout logout={logout}><RegisterProducto /></Layout>} />
       <Route path="/RegisterCompra" element={<Layout logout={logout}><RegistrarCompra /></Layout>} />
+      <Route path="/RegisterVenta" element={<Layout logout={logout}><RegistrarVenta /></Layout>} />
       <Route path="*" element={<Layout logout={logout}><PageNotFound /></Layout>} />
     </Routes>
   );

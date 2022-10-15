@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Data.CustomTypes.Helpers;
+﻿using LuxuryBiker.Data.CustomTypes.Compras;
+using LuxuryBiker.Data.CustomTypes.Helpers;
 using LuxuryBiker.Data.CustomTypes.Productos;
 using LuxuryBiker.Data.Repositry.Productos;
 using System;
@@ -83,6 +84,30 @@ namespace LuxuryBiker.Logic.Productos
             {
 
                 return null;
+            }
+        }
+        public void UpdateValueProducts(List<Producto> productos)
+        {
+            try
+            {
+                _productosRepository.UpdateValueProducts(productos);
+            }
+            catch (Exception)
+            {
+
+                return;
+            }
+        }
+        public void UpdateStockProducts(List<Producto> productosCompra, bool suma)
+        {
+            try
+            {
+                _productosRepository.UpdateStockProducts(productosCompra, suma);
+            }
+            catch (Exception)
+            {
+
+                return;
             }
         }
     }

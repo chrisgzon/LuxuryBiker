@@ -84,7 +84,7 @@ export default function RegistrarCompra() {
         });
     }
 
-    const getCategoriesAndCompras = async () => {
+    const getProductosAndProviders = async () => {
         Swal.fire({
             title: 'Cargando...',
             allowOutsideClick: false,
@@ -98,9 +98,9 @@ export default function RegistrarCompra() {
     }
 
     const handleRegisterProviderOrProduct = () => {
-        getCategoriesAndCompras();
+        getProductosAndProviders();
         setShowModalProvider(false);
-        setShowModalProvider(false);
+        setShowModalProducto(false);
     }
 
     if (data !== null) {
@@ -120,6 +120,6 @@ export default function RegistrarCompra() {
             </main>
         );
     } else {
-        getCategoriesAndCompras()
+        getProductosAndProviders()
     }
 }

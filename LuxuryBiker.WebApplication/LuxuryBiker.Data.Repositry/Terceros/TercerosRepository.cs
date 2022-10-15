@@ -10,6 +10,8 @@ namespace LuxuryBiker.Data.Repositry.Terceros
 {
     public class TercerosRepository
     {
+        private int Provider = 1;
+        private int Client = 2;
         public Tercero getTerceroByIdentificacionAndTipo(string identificacion, int IdTipo)
         {
             using (var ctx = new LuxuryBikerDBContext())
@@ -56,7 +58,7 @@ namespace LuxuryBiker.Data.Repositry.Terceros
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
-                return ctx.Terceros.Where(x => x.Tipo.IdTipo.Equals(1) && x.SenActivo).Select(x => new Tercero()
+                return ctx.Terceros.Where(x => x.Tipo.IdTipo.Equals(Provider) && x.SenActivo).Select(x => new Tercero()
                 {
                     Nombres = x.Nombres,
                     Apellidos = x.Apellidos,
@@ -64,6 +66,21 @@ namespace LuxuryBiker.Data.Repositry.Terceros
                     IdTercero = x.IdTercero,
                     Email = x.Email,
                     Identificacion  = x.Identificacion
+                }).ToList();
+            }
+        }
+        public List<Tercero> GetClients()
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                return ctx.Terceros.Where(x => x.Tipo.IdTipo.Equals(Client) && x.SenActivo).Select(x => new Tercero()
+                {
+                    Nombres = x.Nombres,
+                    Apellidos = x.Apellidos,
+                    Celular = x.Celular,
+                    IdTercero = x.IdTercero,
+                    Email = x.Email,
+                    Identificacion = x.Identificacion
                 }).ToList();
             }
         }

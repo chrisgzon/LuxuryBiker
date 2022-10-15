@@ -61,5 +61,17 @@ namespace LuxuryBiker.Logic.Terceros
                 return null;
             }
         }
+        public List<Tercero> GetClients()
+        {
+            try
+            {
+                return _tercerosRepository.GetClients();
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+        }
     }
 }
