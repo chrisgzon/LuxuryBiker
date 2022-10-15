@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Axios from 'axios';
 import { initAxiosInterceptors } from '../../helpers/auth-helpers';
 import Swal from 'sweetalert2';
+import { Link } from "react-router-dom";
 
 initAxiosInterceptors();
 
@@ -92,7 +93,15 @@ export default function RegisterTercero({callback}) {
 
     return (
         <main>
-            <h1 className="h3 mb-4 text-gray-800">Registrar Tercero <span className='text-gray-400'>(Cliente/Distribuidor)</span></h1>
+            <div className="page-header row">
+            <h1 className="col-md-6 h3 mb-4 text-gray-800">Registrar Tercero <span className='text-gray-400'>(Cliente/Distribuidor)</span></h1>
+                <nav aria-label="breadcrumb" className="col-md-6">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item"><Link to="/">Dashboard</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">Registrar Tercero</li>
+                    </ol>
+                </nav>
+            </div>
             <hr className="sidebar-divider my-0" />
             <div className='box-gray mt-3'>
                 <h3>Datos del tercero</h3>
