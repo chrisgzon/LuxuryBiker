@@ -20,7 +20,9 @@ namespace LuxuryBiker.Data.Model.MetaData.Terceros
             entityBuilder.Property(x => x.FechaCreacion).IsRequired();
             entityBuilder.Property(x => x.Identificacion).HasMaxLength(60).IsRequired();
             entityBuilder.Property(x => x.TipoIdTipo).IsRequired();
-            entityBuilder.Property(x => x.SenActivo).IsRequired().HasDefaultValue(1);
+            entityBuilder.Property(x => x.Nombres).IsRequired().HasMaxLength(250);
+            entityBuilder.Property(x => x.Apellidos).HasMaxLength(250);
+            entityBuilder.Property(x => x.Celular).HasMaxLength(50);
 
             entityBuilder.HasOne(x => x.Tipo).WithMany(x=>x.Terceros);
         }

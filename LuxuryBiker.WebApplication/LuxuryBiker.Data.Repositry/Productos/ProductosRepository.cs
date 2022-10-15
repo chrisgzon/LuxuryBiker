@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Data.CustomTypes.Productos;
+﻿using LuxuryBiker.Data.CustomTypes.Compras;
+using LuxuryBiker.Data.CustomTypes.Productos;
 using LuxuryBiker.Data.Model;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,36 @@ namespace LuxuryBiker.Data.Repositry.Productos
                     Stock = x.Stock,
                     ValorProducto = x.ValorProducto
                 }).ToList();
+            }
+        }
+        public void UpdateValueProducts(List<Producto> productos)
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                var entities = new List<Entities.Productos.Producto>();
+                foreach (var producto in productos)
+                {
+                    var entitie = ctx.Productos.FirstOrDefault(p=>p.IdProducto==producto.IdProducto);
+                    entitie.ValorProducto = producto.ValorProducto;
+                    entities.Add(entitie);
+                }
+                ctx.Productos.UpdateRange(entities);
+                ctx.SaveChanges();
+            }
+        }
+        public void UpdateStockProducts(List<Producto> compraProductos, bool suma)
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                var entities = new List<Entities.Productos.Producto>();
+                foreach (var producto in compraProductos)
+                {
+                    var entitie = ctx.Productos.FirstOrDefault(p => p.IdProducto == producto.IdProducto);
+                    entitie.Stock = suma ? entitie.Stock + producto.Stock : entitie.Stock - producto.Stock;
+                    entities.Add(entitie);
+                }
+                ctx.Productos.UpdateRange(entities);
+                ctx.SaveChanges();
             }
         }
     }

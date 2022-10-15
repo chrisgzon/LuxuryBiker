@@ -139,12 +139,18 @@ export default function Sidebar() {
                 </div>
             </li>) : ""}
 
-            {/*Nav Item - Tables*/}
+            {(!!usuario && (usuario.roles.includes('Administrador') || usuario.isAdministrador)) ? (
             <li className="nav-item">
-                <a className="nav-link" href="tables.html">
-                    <i className="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
+                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVentas" aria-expanded="true" aria-controls="collapsePages">
+                <i className="fas fa-solid fa-tags"></i>
+                    <span>Ventas</span>
+                </a>
+                <div id="collapseVentas" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div className="bg-white py-2 collapse-inner rounded">
+                        <Link className="collapse-item" to="/RegisterVenta">Registrar Venta</Link>
+                    </div>
+                </div>
+            </li>) : ""}
 
             {/*Divider*/}
             <hr className="sidebar-divider d-none d-md-block" />

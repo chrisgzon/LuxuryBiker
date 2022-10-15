@@ -19,7 +19,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Compras.Compras", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Compras.Compra", b =>
                 {
                     b.Property<int>("IdCompra")
                         .ValueGeneratedOnAdd()
@@ -89,7 +89,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.ToTable("ComprasDetails");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Productos.Productos", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Productos.Producto", b =>
                 {
                     b.Property<int>("IdProducto")
                         .ValueGeneratedOnAdd()
@@ -118,6 +118,9 @@ namespace LuxuryBiker.Data.Model.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
+                    b.Property<string>("Referencia")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Stock")
                         .HasPrecision(10, 3)
                         .HasColumnType("decimal(10,3)");
@@ -131,12 +134,20 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.ToTable("Productos");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Terceros.Terceros", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Terceros.Tercero", b =>
                 {
                     b.Property<int>("IdTercero")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Apellidos")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Celular")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Direccion")
                         .HasMaxLength(200)
@@ -154,10 +165,13 @@ namespace LuxuryBiker.Data.Model.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
+                    b.Property<string>("Nombres")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.Property<bool>("SenActivo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit");
 
                     b.Property<int>("TipoIdTipo")
                         .HasColumnType("int");
@@ -191,7 +205,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.ToTable("TiposTercero");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Users.Users", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Users.User", b =>
                 {
                     b.Property<string>("IdUsuario")
                         .HasMaxLength(60)
@@ -208,7 +222,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaNacimiento")
+                    b.Property<DateTime?>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Identificacion")
@@ -291,7 +305,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.ToTable("UsrUsuario_UsrRol");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Ventas.Ventas", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Ventas.Venta", b =>
                 {
                     b.Property<int>("IdVenta")
                         .ValueGeneratedOnAdd()
@@ -311,7 +325,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.Property<DateTime>("FechaVenta")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TerceroIdTercero")
+                    b.Property<int?>("TerceroIdTercero")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Total")
@@ -361,15 +375,15 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.ToTable("VentasDetails");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Compras.Compras", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Compras.Compra", b =>
                 {
-                    b.HasOne("LuxuryBiker.Data.Entities.Terceros.Terceros", "Tercero")
+                    b.HasOne("LuxuryBiker.Data.Entities.Terceros.Tercero", "Tercero")
                         .WithMany("VentasProveedor")
                         .HasForeignKey("TerceroIdTercero")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LuxuryBiker.Data.Entities.Users.Users", "Usuario")
+                    b.HasOne("LuxuryBiker.Data.Entities.Users.User", "Usuario")
                         .WithMany("Compras")
                         .HasForeignKey("UsuarioIdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,13 +396,13 @@ namespace LuxuryBiker.Data.Model.Migrations
 
             modelBuilder.Entity("LuxuryBiker.Data.Entities.Compras.ComprasDetails", b =>
                 {
-                    b.HasOne("LuxuryBiker.Data.Entities.Compras.Compras", "Compra")
+                    b.HasOne("LuxuryBiker.Data.Entities.Compras.Compra", "Compra")
                         .WithMany("DetallesCompra")
                         .HasForeignKey("CompraIdCompra")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LuxuryBiker.Data.Entities.Productos.Productos", "Producto")
+                    b.HasOne("LuxuryBiker.Data.Entities.Productos.Producto", "Producto")
                         .WithMany("DetallesCompra")
                         .HasForeignKey("ProductoIdProducto")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -399,7 +413,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.Navigation("Producto");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Terceros.Terceros", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Terceros.Tercero", b =>
                 {
                     b.HasOne("LuxuryBiker.Data.Entities.Terceros.TiposTercero", "Tipo")
                         .WithMany("Terceros")
@@ -418,7 +432,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LuxuryBiker.Data.Entities.Users.Users", "Usuario")
+                    b.HasOne("LuxuryBiker.Data.Entities.Users.User", "Usuario")
                         .WithMany("Roles")
                         .HasForeignKey("UsuarioIdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -429,15 +443,13 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Ventas.Ventas", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Ventas.Venta", b =>
                 {
-                    b.HasOne("LuxuryBiker.Data.Entities.Terceros.Terceros", "Tercero")
+                    b.HasOne("LuxuryBiker.Data.Entities.Terceros.Tercero", "Tercero")
                         .WithMany("ComprasCliente")
-                        .HasForeignKey("TerceroIdTercero")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TerceroIdTercero");
 
-                    b.HasOne("LuxuryBiker.Data.Entities.Users.Users", "Usuario")
+                    b.HasOne("LuxuryBiker.Data.Entities.Users.User", "Usuario")
                         .WithMany("Ventas")
                         .HasForeignKey("UsuarioIdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -450,13 +462,13 @@ namespace LuxuryBiker.Data.Model.Migrations
 
             modelBuilder.Entity("LuxuryBiker.Data.Entities.Ventas.VentasDetails", b =>
                 {
-                    b.HasOne("LuxuryBiker.Data.Entities.Productos.Productos", "Producto")
+                    b.HasOne("LuxuryBiker.Data.Entities.Productos.Producto", "Producto")
                         .WithMany("DetallesVenta")
                         .HasForeignKey("ProductoIdProducto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LuxuryBiker.Data.Entities.Ventas.Ventas", "Venta")
+                    b.HasOne("LuxuryBiker.Data.Entities.Ventas.Venta", "Venta")
                         .WithMany("DetallesVentas")
                         .HasForeignKey("VentaIdVenta")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -467,19 +479,19 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.Navigation("Venta");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Compras.Compras", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Compras.Compra", b =>
                 {
                     b.Navigation("DetallesCompra");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Productos.Productos", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Productos.Producto", b =>
                 {
                     b.Navigation("DetallesCompra");
 
                     b.Navigation("DetallesVenta");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Terceros.Terceros", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Terceros.Tercero", b =>
                 {
                     b.Navigation("ComprasCliente");
 
@@ -491,7 +503,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.Navigation("Terceros");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Users.Users", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Users.User", b =>
                 {
                     b.Navigation("Compras");
 
@@ -505,7 +517,7 @@ namespace LuxuryBiker.Data.Model.Migrations
                     b.Navigation("Usuarios");
                 });
 
-            modelBuilder.Entity("LuxuryBiker.Data.Entities.Ventas.Ventas", b =>
+            modelBuilder.Entity("LuxuryBiker.Data.Entities.Ventas.Venta", b =>
                 {
                     b.Navigation("DetallesVentas");
                 });

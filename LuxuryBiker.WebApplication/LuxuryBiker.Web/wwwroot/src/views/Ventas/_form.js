@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Swal from 'sweetalert2';
 
-export default function Form({productos, proveedores, registerCompra, showModalProvider, showModalProduct}) {
-    const selectProvider = React.useRef();
+export default function Form({productos, clientes, registerVenta, showModalClient}) {
+    const selectCliente = React.useRef();
     const selectProduct = React.useRef();
-    const txtFechaCompra = React.useRef();
 
-    const [detallesCompra, setDetallesCompra] = useState([]);
+    const [detallesVenta, setDetallesVenta] = useState([]);
     const [total, setTotal] = useState(0);
     const [total_impuesto, setTotal_impuesto] = useState(0);
     const [total_pagar, setTotal_pagar] = useState(0);
@@ -14,30 +13,30 @@ export default function Form({productos, proveedores, registerCompra, showModalP
         nombre: "",
         cantidad: "",
         ValorProducto: "",
-        ProductoIdProducto: 0
+        ProductoIdProducto: 0,
+        cantidadMaxima: 0
     });
 
     const showFieldsProducts = { ProductoIdProducto: "Producto", ValorProducto: "Precio", cantidad: "Cantidad" };
     const impuesto = 19;
-    var dataCompra = null;
+    var dataVenta = null;
     var subtotal = 0;
     var total_aux = 0;
     var total_impuesto_aux = 0;
     var total_pagar_aux = 0;
 
-    const handleSubmitCompra = (e) => {
+    const handleSubmitVenta = (e) => {
         e.preventDefault();
 
-        dataCompra = {
-            TerceroIdTercero: selectProvider.current.value,
+        dataVenta = {
+            TerceroIdTercero: selectCliente.current.value === "" ? null : selectCliente.current.value,
             UsuarioIdUsuario: LuxuryBiker.Usuario.idUsuario,
-            DetallesCompra: detallesCompra,
-            FechaCompra: txtFechaCompra.current.value
+            DetallesVenta: detallesVenta
         }
 
-        registerCompra(dataCompra).then(result=>{
+        registerVenta(dataVenta).then(result=>{
             if (result) {
-                setDetallesCompra([])
+                setDetallesVenta([])
                 setTotal(0)
                 setTotal_impuesto(0)
                 setTotal_pagar(0)
@@ -47,7 +46,12 @@ export default function Form({productos, proveedores, registerCompra, showModalP
 
     const handleFieldProductoChange = (event) => {
         if (event.target.name === "ProductoIdProducto") {
-             producto.nombre = selectProduct.current.options[selectProduct.current.selectedIndex].text
+            let nombre = selectProduct.current.options[selectProduct.current.selectedIndex].text
+            let idProducto = selectProduct.current.value;
+            let precio = productos.find(p=>p.idProducto === parseInt(event.target.value))?.valorProducto;
+            let cantidad = productos.find(p=>p.idProducto === parseInt(event.target.value))?.stock;
+            setProducto({...producto, ValorProducto: precio, cantidadMaxima: cantidad, nombre: nombre, ProductoIdProducto: idProducto});
+            return;
         }
         setProducto({
             ...producto,
@@ -65,24 +69,26 @@ export default function Form({productos, proveedores, registerCompra, showModalP
         subtotal = producto.ValorProducto * producto.cantidad;
         total_aux = total + subtotal; 
         let tProducto = producto; 
-        let tCompras = detallesCompra;
-        tProducto.totalCompraProducto = subtotal;
-        tCompras.push(tProducto);
-        setDetallesCompra(tCompras);
+        let tVentas = detallesVenta;
+        tProducto.totalVentaProducto = subtotal;
+        tVentas.push(tProducto);
+        setDetallesVenta(tVentas);
         setTotal(total_aux);
         setProducto({
             nombre:"",
             cantidad:"",
             ValorProducto:"",
-            ProductoIdProducto:0 
+            ProductoIdProducto:0,
+            cantidadMaxima: 0
         });
         totales();
     };
     
     const validateDataProductAdd = () => {
         var result = true;
+        var productoData = productos.find(x=>x.idProducto==producto.ProductoIdProducto);
         for (var property in producto) {
-            if ((producto[property] === null || producto[property] === "" || producto[property] === 0) && property !== "nombre") {
+            if ((producto[property] === null || producto[property] === "" || producto[property] === 0) && property !== "nombre" && property !== "cantidadMaxima") {
                 Swal.fire(
                     '¡Error!',
                     'El campo <b>' + showFieldsProducts[property] + '</b> no puede estar vacio',
@@ -107,10 +113,18 @@ export default function Form({productos, proveedores, registerCompra, showModalP
             );
             result = false;
         }
-        if (result && detallesCompra.find(x=>x.ProductoIdProducto === producto.ProductoIdProducto)) {
+        if (result && producto.cantidad > productoData.stock) {
             Swal.fire(
                 '¡Error!',
-                'El producto <b>'+producto.nombre+'</b> ya se encuentra en la lista de compras, si desea modificar algun valor debe eliminarlo y volver a agregarlo',
+                'El valor digitado en el campo <b>Cantidad</b> es superior al stock actual del producto',
+                'error'
+            );
+            result = false;
+        }
+        if (result && detallesVenta.find(x=>x.ProductoIdProducto === producto.ProductoIdProducto)) {
+            Swal.fire(
+                '¡Error!',
+                'El producto <b>'+producto.nombre+'</b> ya se encuentra en la lista de ventas, si desea modificar algun valor debe eliminarlo y volver a agregarlo',
                 'error'
             );
             result = false;
@@ -166,63 +180,56 @@ export default function Form({productos, proveedores, registerCompra, showModalP
         setTotal_pagar(total_pagar_aux);
     };
     
-    const eliminar = (index, compra) => {
-        let tCompras = detallesCompra;
-        total_aux = total - compra.totalCompraProducto;
-        tCompras.splice(index, 1);
-        setDetallesCompra(tCompras);
+    const eliminar = (index, venta) => {
+        let tVentas = detallesVenta;
+        total_aux = total - venta.totalVentaProducto;
+        tVentas.splice(index, 1);
+        setDetallesVenta(tVentas);
         setTotal(total_aux);
         totales();
     };
     
-    function Fila ({index, compra}) {
+    function Fila ({index, venta}) {
         return (
             <tr className="selected" id={"fila"+index}>
                 <td>
-                    <button type="button" className="btn btn-danger btn-sm" onClick={eliminar.bind(this, index, compra)}>
+                    <button type="button" className="btn btn-danger btn-sm" onClick={eliminar.bind(this, index, venta)}>
                         <i className="fa fa-times"></i>
                     </button>
                 </td>
                 <td>
-                    <input type="hidden" name="product_id[]" value={compra.ProductoIdProducto} />{compra.nombre}
+                    <input type="hidden" name="product_id[]" value={venta.ProductoIdProducto} />{venta.nombre}
                 </td>
                 <td>
-                    <input type="hidden" id="price[]" name="price[]" value={formatoNumero(compra.ValorProducto, 0, "", ".")} />{formatoNumero(compra.ValorProducto, 0, "", ".")}
+                    <input type="hidden" id="price[]" name="price[]" value={formatoNumero(venta.ValorProducto, 0, "", ".")} />{formatoNumero(venta.ValorProducto, 0, "", ".")}
                 </td>
                 <td>
-                    <input type="hidden" name="quantity[]" value={compra.cantidad} />{compra.cantidad}
+                    <input type="hidden" name="quantity[]" value={venta.cantidad} />{venta.cantidad}
                 </td>
-                <td align="right">${formatoNumero(compra.totalCompraProducto, 0, "", ".")}</td>
+                <td align="right">${formatoNumero(venta.totalVentaProducto, 0, "", ".")}</td>
             </tr>
         );
     }
 
     return (
-        <form className="mt-2" onSubmit={handleSubmitCompra}>
+        <form className="mt-2" onSubmit={handleSubmitVenta}>
             <div name="box-gray">
                 <div className="form-group">
-                    <label htmlFor="FechaCompra">Fecha Compra</label>
-                    <input ref={txtFechaCompra} type="date" id="FechaCompra" className="form-control" name="FechaCompra" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="provider_id">Proveedor</label>
-                    <button type="button" class="btn btn-success btn-sm btn-circle ml-2" onClick={()=>{showModalProvider(true)}}>
+                    <label htmlFor="client_id">Cliente</label>
+                    <button type="button" className="btn btn-success btn-sm btn-circle ml-2" onClick={()=>{showModalClient(true)}}>
                         <i className="fas fa-solid fa-user-plus"></i>
                     </button>
-                    <select ref={selectProvider} id="provider_id" className="form-control" name="provider_id">
+                    <select ref={selectCliente} id="client_id" className="form-control" name="client_id">
                         <option value={""} hidden>Seleccionar...</option>
                         {
-                            proveedores.map((proveedor, index) => {
-                                return(<option key={index} value={proveedor.idTercero}>{proveedor.nombres + (proveedor.apellidos !== "" ? " " + proveedor.apellidos : "") + "("+proveedor.identificacion+")"}</option>);
+                            clientes.map((cliente, index) => {
+                                return(<option key={index} value={cliente.idTercero}>{cliente.nombres + (cliente.apellidos !== "" ? " " + cliente.apellidos : "") + "("+cliente.identificacion+")"}</option>);
                             })
                         }
                     </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="ProductoIdProducto">Producto</label>
-                    <button type="button" class="btn btn-success btn-sm btn-circle ml-2" onClick={()=>{showModalProduct(true)}}>
-                        <i class="fas fa-solid fa-square-plus"></i>
-                    </button>
                     <select ref={selectProduct} value={producto.ProductoIdProducto} onChange={handleFieldProductoChange} id="ProductoIdProducto" className="form-control" name="ProductoIdProducto">
                     <option value={""} hidden>Seleccionar...</option>
                         {
@@ -241,12 +248,12 @@ export default function Form({productos, proveedores, registerCompra, showModalP
                     <input id="tax" onChange={handleFieldProductoChange} className="form-control" value="19" type="text" readOnly name="tax" />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="cantidad">Cantidad</label>
+                    <label htmlFor="cantidad">Cantidad</label>{producto.cantidadMaxima != "" ? <i>Cant. maxima posible: {producto.cantidadMaxima}</i> : ""}
                     <input value={producto.cantidad} onChange={handleFieldProductoChange} id="cantidad" className="form-control" type="text" name="cantidad" />
                 </div>
             </div>
             <div className="form-group mt-3 row">
-                <h4 className="card-title col-md-6">Detalles de compra</h4>
+                <h4 className="card-title col-md-6">Detalles de venta</h4>
                 <div className="col-md-6" style={{ textAlign: "end" }}>
                     <button className="btn btn-success" onClick={HandleAgregar} type="button">Agregar Producto</button>
                 </div>
@@ -264,8 +271,8 @@ export default function Form({productos, proveedores, registerCompra, showModalP
                             </tr>
                         </thead>
                         <tbody>
-                            {detallesCompra.map((compra, index)=>{
-                                return (<Fila key={index} index={index} compra={compra} />);
+                            {detallesVenta.map((venta, index)=>{
+                                return (<Fila key={index} index={index} venta={venta} />);
                             })}
                         </tbody>
                         <tfoot>
