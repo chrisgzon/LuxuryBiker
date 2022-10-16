@@ -142,5 +142,25 @@ namespace LuxuryBiker.Logic.Compras
                 };
             }
         }
+        public ResponseGeneric<bool> ChangeStatus(Compra compra)
+        {
+            try
+            {
+                var result = _comprasRepository.ChangeStatus(compra);
+                return new ResponseGeneric<bool>()
+                {
+                    Error = !result
+                };
+            }
+            catch (Exception)
+            {
+
+                return new ResponseGeneric<bool>()
+                {
+                    Error = true,
+                    Mensaje = "Ocurrio un error al intentar actualizar el estado de la compra."
+                };
+            }
+        }
     }
 }

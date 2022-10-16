@@ -1,5 +1,6 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Compras;
 using LuxuryBiker.Data.CustomTypes.Helpers;
+using LuxuryBiker.Data.CustomTypes.Terceros;
 using LuxuryBiker.Data.Model;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,12 @@ namespace LuxuryBiker.Data.Repositry.Compras
                     Estado = c.Estado,
                     FechaCompra = c.FechaCompra,
                     Total = c.Total,
-                    
+                    Tercero = new Tercero()
+                    {
+                        Nombres = c.Tercero.Nombres,
+                        Apellidos = c.Tercero.Apellidos
+                    },
+                    CantidadProductos = (int)c.DetallesCompra.Sum(dc=>dc.cantidad)
                 });
 
                 if (oParams.FechaIni != null && oParams.FechaFinal != null)
@@ -74,6 +80,16 @@ namespace LuxuryBiker.Data.Repositry.Compras
                 }
 
                 return compras.ToList();
+            }
+        }
+        public bool ChangeStatus(Compra compra)
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                var entitie = ctx.Compras.FirstOrDefault(c => c.IdCompra == compra.IdCompra);
+                entitie.Estado = !compra.Estado;
+                ctx.Compras.Update(entitie);
+                return ctx.SaveChanges() > 0;
             }
         }
     }
