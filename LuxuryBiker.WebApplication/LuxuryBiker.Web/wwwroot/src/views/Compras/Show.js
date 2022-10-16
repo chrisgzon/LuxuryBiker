@@ -33,40 +33,152 @@ export default function Show() {
         }
     }
 
+    const formatoNumero = (numero, decimales, separadorDecimal, separadorMiles) => {
+        var partes, array;
+    
+        if (!isFinite(numero) || isNaN(numero = parseFloat(numero))) {
+            return "";
+        }
+        if (typeof separadorDecimal === "undefined") {
+            separadorDecimal = ",";
+        }
+        if (typeof separadorMiles === "undefined") {
+            separadorMiles = "";
+        }
+    
+        // Redondeamos
+        if (!isNaN(parseInt(decimales))) {
+            if (decimales >= 0) {
+                numero = numero.toFixed(decimales);
+            } else {
+                numero = (
+                    Math.round(numero / Math.pow(10, Math.abs(decimales))) * Math.pow(10, Math.abs(decimales))
+                ).toFixed();
+            }
+        } else {
+            numero = numero.toString();
+        }
+    
+        // Damos formato
+        partes = numero.split(".", 2);
+        array = partes[0].split("");
+        for (var i = array.length - 3; i > 0 && array[i - 1] !== "-"; i -= 3) {
+            array.splice(i, 0, separadorMiles);
+        }
+        numero = array.join("");
+    
+        if (partes.length > 1) {
+            numero += separadorDecimal + partes[1];
+        }
+    
+        return numero;
+    };
+
+    const handleOnClickStatusCompra = async (compra, e) => {
+
+        let mensaje = compra.estado 
+        ? "Si cancela la compra se descontara la cantidad de cada producto comprado del stock actual." 
+        : "Si valida la compra se aumentara la cantidad de cada producto comprado al stock actual."
+        Swal.fire({
+            title: '¿Esta seguro de actualizar el estado?',
+            text: mensaje,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, actualizar!',
+            cancelButtonText: 'Cancelar'
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+
+                await changeStatusCompra(compra);
+            }
+          })
+    }
+
+    const changeStatusCompra = async function(compra) {
+
+        try {
+            await Axios.post('/Compras/ChangeStatus', compra).then((response) => {
+                if (response.data.error) {
+                    throw response;
+                }
+
+                compra.estado = !compra.estado;
+                setCompras([...Compras])
+                Swal.fire(
+                    '¡Excelente!',
+                    response.data.mensaje,
+                    'success'
+                )
+            });
+        } catch(error) {
+            console.log(error);
+            Swal.fire(
+                '¡Error!',
+                error.data.mensaje,
+                'error'
+            )
+        }
+    }
+
     const Columnas = [
         {
-            name:"Id",
-            selector: row => row.idCompra,
+            name:"Código",
+            selector: row => row.codCompra,
             sortable: true,
+            grow:0.5
+        },
+        {
+            name:"Distribuidor",
+            selector: row => row.tercero.nombres + (row.tercero.apellidos !== "" ? " " + row.tercero.apellidos : ""),
+            sortable: true,
+            grow: 2
+        },
+        {
+            name:"Cant. productos",
+            selector: row => row.cantidadProductos,
+            sortable: true,
+            grow:0.5
         },
         {
             name:"Fecha Compra",
-            selector:row=>row.fechaCompra,
+            selector:row=>
+            {
+                var opciones = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(row.fechaCompra).toLocaleDateString('es',opciones)
+                .replace(/ /g,'-')
+                .replace('.','')
+                .replace(/-([a-z])/, function (x) {return '-' + x[1].toUpperCase()});
+            },
             sortable: true,
         },
         {
             name:"Valor Total",
-            selector:row=>row.total,
+            selector:row=> "$ " + formatoNumero(row.total, 0, "", "."),
             sortable: true,
         },
         {
             name:"Estado",
             sortable: true,
             selector: function(row){
-                
                 if (row.estado) {
                     return (
-                    <a href="/"
-                        className="jsgrid-button btn btn-success">
-                            Validada <i className="fas fa-check"></i>                    
+                    <a href="#" title="Cancelar Compra" onClick={handleOnClickStatusCompra.bind(this, row)} className="btn btn-sm btn-success btn-icon-split">
+                        <span className="icon text-white-50">
+                            <i className="fas fa-check"></i>
+                        </span>
+                        <span className="text">Valida</span>
                     </a>
                     )
                 } else {
                     return (
-                    <a href="/"
-                        className="jsgrid-button btn btn-danger">
-                            Cancelada <i className="fas fa-times"></i>                    
-                    </a>
+                        <a href="#" title="Validar Compra" onClick={handleOnClickStatusCompra.bind(this, row)} className="btn btn-sm btn-danger btn-icon-split">
+                            <span className="icon text-white-50">
+                                <i className="fas fa-times"></i>
+                            </span>
+                            <span className="text">Cancelada</span>
+                        </a>
                     )
                 }
             }
