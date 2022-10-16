@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import Axios from 'axios';
-import { initAxiosInterceptors } from '../../helpers/auth-helpers';
 import Swal from 'sweetalert2';
 import Form from './_form';
 import RegisterTercero from './../Terceros/RegisterTercero';
 import ModalClient from 'react-modal';
 import { Link } from "react-router-dom";
-
-initAxiosInterceptors();
 
 export default function RegistrarVenta() {
     const [data, setData] = useState(null);

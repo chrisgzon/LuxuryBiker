@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Axios from 'axios';
-import { initAxiosInterceptors } from '../../helpers/auth-helpers';
 import Swal from 'sweetalert2';
 import { Link } from "react-router-dom";
-
-initAxiosInterceptors();
 
 export default function RegisterProducto({callback}) {
     const [form, setForm] = useState({

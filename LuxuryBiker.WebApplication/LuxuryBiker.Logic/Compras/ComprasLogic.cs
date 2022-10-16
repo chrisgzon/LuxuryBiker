@@ -123,5 +123,24 @@ namespace LuxuryBiker.Logic.Compras
                 throw;
             }
         }
+        public ResponseGeneric<List<Compra>> GetCompras(ParamsWebMethod oParams)
+        {
+            try
+            {
+                return new ResponseGeneric<List<Compra>>()
+                {
+                    Error = false,
+                    Result = _comprasRepository.GetCompras(oParams)
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseGeneric<List<Compra>>()
+                {
+                    Error = true,
+                    Mensaje = "Ocurrio un error al obtener las compras."
+                };
+            }
+        }
     }
 }

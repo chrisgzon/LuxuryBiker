@@ -1,7 +1,9 @@
 ﻿using LuxuryBiker.Data.CustomTypes.Compras;
+using LuxuryBiker.Data.CustomTypes.Helpers;
 using LuxuryBiker.Data.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +51,29 @@ namespace LuxuryBiker.Data.Repositry.Compras
                 {
                     return false;
                 }
+            }
+        }
+        public List<Compra> GetCompras(ParamsWebMethod oParams)
+        {
+            using (var ctx = new LuxuryBikerDBContext())
+            {
+                var compras = ctx.Compras.Select(c=> new Compra()
+                {
+                    IdCompra = c.IdCompra,
+                    CodCompra = c.CodCompra,
+                    Estado = c.Estado,
+                    FechaCompra = c.FechaCompra,
+                    Total = c.Total,
+                    
+                });
+
+                if (oParams.FechaIni != null && oParams.FechaFinal != null)
+                {
+                    compras.Where(c=>DbFunctions.TruncateTime(oParams.FechaIni) <= DbFunctions.TruncateTime(c.FechaCompra)
+                                        && DbFunctions.TruncateTime(oParams.FechaFinal) >= DbFunctions.TruncateTime(c.FechaCompra));
+                }
+
+                return compras.ToList();
             }
         }
     }

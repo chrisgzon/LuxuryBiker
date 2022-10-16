@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Axios from 'axios';
-import { initAxiosInterceptors } from '../../helpers/auth-helpers';
 import Swal from 'sweetalert2';
 import Form from './_form';
 import RegisterTercero from './../Terceros/RegisterTercero';
@@ -8,8 +7,6 @@ import RegisterProduct from './../Productos/RegisterProduct'
 import ModalProvider from 'react-modal';
 import ModalProducto from 'react-modal';
 import { Link } from "react-router-dom";
-
-initAxiosInterceptors();
 
 export default function RegistrarCompra() {
     const [data, setData] = useState(null);
@@ -46,7 +43,7 @@ export default function RegistrarCompra() {
     }
 
     const handleSubmitCompra = (dataCompra) => {  
-        return new Promise(async(resolve, reject)=>{
+        return new Promise(async(resolve)=>{
             if (!validateDataCompra(dataCompra)) {
                 resolve(false);
                 return;

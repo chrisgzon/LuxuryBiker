@@ -62,7 +62,10 @@ namespace LuxuryBiker.Web
             });
             services.AddHttpContextAccessor();
             services.AddAuthorization();
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.AllowEmptyInputInBodyModelBinding = true;
+            });
 
 
 
