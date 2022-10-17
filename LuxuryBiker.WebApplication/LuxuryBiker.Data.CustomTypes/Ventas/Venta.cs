@@ -18,6 +18,7 @@ namespace LuxuryBiker.Data.CustomTypes.Ventas
         public string UsuarioIdUsuario { get; set; } // Usuario que realiza la venta
         public bool Estado { get; set; }
         public decimal Total { get; set; }
+        public int CantidadProductos { get; set; }
 
         public User Usuario { get; set; }
         public Tercero Tercero { get; set; }
