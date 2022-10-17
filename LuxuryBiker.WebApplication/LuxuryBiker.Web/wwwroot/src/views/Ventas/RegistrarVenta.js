@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import Axios from 'axios';
-import { initAxiosInterceptors } from '../../helpers/auth-helpers';
 import Swal from 'sweetalert2';
 import Form from './_form';
 import RegisterTercero from './../Terceros/RegisterTercero';
 import ModalClient from 'react-modal';
-
-initAxiosInterceptors();
+import { Link } from "react-router-dom";
 
 export default function RegistrarVenta() {
     const [data, setData] = useState(null);
@@ -85,7 +83,15 @@ export default function RegistrarVenta() {
     if (data !== null) {
         return (
             <main>
-                <h1 className="h3 mb-4 text-gray-800 col-md-6">Registrar Venta</h1>
+                <div className="page-header row">
+                    <h1 className="col-md-6 h3 mb-4 text-gray-800 col-md-6">Registrar Venta</h1>
+                    <nav aria-label="breadcrumb" className="col-md-6">
+                        <ol className="breadcrumb">
+                            <li className="breadcrumb-item"><Link to="/">Dashboard</Link></li>
+                            <li className="breadcrumb-item active" aria-current="page">Registrar Venta</li>
+                        </ol>
+                    </nav>
+                </div>
                 <hr className="sidebar-divider my-0" />
                 <Form productos={data.productos} clientes={data.clientes} registerVenta={handleSubmitVenta.bind(this)} showModalClient={setShowModalClient} />
                 <ModalClient isOpen={showModalClient} >

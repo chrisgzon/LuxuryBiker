@@ -31,5 +31,15 @@ namespace LuxuryBiker.web.Controllers.Ventas
         {
             return _ventasLogic.RegisterNewVenta(venta);
         }
+        [Route("Ventas/GetVentas")]
+        public ResponseGeneric<List<Venta>> GetVentas()
+        {
+            return _ventasLogic.GetVentas();
+        }
+        [Route("Ventas/ChangeStatus")]
+        public ResponseGeneric<bool> ChangeStatus(Venta venta)
+        {
+            return _ventasLogic.ChangeStatus(venta);
+        }
     }
 }

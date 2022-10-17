@@ -33,5 +33,17 @@ namespace LuxuryBiker.web.Controllers.Compras
         {
             return _comprasLogic.RegisterNewCompra(compra);
         }
+        [Route("Compras/GetCompras")]
+        [HttpPost]
+        public ResponseGeneric<List<Compra>> GetCompras(ParamsWebMethod oParams)
+        {
+            return _comprasLogic.GetCompras(oParams);
+        }
+        [Route("Compras/ChangeStatus")]
+        [HttpPost]
+        public ResponseGeneric<bool> ChangeStatus(Compra compra)
+        {
+            return _comprasLogic.ChangeStatus(compra);
+        }
     }
 }

@@ -85,7 +85,7 @@ export default function Sidebar() {
                 <div id="collapseTerceros" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
                         <h6 className="collapse-header">Clientes/Distribuidores:</h6>
-                        <Link className="collapse-item" to="/RegistrarTercero">Registrar Tercero</Link>
+                        <Link className="collapse-item" to="/Terceros/Registrar">Registrar Tercero</Link>
                     </div>
                 </div>
             </li>) : ""}
@@ -121,7 +121,7 @@ export default function Sidebar() {
                 </a>
                 <div id="collapseProductos" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <Link className="collapse-item" to="/RegisterProducto">Registrar Producto</Link>
+                        <Link className="collapse-item" to="/Productos/Registrar">Registrar Producto</Link>
                     </div>
                 </div>
             </li>) : ""}
@@ -134,7 +134,8 @@ export default function Sidebar() {
                 </a>
                 <div id="collapseCompras" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <Link className="collapse-item" to="/RegisterCompra">Registrar Compra</Link>
+                        <Link className="collapse-item" to="/Compras/Show">Ver Compras</Link>
+                        <Link className="collapse-item" to="/Compras/Registrar">Registrar Compra</Link>
                     </div>
                 </div>
             </li>) : ""}
@@ -147,7 +148,8 @@ export default function Sidebar() {
                 </a>
                 <div id="collapseVentas" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <Link className="collapse-item" to="/RegisterVenta">Registrar Venta</Link>
+                        <Link className="collapse-item" to="/Ventas/Show">Ver Ventas</Link>
+                        <Link className="collapse-item" to="/Ventas/Registrar">Registrar Venta</Link>
                     </div>
                 </div>
             </li>) : ""}
