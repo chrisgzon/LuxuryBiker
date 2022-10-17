@@ -134,8 +134,8 @@ export default function Sidebar() {
                 </a>
                 <div id="collapseCompras" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
-                        <Link className="collapse-item" to="/Compras/Registrar">Registrar Compra</Link>
                         <Link className="collapse-item" to="/Compras/Show">Ver Compras</Link>
+                        <Link className="collapse-item" to="/Compras/Registrar">Registrar Compra</Link>
                     </div>
                 </div>
             </li>) : ""}
@@ -148,6 +148,7 @@ export default function Sidebar() {
                 </a>
                 <div id="collapseVentas" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div className="bg-white py-2 collapse-inner rounded">
+                        <Link className="collapse-item" to="/Ventas/Show">Ver Ventas</Link>
                         <Link className="collapse-item" to="/Ventas/Registrar">Registrar Venta</Link>
                     </div>
                 </div>

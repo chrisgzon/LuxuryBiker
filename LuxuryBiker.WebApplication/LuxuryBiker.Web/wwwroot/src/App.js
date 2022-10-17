@@ -23,6 +23,7 @@ import RegisterProducto from './views/Productos/RegisterProduct';
 import RegistrarCompra from './views/Compras/RegistrarCompra';
 import RegistrarVenta from './views/Ventas/RegistrarVenta';
 import ShowCompras from './views/Compras/Show';
+import ShowVentas from './views/Ventas/Show';
 
 initAxiosInterceptors();
 
@@ -122,6 +123,7 @@ const LoginRoutes = ({ logout }) => {
       <Route path="/Compras/Registrar" element={<Layout logout={logout}><RegistrarCompra /></Layout>} />
       <Route path="/Compras/Show" element={<Layout logout={logout}><ShowCompras /></Layout>} />
       <Route path="/Ventas/Registrar" element={<Layout logout={logout}><RegistrarVenta /></Layout>} />
+      <Route path="/Ventas/Show" element={<Layout logout={logout}><ShowVentas /></Layout>} />
       <Route path="*" element={<Layout logout={logout}><PageNotFound /></Layout>} />
     </Routes>
   );

@@ -5,9 +5,9 @@ import Swal from 'sweetalert2';
 import Table from "../../components/Table";
 
 export default function Show() {
-    const [Compras, setCompras] = useState(null);
+    const [Ventas, setVentas] = useState(null);
 
-    const getCompras = async function() {
+    const getVentas = async function() {
         Swal.fire({
             title: 'Cargando...',
             allowOutsideClick: false,
@@ -16,12 +16,12 @@ export default function Show() {
             showConfirmButton: false
         })
         try {
-            await Axios.post("/Compras/GetCompras", {}).then(response => {
+            await Axios.post("/Ventas/GetVentas", {}).then(response => {
                 if (response.data.error) {
                     throw response;
                 }
                 
-                setCompras(response.data.result);
+                setVentas(response.data.result);
                 Swal.close();
             });
         } catch(error) {
@@ -74,11 +74,11 @@ export default function Show() {
         return numero;
     };
 
-    const handleOnClickStatusCompra = async (compra, e) => {
+    const handleOnClickStatusVenta = async (venta, e) => {
 
-        let mensaje = compra.estado 
-        ? "Si cancela la compra se descontara la cantidad de cada producto comprado del stock actual." 
-        : "Si valida la compra se aumentara la cantidad de cada producto comprado al stock actual."
+        let mensaje = venta.estado 
+        ? "Si cancela la venta se aumentara la cantidad de cada producto vendido al stock actual." 
+        : "Si valida la venta se descontara la cantidad de cada producto vendido del stock actual."
         Swal.fire({
             title: '¿Esta seguro de actualizar el estado?',
             text: mensaje,
@@ -91,21 +91,21 @@ export default function Show() {
           }).then(async (result) => {
             if (result.isConfirmed) {
 
-                await changeStatusCompra(compra);
+                await changeStatusVenta(venta);
             }
           })
     }
 
-    const changeStatusCompra = async function(compra) {
+    const changeStatusVenta = async function(venta) {
 
         try {
-            await Axios.post('/Compras/ChangeStatus', compra).then((response) => {
+            await Axios.post('/Ventas/ChangeStatus', venta).then((response) => {
                 if (response.data.error) {
                     throw response;
                 }
 
-                compra.estado = !compra.estado;
-                setCompras([...Compras])
+                venta.estado = !venta.estado;
+                setVentas([...Ventas])
                 Swal.fire(
                     '¡Excelente!',
                     "Se actualizo el estado correctamente.",
@@ -125,13 +125,19 @@ export default function Show() {
     const Columnas = [
         {
             name:"Código",
-            selector: row => row.codCompra,
+            selector: row => row.codVenta,
             sortable: true,
             grow:0.5
         },
         {
-            name:"Distribuidor",
-            selector: row => row.tercero.nombres + (row.tercero.apellidos !== "" ? " " + row.tercero.apellidos : ""),
+            name:"Cliente",
+            selector: row => {
+                if (row.tercero !== null) {
+                    return row.tercero.nombres + (row.tercero.apellidos !== "" ? " " + row.tercero.apellidos : "")
+                } else {
+                    return "No registra"
+                }
+            },
             sortable: true,
             grow: 2
         },
@@ -142,11 +148,11 @@ export default function Show() {
             grow:0.5
         },
         {
-            name:"Fecha Compra",
+            name:"Fecha Venta",
             selector:row=>
             {
                 var opciones = { year: 'numeric', month: 'short', day: 'numeric' };
-                return new Date(row.fechaCompra).toLocaleDateString('es',opciones)
+                return new Date(row.fechaVenta).toLocaleDateString('es',opciones)
                 .replace(/ /g,'-')
                 .replace('.','')
                 .replace(/-([a-z])/, function (x) {return '-' + x[1].toUpperCase()});
@@ -163,7 +169,7 @@ export default function Show() {
             selector: function(row){
                 if (row.estado) {
                     return (
-                    <a href="#" title="Cancelar Compra" onClick={handleOnClickStatusCompra.bind(this, row)} className="btn btn-sm btn-success btn-icon-split">
+                    <a href="#" title="Cancelar Venta" onClick={handleOnClickStatusVenta.bind(this, row)} className="btn btn-sm btn-success btn-icon-split">
                         <span className="icon text-white-50">
                             <i className="fas fa-check"></i>
                         </span>
@@ -172,7 +178,7 @@ export default function Show() {
                     )
                 } else {
                     return (
-                        <a href="#" title="Validar Compra" onClick={handleOnClickStatusCompra.bind(this, row)} className="btn btn-sm btn-danger btn-icon-split">
+                        <a href="#" title="Validar Venta" onClick={handleOnClickStatusVenta.bind(this, row)} className="btn btn-sm btn-danger btn-icon-split">
                             <span className="icon text-white-50">
                                 <i className="fas fa-times"></i>
                             </span>
@@ -197,16 +203,16 @@ export default function Show() {
         }
     ]
 
-    if (Compras !== null) {
+    if (Ventas !== null) {
 
         return (
             <div className="content-wrapper">
                 <div className="page-header row">
-                    <h1 className="col-md-6 h3 mb-4 text-gray-800 col-md-6">Compras</h1>
+                    <h1 className="col-md-6 h3 mb-4 text-gray-800 col-md-6">Ventas</h1>
                     <nav aria-label="breadcrumb" className="col-md-6">
                         <ol className="breadcrumb">
                             <li className="breadcrumb-item"><Link to="/">Dashboard</Link></li>
-                            <li className="breadcrumb-item active" aria-current="page">Compras</li>
+                            <li className="breadcrumb-item active" aria-current="page">Ventas</li>
                         </ol>
                     </nav>
                 </div>
@@ -216,7 +222,7 @@ export default function Show() {
                                 <div className="card shadow mb-4">
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                           <Table Columns={Columnas} Data={Compras} Title={"Compras"} />
+                                           <Table Columns={Columnas} Data={Ventas} Title={"Ventas"} />
                                         </div>
                                     </div>
                                 </div>
@@ -226,6 +232,6 @@ export default function Show() {
             </div>
         );
     } else {
-        getCompras();
+        getVentas();
     }
 }

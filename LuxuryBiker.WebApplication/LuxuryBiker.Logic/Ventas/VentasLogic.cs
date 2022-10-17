@@ -121,5 +121,44 @@ namespace LuxuryBiker.Logic.Ventas
                 throw;
             }
         }
+        public ResponseGeneric<List<Venta>> GetVentas()
+        {
+            try
+            {
+                return new ResponseGeneric<List<Venta>>()
+                {
+                    Error = false,
+                    Result = _ventasRepository.GetVentas()
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseGeneric<List<Venta>>()
+                {
+                    Error = true,
+                    Mensaje = "Ocurrio un error al obtener las ventas."
+                };
+            }
+        }
+        public ResponseGeneric<bool> ChangeStatus(Venta venta)
+        {
+            try
+            {
+                var result = _ventasRepository.ChangeStatus(venta);
+                return new ResponseGeneric<bool>()
+                {
+                    Error = !result
+                };
+            }
+            catch (Exception)
+            {
+
+                return new ResponseGeneric<bool>()
+                {
+                    Error = true,
+                    Mensaje = "Ocurrio un error al intentar actualizar el estado de la compra."
+                };
+            }
+        }
     }
 }
