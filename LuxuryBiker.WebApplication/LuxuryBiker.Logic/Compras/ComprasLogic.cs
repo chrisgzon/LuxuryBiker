@@ -1,4 +1,4 @@
-﻿using LuxuryBiker.Data.CustomTypes.Compras;
+using LuxuryBiker.Data.CustomTypes.Compras;
 using LuxuryBiker.Data.CustomTypes.Helpers;
 using LuxuryBiker.Data.CustomTypes.Productos;
 using LuxuryBiker.Data.Repositry.Compras;
@@ -159,6 +159,23 @@ namespace LuxuryBiker.Logic.Compras
                 {
                     Error = true,
                     Mensaje = "Ocurrio un error al intentar actualizar el estado de la compra."
+                };
+            }
+        }
+        public ResponseGeneric<Dictionary<string, object>> GetData()
+        {
+            try
+            {
+                return new ResponseGeneric<Dictionary<string, object>>()
+                {
+                    Result = _comprasRepository.GetData(),
+                    Error = false
+                };
+            } catch (Exception ex)
+            {
+                return new ResponseGeneric<Dictionary<string, object>>()
+                {
+                    Error = true
                 };
             }
         }

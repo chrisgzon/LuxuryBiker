@@ -16,7 +16,7 @@ namespace LuxuryBiker.Data.Repositry.Ventas
         {
             using (var ctx = new LuxuryBikerDBContext())
             {
-                var code = ctx.Ventas.OrderByDescending(x => x.CodVenta).ThenBy(x => x.IdVenta).Select(x => x.CodVenta).FirstOrDefault();
+                var code = ctx.Ventas.OrderByDescending(x => x.IdVenta).Select(x => x.CodVenta).FirstOrDefault();
                 if (code == null)
                     code = "0";
                 return code;

@@ -1,4 +1,4 @@
-﻿using LuxuryBiker.Data.CustomTypes.Compras;
+using LuxuryBiker.Data.CustomTypes.Compras;
 using LuxuryBiker.Data.CustomTypes.Helpers;
 using LuxuryBiker.Data.CustomTypes.Productos;
 using LuxuryBiker.Logic.Compras;
@@ -44,6 +44,11 @@ namespace LuxuryBiker.web.Controllers.Compras
         public ResponseGeneric<bool> ChangeStatus(Compra compra)
         {
             return _comprasLogic.ChangeStatus(compra);
+        }
+        [Route("Compras/GetData")]
+        public ResponseGeneric<Dictionary<string, object>> GetData()
+        {
+            return _comprasLogic.GetData();
         }
     }
 }
