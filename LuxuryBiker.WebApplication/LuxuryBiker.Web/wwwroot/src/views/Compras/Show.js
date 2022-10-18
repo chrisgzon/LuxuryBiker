@@ -181,19 +181,6 @@ export default function Show() {
                     )
                 }
             }
-        },
-        {
-            name:"Acciones",
-            center:true,
-            selector: function(row){
-                return (
-                    <>
-                        <a href="/" title="exportar a pdf" className="jsgrid-button jsgrid-edit-button"><i className="far fa-file-pdf"></i></a>
-                        <a href="/" title="imprimir" className="jsgrid-button jsgrid-edit-button"><i className="fas fa-print"></i></a> 
-                        <a href="/" title="revisar detalles" className="jsgrid-button jsgrid-edit-button"><i className="far fa-eye"></i></a>
-                    </> 
-                );
-            }.bind(this)
         }
     ]
 
