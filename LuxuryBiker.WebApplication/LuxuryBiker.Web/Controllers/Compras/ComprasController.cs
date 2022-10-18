@@ -45,5 +45,10 @@ namespace LuxuryBiker.web.Controllers.Compras
         {
             return _comprasLogic.ChangeStatus(compra);
         }
+        [Route("Compras/GetData")]
+        public ResponseGeneric<Dictionary<string, object>> GetData()
+        {
+            return _comprasLogic.GetData();
+        }
     }
 }

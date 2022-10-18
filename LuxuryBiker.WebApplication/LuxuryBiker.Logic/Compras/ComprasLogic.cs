@@ -162,5 +162,22 @@ namespace LuxuryBiker.Logic.Compras
                 };
             }
         }
+        public ResponseGeneric<Dictionary<string, object>> GetData()
+        {
+            try
+            {
+                return new ResponseGeneric<Dictionary<string, object>>()
+                {
+                    Result = _comprasRepository.GetData(),
+                    Error = false
+                };
+            } catch (Exception ex)
+            {
+                return new ResponseGeneric<Dictionary<string, object>>()
+                {
+                    Error = true
+                };
+            }
+        }
     }
 }
