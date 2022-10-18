@@ -16,6 +16,7 @@ export default function({Columns, Data, Title = ""}) {
             paginationComponentOptions={paginacionOpciones}
             fixedHeader
             fixedHeaderScrollHeight="600px"
+            noDataComponent="No hay datos para mostrar"
         />
     );
 }
