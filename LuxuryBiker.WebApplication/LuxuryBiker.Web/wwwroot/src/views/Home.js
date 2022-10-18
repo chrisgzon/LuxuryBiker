@@ -95,17 +95,6 @@ export default function Home() {
             name:"Cantidad vendida",
             selector:row=>row.cantidad,
             sortable: true,
-        },
-        {
-            name:"Detalles",
-            selector:row=> {
-                return  <a href="#" className="btn btn-primary btn-sm btn-icon-split">
-                            <span className="icon text-white-50">
-                                <i className="far fa-eye"></i>
-                            </span>
-                            <span className="text">Ver detalles</span>
-                        </a>
-            }
         }
     ]
 
