@@ -1,4 +1,4 @@
-﻿using LuxuryBiker.Data.CustomTypes.Compras;
+using LuxuryBiker.Data.CustomTypes.Compras;
 using LuxuryBiker.Data.CustomTypes.Helpers;
 using LuxuryBiker.Data.CustomTypes.Terceros;
 using LuxuryBiker.Data.Model;
