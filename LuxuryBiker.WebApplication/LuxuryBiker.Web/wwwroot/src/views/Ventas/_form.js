@@ -9,6 +9,7 @@ export default function Form({productos, clientes, registerVenta, showModalClien
     const [total, setTotal] = useState(0);
     const [total_impuesto, setTotal_impuesto] = useState(0);
     const [total_pagar, setTotal_pagar] = useState(0);
+    const [calcularIva, setcalcularIva] = useState(false);
     const [producto, setProducto] = useState({
         nombre: "",
         cantidad: "",
@@ -31,13 +32,15 @@ export default function Form({productos, clientes, registerVenta, showModalClien
         dataVenta = {
             TerceroIdTercero: selectCliente.current.value === "" ? null : selectCliente.current.value,
             UsuarioIdUsuario: LuxuryBiker.Usuario.idUsuario,
-            DetallesVenta: detallesVenta
+            DetallesVenta: detallesVenta,
+            AplicaIva: calcularIva
         }
 
         registerVenta(dataVenta).then(result=>{
             if (result) {
                 setDetallesVenta([])
                 setTotal(0)
+                setcalcularIva(false);
                 setTotal_impuesto(0)
                 setTotal_pagar(0)
             }
@@ -173,10 +176,15 @@ export default function Form({productos, clientes, registerVenta, showModalClien
         return numero;
     };
     
-    const totales = () => {
-        total_impuesto_aux = total_aux * (impuesto / 100);
-        total_pagar_aux = total_aux + total_impuesto_aux 
-        setTotal_impuesto(total_impuesto_aux);
+    const totales = (calculariva = calcularIva) => {
+        if (calculariva) {
+            total_impuesto_aux = total_aux * (impuesto / 100);
+            total_pagar_aux = total_aux + total_impuesto_aux 
+            setTotal_impuesto(total_impuesto_aux);
+        } else {
+            setTotal_impuesto(0);
+            total_pagar_aux = total_aux;
+        }
         setTotal_pagar(total_pagar_aux);
     };
     
@@ -188,6 +196,12 @@ export default function Form({productos, clientes, registerVenta, showModalClien
         setTotal(total_aux);
         totales();
     };
+
+    const handleOnChangeCheckCalcularIva = function(e) {
+        setcalcularIva(e.currentTarget.checked)
+        total_aux = total;
+        totales(e.currentTarget.checked)
+    }
     
     function Fila ({index, venta}) {
         return (
@@ -228,6 +242,16 @@ export default function Form({productos, clientes, registerVenta, showModalClien
                         }
                     </select>
                 </div>
+                <div className="row">
+                <div className="form-group col-10">
+                    <label htmlFor="tax">Iva (%)</label>
+                    <input id="tax" onChange={handleFieldProductoChange} className="form-control" value="19" type="text" readOnly name="tax" />
+                </div>
+                <div className="form-group form-check col-2 mt-2">
+                    <input id="chck-calcularIva" onChange={handleOnChangeCheckCalcularIva.bind(this)} className="form-check-input" type="checkbox" name="chck-calcularIva" checked={calcularIva ? 'checked' : ''}/>
+                    <label className="form-check-label" htmlFor="chck-calcularIva">Calcular Iva</label>
+                </div>
+                </div>
                 <div className="form-group">
                     <label htmlFor="ProductoIdProducto">Producto</label>
                     <select ref={selectProduct} value={producto.ProductoIdProducto} onChange={handleFieldProductoChange} id="ProductoIdProducto" className="form-control" name="ProductoIdProducto">
@@ -242,10 +266,6 @@ export default function Form({productos, clientes, registerVenta, showModalClien
                 <div className="form-group">
                     <label htmlFor="ValorProducto">Precio</label>
                     <input value={producto.ValorProducto} onChange={handleFieldProductoChange} id="ValorProducto" className="form-control" type="text" name="ValorProducto" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="tax">Impuesto (%)</label>
-                    <input id="tax" onChange={handleFieldProductoChange} className="form-control" value="19" type="text" readOnly name="tax" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="cantidad">Cantidad</label>{producto.cantidadMaxima != "" ? <i>Cant. maxima posible: {producto.cantidadMaxima}</i> : ""}

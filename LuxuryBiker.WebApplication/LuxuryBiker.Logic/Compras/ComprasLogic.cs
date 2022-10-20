@@ -112,8 +112,8 @@ namespace LuxuryBiker.Logic.Compras
                 {
                     decimal subtotal = detalleCompra.cantidad * detalleCompra.ValorProducto;
                     total += subtotal;
-                }
-                totalImpuesto = total * (impuesto / 100);
+                } 
+                totalImpuesto = compra.AplicaIva ? (total * (impuesto / 100)) : 0;
                 total += totalImpuesto;
                 return total;
             }
