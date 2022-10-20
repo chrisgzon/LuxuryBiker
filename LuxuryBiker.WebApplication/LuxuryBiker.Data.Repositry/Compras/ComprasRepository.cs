@@ -197,7 +197,7 @@ namespace LuxuryBiker.Data.Repositry.Compras
                     ?
                         new List<object>() { new
                         {
-                            Dia = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(dayNow.Day),
+                            Dia = dayNow.Day,
                             Total = 0
                         } }
                     :
