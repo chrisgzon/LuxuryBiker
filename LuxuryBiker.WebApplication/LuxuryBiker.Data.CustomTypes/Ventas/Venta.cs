@@ -19,6 +19,7 @@ namespace LuxuryBiker.Data.CustomTypes.Ventas
         public bool Estado { get; set; }
         public decimal Total { get; set; }
         public int CantidadProductos { get; set; }
+        public bool AplicaIva { get; set; }
 
         public User Usuario { get; set; }
         public Tercero Tercero { get; set; }
