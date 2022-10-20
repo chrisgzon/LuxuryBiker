@@ -10,6 +10,7 @@ export default function Form({productos, proveedores, registerCompra, showModalP
     const [total, setTotal] = useState(0);
     const [total_impuesto, setTotal_impuesto] = useState(0);
     const [total_pagar, setTotal_pagar] = useState(0);
+    const [calcularIva, setCalcularIva] = useState(false);
     const [producto, setProducto] = useState({
         nombre: "",
         cantidad: "",
@@ -32,13 +33,15 @@ export default function Form({productos, proveedores, registerCompra, showModalP
             TerceroIdTercero: selectProvider.current.value,
             UsuarioIdUsuario: LuxuryBiker.Usuario.idUsuario,
             DetallesCompra: detallesCompra,
-            FechaCompra: txtFechaCompra.current.value
+            FechaCompra: txtFechaCompra.current.value,
+            AplicaIva: calcularIva
         }
 
         registerCompra(dataCompra).then(result=>{
             if (result) {
                 setDetallesCompra([])
                 setTotal(0)
+                setCalcularIva(false);
                 setTotal_impuesto(0)
                 setTotal_pagar(0)
             }
@@ -159,10 +162,15 @@ export default function Form({productos, proveedores, registerCompra, showModalP
         return numero;
     };
     
-    const totales = () => {
-        total_impuesto_aux = total_aux * (impuesto / 100);
-        total_pagar_aux = total_aux + total_impuesto_aux 
-        setTotal_impuesto(total_impuesto_aux);
+    const totales = (calculariva = calcularIva) => {
+        if (calculariva) {
+            total_impuesto_aux = total_aux * (impuesto / 100);
+            total_pagar_aux = total_aux + total_impuesto_aux 
+            setTotal_impuesto(total_impuesto_aux);
+        } else {
+            setTotal_impuesto(0);
+            total_pagar_aux = total_aux;
+        }
         setTotal_pagar(total_pagar_aux);
     };
     
@@ -197,6 +205,12 @@ export default function Form({productos, proveedores, registerCompra, showModalP
         );
     }
 
+    const handleOnChangeCheckCalcularIva = function(e) {
+        setCalcularIva(e.currentTarget.checked)
+        total_aux = total;
+        totales(e.currentTarget.checked)
+    }
+
     return (
         <form className="mt-2" onSubmit={handleSubmitCompra}>
             <div name="box-gray">
@@ -218,6 +232,16 @@ export default function Form({productos, proveedores, registerCompra, showModalP
                         }
                     </select>
                 </div>
+                <div className="row">
+                    <div className="form-group col-10">
+                        <label htmlFor="tax">Iva (%)</label>
+                        <input id="tax" onChange={handleFieldProductoChange} className="form-control" value="19" type="text" readOnly name="tax" />
+                    </div>
+                    <div className="form-group form-check col-2 mt-2">
+                        <input id="chck-calcularIva" onChange={handleOnChangeCheckCalcularIva.bind(this)} className="form-check-input" type="checkbox" name="chck-calcularIva" checked={calcularIva ? 'checked' : ''}/>
+                        <label className="form-check-label" htmlFor="chck-calcularIva">Calcular Iva</label>
+                    </div>
+                </div>
                 <div className="form-group">
                     <label htmlFor="ProductoIdProducto">Producto</label>
                     <button type="button" class="btn btn-success btn-sm btn-circle ml-2" onClick={()=>{showModalProduct(true)}}>
@@ -235,10 +259,6 @@ export default function Form({productos, proveedores, registerCompra, showModalP
                 <div className="form-group">
                     <label htmlFor="ValorProducto">Precio</label>
                     <input value={producto.ValorProducto} onChange={handleFieldProductoChange} id="ValorProducto" className="form-control" type="text" name="ValorProducto" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="tax">Impuesto (%)</label>
-                    <input id="tax" onChange={handleFieldProductoChange} className="form-control" value="19" type="text" readOnly name="tax" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="cantidad">Cantidad</label>

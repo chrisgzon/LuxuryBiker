@@ -19,6 +19,7 @@ namespace LuxuryBiker.Data.CustomTypes.Compras
         public decimal Total { get; set; }
         public bool Estado { get; set; }
         public int CantidadProductos { get; set; }
+        public bool AplicaIva { get; set; }
 
         public List<ComprasDetails> DetallesCompra { get; set; }
         public User Usuario { get; set; }
