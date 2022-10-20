@@ -1,0 +1,38 @@
+USE [LuxuryBiker]
+GO
+
+/****** Object:  Trigger [dbo].[tr_updStockCompraChangeStatus]    Script Date: 19/10/2022 8:58:59 p. m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE TRIGGER [dbo].[tr_updStockCompraChangeStatus] ON [dbo].[Compras]
+	AFTER UPDATE NOT FOR REPLICATION
+	AS
+		BEGIN
+			SET NOCOUNT ON;
+			IF (UPDATE(Estado))
+				IF (1 = (SELECT i.Estado FROM inserted i INNER JOIN Compras c ON c.IdCompra = i.IdCompra))
+					UPDATE p
+					SET p.Stock = p.Stock + cd.cantidad
+					FROM Productos p
+					INNER JOIN ComprasDetails cd ON cd.ProductoIdProducto = p.IdProducto
+					INNER JOIN Compras c ON c.IdCompra = cd.CompraIdCompra
+					INNER JOIN inserted i ON i.IdCompra = c.IdCompra
+				ELSE
+					UPDATE p
+					SET p.Stock = p.Stock - cd.cantidad
+					FROM Productos p
+					INNER JOIN ComprasDetails cd ON cd.ProductoIdProducto = p.IdProducto
+					INNER JOIN Compras c ON c.IdCompra = cd.CompraIdCompra
+					INNER JOIN inserted i ON i.IdCompra = c.IdCompra
+		END
+GO
+
+ALTER TABLE [dbo].[Compras] ENABLE TRIGGER [tr_updStockCompraChangeStatus]
+GO
+
+

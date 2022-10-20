@@ -1,0 +1,237 @@
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+CREATE TABLE [Productos] (
+    [IdProducto] int NOT NULL IDENTITY,
+    [Nombre] nvarchar(60) NOT NULL,
+    [Codigo] nvarchar(60) NOT NULL,
+    [Descripcion] nvarchar(500) NULL,
+    [Estado] bit NOT NULL DEFAULT CAST(1 AS bit),
+    [FechaRegistro] datetime2 NOT NULL,
+    [Stock] decimal(10,3) NOT NULL,
+    [ValorProducto] decimal(28,6) NOT NULL,
+    [Referencia] nvarchar(max) NULL,
+    CONSTRAINT [PK_Productos] PRIMARY KEY ([IdProducto])
+);
+GO
+
+CREATE TABLE [TiposTercero] (
+    [IdTipo] int NOT NULL IDENTITY,
+    [Nombre] nvarchar(60) NOT NULL,
+    [SenActivo] bit NOT NULL DEFAULT CAST(1 AS bit),
+    CONSTRAINT [PK_TiposTercero] PRIMARY KEY ([IdTipo])
+);
+GO
+
+CREATE TABLE [Users] (
+    [IdUsuario] nvarchar(60) NOT NULL,
+    [Nombres] nvarchar(250) NOT NULL,
+    [Apellidos] nvarchar(250) NULL,
+    [Email] nvarchar(100) NULL,
+    [PasswordHash] nvarchar(800) NOT NULL,
+    [Identificacion] nvarchar(60) NOT NULL,
+    [SenActivo] bit NOT NULL DEFAULT CAST(0 AS bit),
+    [FechaNacimiento] datetime2 NULL,
+    [FechaCreacion] datetime2 NOT NULL,
+    [UserName] nvarchar(250) NOT NULL,
+    [PhoneNumber] nvarchar(60) NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([IdUsuario])
+);
+GO
+
+CREATE TABLE [UsrRoles] (
+    [IdRol] int NOT NULL IDENTITY,
+    [NombreRol] nvarchar(60) NOT NULL,
+    [SenActivo] bit NOT NULL DEFAULT CAST(0 AS bit),
+    CONSTRAINT [PK_UsrRoles] PRIMARY KEY ([IdRol])
+);
+GO
+
+CREATE TABLE [Terceros] (
+    [IdTercero] int NOT NULL IDENTITY,
+    [Email] nvarchar(150) NULL,
+    [Identificacion] nvarchar(60) NOT NULL,
+    [FechaCreacion] datetime2 NOT NULL,
+    [Direccion] nvarchar(200) NULL,
+    [SenActivo] bit NOT NULL,
+    [TipoIdTipo] int NOT NULL,
+    [Celular] nvarchar(50) NULL,
+    [Nombres] nvarchar(250) NOT NULL,
+    [Apellidos] nvarchar(250) NULL,
+    CONSTRAINT [PK_Terceros] PRIMARY KEY ([IdTercero]),
+    CONSTRAINT [FK_Terceros_TiposTercero_TipoIdTipo] FOREIGN KEY ([TipoIdTipo]) REFERENCES [TiposTercero] ([IdTipo]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [UsrUsuario_UsrRol] (
+    [Id] int NOT NULL IDENTITY,
+    [UsuarioIdUsuario] nvarchar(60) NOT NULL,
+    [RolIdRol] int NOT NULL,
+    CONSTRAINT [PK_UsrUsuario_UsrRol] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UsrUsuario_UsrRol_Users_UsuarioIdUsuario] FOREIGN KEY ([UsuarioIdUsuario]) REFERENCES [Users] ([IdUsuario]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsrUsuario_UsrRol_UsrRoles_RolIdRol] FOREIGN KEY ([RolIdRol]) REFERENCES [UsrRoles] ([IdRol]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [Compras] (
+    [IdCompra] int NOT NULL IDENTITY,
+    [CodCompra] nvarchar(60) NOT NULL,
+    [FechaCompra] datetime2 NOT NULL,
+    [UsuarioIdUsuario] nvarchar(60) NOT NULL,
+    [TerceroIdTercero] int NOT NULL,
+    [Total] decimal(28,6) NOT NULL,
+    [Estado] bit NOT NULL DEFAULT CAST(1 AS bit),
+    CONSTRAINT [PK_Compras] PRIMARY KEY ([IdCompra]),
+    CONSTRAINT [FK_Compras_Terceros_TerceroIdTercero] FOREIGN KEY ([TerceroIdTercero]) REFERENCES [Terceros] ([IdTercero]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Compras_Users_UsuarioIdUsuario] FOREIGN KEY ([UsuarioIdUsuario]) REFERENCES [Users] ([IdUsuario]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [Ventas] (
+    [IdVenta] int NOT NULL IDENTITY,
+    [CodVenta] nvarchar(60) NOT NULL,
+    [FechaVenta] datetime2 NOT NULL,
+    [TerceroIdTercero] int NULL,
+    [UsuarioIdUsuario] nvarchar(60) NOT NULL,
+    [Estado] bit NOT NULL DEFAULT CAST(1 AS bit),
+    [Total] decimal(28,6) NOT NULL,
+    CONSTRAINT [PK_Ventas] PRIMARY KEY ([IdVenta]),
+    CONSTRAINT [FK_Ventas_Terceros_TerceroIdTercero] FOREIGN KEY ([TerceroIdTercero]) REFERENCES [Terceros] ([IdTercero]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Ventas_Users_UsuarioIdUsuario] FOREIGN KEY ([UsuarioIdUsuario]) REFERENCES [Users] ([IdUsuario]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [ComprasDetails] (
+    [Id] int NOT NULL IDENTITY,
+    [CompraIdCompra] int NOT NULL,
+    [ProductoIdProducto] int NOT NULL,
+    [ValorProducto] decimal(28,6) NOT NULL,
+    [cantidad] decimal(10,3) NOT NULL,
+    CONSTRAINT [PK_ComprasDetails] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ComprasDetails_Compras_CompraIdCompra] FOREIGN KEY ([CompraIdCompra]) REFERENCES [Compras] ([IdCompra]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ComprasDetails_Productos_ProductoIdProducto] FOREIGN KEY ([ProductoIdProducto]) REFERENCES [Productos] ([IdProducto]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [VentasDetails] (
+    [Id] int NOT NULL IDENTITY,
+    [ProductoIdProducto] int NOT NULL,
+    [VentaIdVenta] int NOT NULL,
+    [ValorProducto] decimal(28,6) NOT NULL,
+    [Cantidad] decimal(10,3) NOT NULL,
+    CONSTRAINT [PK_VentasDetails] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_VentasDetails_Productos_ProductoIdProducto] FOREIGN KEY ([ProductoIdProducto]) REFERENCES [Productos] ([IdProducto]) ON DELETE CASCADE,
+    CONSTRAINT [FK_VentasDetails_Ventas_VentaIdVenta] FOREIGN KEY ([VentaIdVenta]) REFERENCES [Ventas] ([IdVenta]) ON DELETE CASCADE
+);
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdProducto', N'Codigo', N'Descripcion', N'Estado', N'FechaRegistro', N'Nombre', N'Referencia', N'Stock', N'ValorProducto') AND [object_id] = OBJECT_ID(N'[Productos]'))
+    SET IDENTITY_INSERT [Productos] ON;
+INSERT INTO [Productos] ([IdProducto], [Codigo], [Descripcion], [Estado], [FechaRegistro], [Nombre], [Referencia], [Stock], [ValorProducto])
+VALUES (1, N'PBOKL168', N'Bocinas twitter KL 110Wats 6IN', CAST(1 AS bit), '2022-10-19T21:34:32.5022206-05:00', N'Bocinas', N'KL168', 0.0, 0.0),
+(2, N'PALSONY265', N'Alarma SONY 250Wats', CAST(1 AS bit), '2022-10-19T21:34:32.5023090-05:00', N'Alarma', N'SONY256', 0.0, 0.0),
+(3, N'PLLMRF256', N'LLantas MRF', CAST(1 AS bit), '2022-10-19T21:34:32.5023096-05:00', N'Llantas Racing', N'MRF256', 0.0, 0.0),
+(4, N'PCALS2R5', N'Casco LS2 R5 Talla M', CAST(1 AS bit), '2022-10-19T21:34:32.5023098-05:00', N'Casco', N'LS2R5', 0.0, 0.0);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdProducto', N'Codigo', N'Descripcion', N'Estado', N'FechaRegistro', N'Nombre', N'Referencia', N'Stock', N'ValorProducto') AND [object_id] = OBJECT_ID(N'[Productos]'))
+    SET IDENTITY_INSERT [Productos] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdTipo', N'Nombre', N'SenActivo') AND [object_id] = OBJECT_ID(N'[TiposTercero]'))
+    SET IDENTITY_INSERT [TiposTercero] ON;
+INSERT INTO [TiposTercero] ([IdTipo], [Nombre], [SenActivo])
+VALUES (1, N'Distribuidor', CAST(1 AS bit)),
+(2, N'Cliente', CAST(1 AS bit));
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdTipo', N'Nombre', N'SenActivo') AND [object_id] = OBJECT_ID(N'[TiposTercero]'))
+    SET IDENTITY_INSERT [TiposTercero] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdUsuario', N'Apellidos', N'Email', N'FechaCreacion', N'FechaNacimiento', N'Identificacion', N'Nombres', N'PasswordHash', N'PhoneNumber', N'SenActivo', N'UserName') AND [object_id] = OBJECT_ID(N'[Users]'))
+    SET IDENTITY_INSERT [Users] ON;
+INSERT INTO [Users] ([IdUsuario], [Apellidos], [Email], [FechaCreacion], [FechaNacimiento], [Identificacion], [Nombres], [PasswordHash], [PhoneNumber], [SenActivo], [UserName])
+VALUES (N'b8c23e59-986a-4c6b-8c1e-5fa75f3bff54', N'Admin', N'superadmin@luxurybiker.com', '2022-10-19T21:34:32.4783182-05:00', NULL, N'1000333666', N'Super', N'AQAAAAEAACcQAAAAEHqpSkHIf0hE3wgE6sJ+KQ9ElSaF+FwEuSiXDRZA/TV8/PuDUFsPYUOxdXnY2jYYgg==', NULL, CAST(1 AS bit), N'superadmin@luxurybiker.com');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdUsuario', N'Apellidos', N'Email', N'FechaCreacion', N'FechaNacimiento', N'Identificacion', N'Nombres', N'PasswordHash', N'PhoneNumber', N'SenActivo', N'UserName') AND [object_id] = OBJECT_ID(N'[Users]'))
+    SET IDENTITY_INSERT [Users] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdRol', N'NombreRol', N'SenActivo') AND [object_id] = OBJECT_ID(N'[UsrRoles]'))
+    SET IDENTITY_INSERT [UsrRoles] ON;
+INSERT INTO [UsrRoles] ([IdRol], [NombreRol], [SenActivo])
+VALUES (1, N'Super Administrador', CAST(1 AS bit));
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdRol', N'NombreRol', N'SenActivo') AND [object_id] = OBJECT_ID(N'[UsrRoles]'))
+    SET IDENTITY_INSERT [UsrRoles] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdTercero', N'Apellidos', N'Celular', N'Direccion', N'Email', N'FechaCreacion', N'Identificacion', N'Nombres', N'SenActivo', N'TipoIdTipo') AND [object_id] = OBJECT_ID(N'[Terceros]'))
+    SET IDENTITY_INSERT [Terceros] ON;
+INSERT INTO [Terceros] ([IdTercero], [Apellidos], [Celular], [Direccion], [Email], [FechaCreacion], [Identificacion], [Nombres], [SenActivo], [TipoIdTipo])
+VALUES (1, N'Rodrigez Palacios', N'300045895', N'Barrios Unidos, Bogotá D.C.', N'jdrodriguez@gmail.com', '2022-10-19T21:34:32.4888145-05:00', N'1000333555', N'Juan David', CAST(1 AS bit), 1);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdTercero', N'Apellidos', N'Celular', N'Direccion', N'Email', N'FechaCreacion', N'Identificacion', N'Nombres', N'SenActivo', N'TipoIdTipo') AND [object_id] = OBJECT_ID(N'[Terceros]'))
+    SET IDENTITY_INSERT [Terceros] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdTercero', N'Apellidos', N'Celular', N'Direccion', N'Email', N'FechaCreacion', N'Identificacion', N'Nombres', N'SenActivo', N'TipoIdTipo') AND [object_id] = OBJECT_ID(N'[Terceros]'))
+    SET IDENTITY_INSERT [Terceros] ON;
+INSERT INTO [Terceros] ([IdTercero], [Apellidos], [Celular], [Direccion], [Email], [FechaCreacion], [Identificacion], [Nombres], [SenActivo], [TipoIdTipo])
+VALUES (2, N'Munera Guevara', N'300045887', N'Usaquen, Bogotá D.C.', N'mlmunera@gmail.com', '2022-10-19T21:34:32.4889369-05:00', N'1000333444', N'Maria Lorena', CAST(1 AS bit), 2);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'IdTercero', N'Apellidos', N'Celular', N'Direccion', N'Email', N'FechaCreacion', N'Identificacion', N'Nombres', N'SenActivo', N'TipoIdTipo') AND [object_id] = OBJECT_ID(N'[Terceros]'))
+    SET IDENTITY_INSERT [Terceros] OFF;
+GO
+
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'RolIdRol', N'UsuarioIdUsuario') AND [object_id] = OBJECT_ID(N'[UsrUsuario_UsrRol]'))
+    SET IDENTITY_INSERT [UsrUsuario_UsrRol] ON;
+INSERT INTO [UsrUsuario_UsrRol] ([Id], [RolIdRol], [UsuarioIdUsuario])
+VALUES (1, 1, N'b8c23e59-986a-4c6b-8c1e-5fa75f3bff54');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'RolIdRol', N'UsuarioIdUsuario') AND [object_id] = OBJECT_ID(N'[UsrUsuario_UsrRol]'))
+    SET IDENTITY_INSERT [UsrUsuario_UsrRol] OFF;
+GO
+
+CREATE INDEX [IX_Compras_TerceroIdTercero] ON [Compras] ([TerceroIdTercero]);
+GO
+
+CREATE INDEX [IX_Compras_UsuarioIdUsuario] ON [Compras] ([UsuarioIdUsuario]);
+GO
+
+CREATE INDEX [IX_ComprasDetails_CompraIdCompra] ON [ComprasDetails] ([CompraIdCompra]);
+GO
+
+CREATE INDEX [IX_ComprasDetails_ProductoIdProducto] ON [ComprasDetails] ([ProductoIdProducto]);
+GO
+
+CREATE INDEX [IX_Terceros_TipoIdTipo] ON [Terceros] ([TipoIdTipo]);
+GO
+
+CREATE INDEX [IX_UsrUsuario_UsrRol_RolIdRol] ON [UsrUsuario_UsrRol] ([RolIdRol]);
+GO
+
+CREATE INDEX [IX_UsrUsuario_UsrRol_UsuarioIdUsuario] ON [UsrUsuario_UsrRol] ([UsuarioIdUsuario]);
+GO
+
+CREATE INDEX [IX_Ventas_TerceroIdTercero] ON [Ventas] ([TerceroIdTercero]);
+GO
+
+CREATE INDEX [IX_Ventas_UsuarioIdUsuario] ON [Ventas] ([UsuarioIdUsuario]);
+GO
+
+CREATE INDEX [IX_VentasDetails_ProductoIdProducto] ON [VentasDetails] ([ProductoIdProducto]);
+GO
+
+CREATE INDEX [IX_VentasDetails_VentaIdVenta] ON [VentasDetails] ([VentaIdVenta]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20221020023433_initial', N'5.0.17');
+GO
+
+COMMIT;
+GO
+

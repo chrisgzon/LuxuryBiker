@@ -1,0 +1,61 @@
+USE [LuxuryBiker]
+GO
+
+/****** Object:  StoredProcedure [dbo].[REGISTER_NEW_USER]    Script Date: 19/10/2022 8:58:17 p. m. ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- =============================================
+-- Author:		<Christian>
+-- Create date: <23/09/2022>
+-- Description:	<Procedimiento almacenado para realizar insercion de nuevos usuarios e insertar rol predeterminado>
+-- =============================================
+CREATE PROCEDURE [dbo].[REGISTER_NEW_USER]
+	-- Add the parameters for the stored procedure here
+	@USERNAME VARCHAR(1000), 
+	@PASSWORD VARCHAR(MAX),
+	@NOMBRES VARCHAR(1000),
+	@APELLIDOS VARCHAR(1000) = '',
+	@IDENTIFICACION VARCHAR(1000)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @inserted_id TABLE ([id] VARCHAR(100))
+
+    INSERT INTO Users (IdUsuario,
+						Nombres,
+						Apellidos,
+						Email,
+						UserName,
+						FechaCreacion,
+						FechaNacimiento,
+						Identificacion,
+						PasswordHash,
+						PhoneNumber,
+						SenActivo)
+						OUTPUT INSERTED.[IdUsuario] INTO @inserted_id
+						VALUES 
+						(NEWID(),
+						@NOMBRES,
+						@APELLIDOS,
+						@USERNAME,
+						@USERNAME,
+						GETDATE(),
+						NULL,
+						@IDENTIFICACION,
+						@PASSWORD,
+						NULL,
+						1)
+	
+	INSERT INTO UsrUsuario_UsrRol (RolIdRol,
+						UsuarioIdUsuario)
+						SELECT TOP(1)2, Id FROM @inserted_id
+						
+END
+GO
+
+
