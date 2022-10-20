@@ -219,7 +219,7 @@ export default function Home() {
             });
     }
 
-    if (!loading) {
+    if (!loading && Data !== null && Data.length !== 0) {
         showGraphics()
     }
 
