@@ -73,7 +73,7 @@ namespace LuxuryBiker.Data.Model
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-TERFBNJ\\MSSQLSERVER2019;Initial Catalog=LuxuryBiker;User ID=sa;Password=D@v1d*21;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-HAOEB16\\MSSQLSERVER02;Initial Catalog=LuxuryBiker;User ID=sa;Password=P4$$w0rd;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             }
             base.OnConfiguring(optionsBuilder);
         }

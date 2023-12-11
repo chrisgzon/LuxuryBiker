@@ -11300,3 +11300,7 @@ body.sidebar-toggled footer.sticky-footer {
 .fa-square-plus:before {
   content: "\f0fe";
 }
+
+html, body, #root, #root > div, main {
+    height: 100%
+}
