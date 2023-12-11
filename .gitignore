@@ -364,6 +364,6 @@ FodyWeavers.xsd
 
 # Ignoramos migraciones
 /LuxuryBiker.WebApplication/LuxuryBiker.Data.Model/Migrations
-**/appsetings.json
-**/appsetings.development.json
+**/appsettings.json
+**/appsettings.development.json
 **/assets/
