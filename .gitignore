@@ -367,3 +367,4 @@ FodyWeavers.xsd
 **/appsettings.json
 **/appsettings.development.json
 **/assets/
+.vscode/
