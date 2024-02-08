@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { isLoggedGuard } from '@guards/auth/is-logged.guard';
 
 export const routes: Routes = [
     {
@@ -7,7 +8,12 @@ export const routes: Routes = [
         redirectTo: 'home'
     },
     {
+        path: 'login',
+        loadComponent: () => import('./dashboard/pages/login/login.component'),
+    },
+    {
         path: '',
+        canActivate: [isLoggedGuard],
         loadComponent: () => import('./dashboard/layouts/master/master.component'),
         children: [
             {

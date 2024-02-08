@@ -2,6 +2,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@base/*": ["./src/base/*"],
+      "@entities/*": ["./src/data/entities/*"],
+      "@mappers/*": ["./src/data/mappers/*"],
+      "@implementation/repositories/*": ["./src/data/repositories/*"],
+      "@models/*": ["./src/domain/models/*"],
+      "@abstract/repositories/*": ["./src/domain/repositories/*"],
+      "@useCases/*": ["./src/domain/useCases/*"],
+      "@services/*": ["./src/presentation/app/dashboard/services/*"],
+      "@guards/*": ["./src/presentation/app/dashboard/guards/*"]
+    },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
