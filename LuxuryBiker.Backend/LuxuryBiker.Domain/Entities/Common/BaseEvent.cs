@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace LuxuryBiker.Domain.Common
+﻿namespace LuxuryBiker.Domain.Entities.Common
 {
     public abstract class BaseEvent : INotification
     {

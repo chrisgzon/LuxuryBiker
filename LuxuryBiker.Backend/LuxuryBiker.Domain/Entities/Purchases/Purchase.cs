@@ -1,6 +1,6 @@
-﻿using LuxuryBiker.Domain.Common;
+﻿using LuxuryBiker.Domain.Entities.Common;
 
-namespace LuxuryBiker.Data.Entities.Compras
+namespace LuxuryBiker.Domain.Entities.Purchases
 {
     public class Purchase : BaseAuditableEntity<int>
     {

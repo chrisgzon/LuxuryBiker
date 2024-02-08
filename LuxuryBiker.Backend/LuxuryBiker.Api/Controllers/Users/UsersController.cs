@@ -1,44 +1,27 @@
-﻿using LuxuryBiker.Data.CustomTypes.Helpers;
-using LuxuryBiker.Data.CustomTypes.Users;
-using LuxuryBiker.Logic.Users;
-using LuxuryBiker.web.Security;
+﻿using LuxuryBiker.Application.Common.Models;
+using LuxuryBiker.Application.Users.Queries.CheckLogin;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace LuxuryBiker.web.Controllers.Users
+namespace LuxuryBiker.Api.Controllers.Users
 {
     [Authorize]
     [ApiController]
+    [Route("[controller]/[action]")]
     public class UsersController : ControllerBase
     {
-        private readonly UsersLogic _usersLogic;
-        public UsersController()
+        private readonly ISender _mediator;
+        public UsersController(ISender mediator)
         {
-            _usersLogic = new UsersLogic();
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
-        [Route("Usuarios/Login")]
+
         [HttpPost]
         [AllowAnonymous]
-        public ResponseGeneric<User> Login(User user)
+        public async Task<ResponseGeneric<UserAuthenticated>> Login(string username, string password, bool rememberme)
         {
-             return new LoginLogic().CheckLogin(user.UserName, user.PasswordHash, user.Rememberme);
-        }
-        [Route("Usuarios/Whoami")]
-        [HttpGet]
-        public ResponseGeneric<User> whoami()
-        {
-            return new LoginLogic().Whoami();
-        }
-        [Route("Usuarios/register")]
-        [AllowAnonymous]
-        [HttpPost]
-        public ResponseGeneric<User> Register(User usuario)
-        {
-            return _usersLogic.RegisterNewUser(usuario);
+            return await _mediator.Send(new CheckLoginQuery(username, password, rememberme));
         }
     }
 }

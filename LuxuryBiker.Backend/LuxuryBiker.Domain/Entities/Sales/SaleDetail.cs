@@ -1,6 +1,6 @@
-﻿using LuxuryBiker.Domain.Common;
+﻿using LuxuryBiker.Domain.Entities.Common;
 
-namespace LuxuryBiker.Data.Entities.Ventas
+namespace LuxuryBiker.Domain.Entities.Sales
 {
     public class SaleDetail : BaseEntity<int>
     {
@@ -8,7 +8,5 @@ namespace LuxuryBiker.Data.Entities.Ventas
         public int SaleId { get; set; }
         public decimal ProductValue { get; set; }
         public decimal Quantity { get; set; }
-
-        public Sale Sale { get; set; }
     }
 }

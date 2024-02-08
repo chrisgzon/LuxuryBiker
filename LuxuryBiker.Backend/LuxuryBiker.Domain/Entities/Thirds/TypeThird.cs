@@ -1,6 +1,6 @@
-﻿using LuxuryBiker.Domain.Common;
+﻿using LuxuryBiker.Domain.Entities.Common;
 
-namespace LuxuryBiker.Data.Entities.Terceros
+namespace LuxuryBiker.Domain.Entities.Thirds
 {
     public class TypeThird : BaseEntity<int>
     {

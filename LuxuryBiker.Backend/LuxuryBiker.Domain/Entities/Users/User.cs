@@ -1,6 +1,6 @@
-﻿using LuxuryBiker.Domain.Common;
+﻿using LuxuryBiker.Domain.Entities.Common;
 
-namespace LuxuryBiker.Data.Entities.Users
+namespace LuxuryBiker.Domain.Entities.Users
 {
     public class User : BaseAuditableEntity<Guid>
     {

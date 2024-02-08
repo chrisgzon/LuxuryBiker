@@ -1,4 +1,4 @@
-﻿namespace LuxuryBiker.Domain.Common
+﻿namespace LuxuryBiker.Domain.Entities.Common
 {
     public abstract class BaseAuditableEntity<T> : BaseEntity<T>
     {

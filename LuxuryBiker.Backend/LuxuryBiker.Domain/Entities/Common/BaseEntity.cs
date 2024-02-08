@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LuxuryBiker.Domain.Common
+namespace LuxuryBiker.Domain.Entities.Common
 {
     public abstract class BaseEntity<T>
     {

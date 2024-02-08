@@ -1,6 +1,6 @@
-﻿using LuxuryBiker.Domain.Common;
+﻿using LuxuryBiker.Domain.Entities.Common;
 
-namespace LuxuryBiker.Data.Entities.Terceros
+namespace LuxuryBiker.Domain.Entities.Thirds
 {
     public class Third : BaseAuditableEntity<int>
     {
@@ -12,7 +12,5 @@ namespace LuxuryBiker.Data.Entities.Terceros
         public string? PhoneNumber { get; set; }
         public string? Name { get; set; }
         public string? Surnames { get; set; }
-
-        public TypeThird Type { get; set; }
     }
 }

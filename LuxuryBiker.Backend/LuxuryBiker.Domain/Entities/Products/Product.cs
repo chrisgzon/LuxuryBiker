@@ -1,6 +1,6 @@
-﻿using LuxuryBiker.Domain.Common;
+﻿using LuxuryBiker.Domain.Entities.Common;
 
-namespace LuxuryBiker.Data.Entities.Productos
+namespace LuxuryBiker.Domain.Entities.Products
 {
     public class Product : BaseAuditableEntity<int>
     {
