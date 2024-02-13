@@ -1,7 +1,8 @@
-﻿using LuxuryBiker.Application.Common.Interfaces;
+﻿using LuxuryBiker.Application.Common.Interfaces.Services;
+using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace LuxuryBiker.Api.Services;
+namespace LuxuryBiker.Api.Authentication;
 
 public class CurrentUser : IUser
 {
@@ -12,5 +13,5 @@ public class CurrentUser : IUser
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? Id => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? Id => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Sid);
 }

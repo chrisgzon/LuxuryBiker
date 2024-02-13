@@ -1,17 +1,22 @@
-﻿using LuxuryBiker.Application.Common.Models;
-
-namespace LuxuryBiker.Application.Common.Interfaces.Services
+﻿namespace LuxuryBiker.Application.Common.Interfaces.Services
 {
-    public interface IIdentityService
+    public interface IIdentityService<TUser>
     {
-        Task<string?> GetUserNameAsync(Guid userId);
+        Task<string?> GetUserNameAsync(string userId);
 
-        Task<bool> IsInRoleAsync(Guid userId, string role);
+        Task<bool> IsInRoleAsync(string userId, string role);
 
-        Task<bool> AuthorizeAsync(Guid userId, string policyName);
+        Task<TUser> GetUserAsync(string userName);
+        Task<TUser> GetUserByIdAsync(string id);
 
-        Task<(Response Result, Guid UserId)> CreateUserAsync(string userName, string password);
+        Task<bool> ValidatePassword(TUser user, string password);
 
-        Task<Response> DeleteUserAsync(Guid userId);
+        Task<(Models.Result Result, string UserId)> CreateUserAsync(string userName, string password);
+
+        Task<Models.Result> DeleteUserAsync(string userId);
+
+        Task<List<string>> GetRolesAsync(TUser user);
+
+        Task<bool> AuthorizeAsync(string userId, string policyName);
     }
 }

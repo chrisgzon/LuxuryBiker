@@ -1,4 +1,4 @@
-﻿namespace LuxuryBiker.Infrastructure.Services.Authentication;
+﻿namespace LuxuryBiker.Infrastructure.Services.Authentication.JWT;
 
 public class JWTSettings
 {

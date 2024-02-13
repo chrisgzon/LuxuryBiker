@@ -1,10 +1,8 @@
-﻿using LuxuryBiker.Application.Common.Models;
-
-namespace LuxuryBiker.Application.Common.Interfaces.Services
+﻿namespace LuxuryBiker.Application.Common.Interfaces.Services
 {
-    public interface IAuthenticationService
+    public interface IAuthenticationService<TUser> where TUser : class
     {
-        string Authenticate(Guid userId, string email, bool rememberme);
-        bool CheckPassword(string hashedPassword, string providedPassword);
+        Task<ErrorOr<TUser>> Authenticate(string username, string password, bool rememberMe);
+        Task<ErrorOr<TUser>> GetCurrentUserProfile();
     }
 }
