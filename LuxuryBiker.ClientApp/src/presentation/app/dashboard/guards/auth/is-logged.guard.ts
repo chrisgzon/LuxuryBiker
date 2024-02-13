@@ -11,3 +11,17 @@ export const isLoggedGuard: CanActivateFn = (route, state) => {
     map((isLoggedIn) => isLoggedIn || router.createUrlTree(['/login']))
   );
 };
+
+export const isntLoggedGuard: CanActivateFn = (route, state) => {
+
+  const router: Router = inject(Router);
+  return inject(AuthService).isLoggedIn$.pipe(
+      map((isLoggedIn) => {
+        if (isLoggedIn) {
+          return router.createUrlTree(['/home']);
+        }
+        return true;
+      }
+    )
+  );
+};

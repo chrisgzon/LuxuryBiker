@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoginCredentialsModel } from '@models/auth/login-credentials.model';
+import { LoginCredentialsModel } from '@domain/authentication/models/login-credentials.model';
 import { AuthService } from '@services/auth/auth.service';
 import { EMPTY, catchError, finalize } from 'rxjs';
 
@@ -25,6 +25,9 @@ export default class LoginComponent {
       validators: [Validators.required],
       nonNullable: true,
     }),
+    rememberme: new FormControl(false, {
+      nonNullable: true,
+    })
   });
 
   constructor(
@@ -40,7 +43,7 @@ export default class LoginComponent {
       .pipe(
         finalize(() => (this.processingRequest = false)),
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 401) {
+          if (error.status === 404) {
             this.handleUnauthorized();
             return EMPTY;
           }

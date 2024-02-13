@@ -4,14 +4,11 @@
   "compilerOptions": {
     "paths": {
       "@base/*": ["./src/base/*"],
-      "@entities/*": ["./src/data/entities/*"],
-      "@mappers/*": ["./src/data/mappers/*"],
-      "@implementation/repositories/*": ["./src/data/repositories/*"],
-      "@models/*": ["./src/domain/models/*"],
-      "@abstract/repositories/*": ["./src/domain/repositories/*"],
-      "@useCases/*": ["./src/domain/useCases/*"],
+      "@data/*": ["./src/data/*"],
+      "@domain/*": ["./src/domain/*"],
       "@services/*": ["./src/presentation/app/dashboard/services/*"],
-      "@guards/*": ["./src/presentation/app/dashboard/guards/*"]
+      "@guards/*": ["./src/presentation/app/dashboard/guards/*"],
+      "@enviroments/*": ["./src/enviroments/*"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

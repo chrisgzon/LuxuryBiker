@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NavComponent } from '../nav/nav.component';
 import { FooterComponent } from '../footer/footer.component';
+import { AuthService } from '@services/auth/auth.service';
 
 @Component({
   selector: 'app-master',
@@ -12,5 +13,9 @@ import { FooterComponent } from '../footer/footer.component';
   styles: ``
 })
 export default class MasterComponent {
-
+  constructor(
+    public authService: AuthService
+  ) {
+    authService.getProfileCurrentUserIfNotIsSet()
+  }
 }

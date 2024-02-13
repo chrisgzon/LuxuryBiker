@@ -2,25 +2,16 @@ import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { UserRepository } from '@abstract/repositories/user-repository';
-import { UserLoginUseCase } from '@useCases/auth/user-login.useCase';
-import { UserImplementationRepository } from '@implementation/repositories/user-implementation.repository';
-import { provideHttpClient } from '@angular/common/http';
-
-const userLoginUseCaseFactory = 
-(userRepo: UserRepository) => new UserLoginUseCase(userRepo);
-const userLoginUseCaseProvider = {
-    provide: UserLoginUseCase,
-    useFactory: userLoginUseCaseFactory,
-    deps: [UserRepository],
-};
-
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthInterceptorHttpService } from '@services/auth/auth-interceptor-http.service';
+import { authImplementationRespositoryProvider, getUserProfileUseCaseProvider, userLoginUseCaseProvider } from '@data/authentication';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([AuthInterceptorHttpService])),
     userLoginUseCaseProvider,
-    { provide: UserRepository, useClass: UserImplementationRepository }
+    getUserProfileUseCaseProvider,
+    authImplementationRespositoryProvider
   ]
 };
