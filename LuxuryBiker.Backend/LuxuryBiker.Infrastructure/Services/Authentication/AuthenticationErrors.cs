@@ -4,7 +4,7 @@
     {
         public static Error InvalidCredentials { get; } = Error.NotFound(
             code: "Authentication.InvalidCredentials",
-            description: "usuario y/o contraseña invalidas."
+            description: "usuario y/o contraseña invalidos."
         );
         public static Error NotUserlogged { get; } = Error.NotFound(
             code: "Authentication.NotUserLogged",

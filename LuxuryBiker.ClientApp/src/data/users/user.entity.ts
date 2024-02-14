@@ -1,7 +1,6 @@
 export interface UserEntity {
     id: string;
-    fullname: string;
-    username: string;
+    userName: string;
     names: string;
     surnames: string;
     identification: string;

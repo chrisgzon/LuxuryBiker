@@ -13,9 +13,6 @@ import { AuthService } from '@services/auth/auth.service';
   styles: ``
 })
 export default class MasterComponent {
-  constructor(
-    public authService: AuthService
-  ) {
-    authService.getProfileCurrentUserIfNotIsSet()
-  }
+  
+  constructor() {}
 }

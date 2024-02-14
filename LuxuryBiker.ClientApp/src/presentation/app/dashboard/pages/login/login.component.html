@@ -9,6 +9,20 @@
                         </div>
                         <h4>Hola! empecemos</h4>
                         <h6 class="font-weight-light">Inicia sesion para continuar.</h6>
+                        @if(form.hasError('invalidCredentials')){
+                            <div class="alert alert-danger">
+                                <div>
+                                    {{this.form.errors?.["error"]}}
+                                </div>
+                            </div>
+                        }
+                        @if(form.hasError('errorUnexpected')){
+                            <div class="alert alert-danger">
+                                <div>
+                                    {{this.form.errors?.["error"]}}
+                                </div>
+                            </div>
+                        }
                         <form [formGroup]="form" (ngSubmit)="login()" class="pt-3">
                             <div class="form-group">
                                 <input type="email" 
@@ -16,6 +30,20 @@
                                     id="exampleInputEmail1"
                                     formControlName="username"
                                     placeholder="Usuario">
+                                @if (this.form.controls.username.invalid && (this.form.controls.username.dirty || this.form.controls.username.touched)) {
+                                    <div class="alert alert-danger">
+                                        @if (this.form.controls.username.errors?.['required']) {
+                                            <div>
+                                                el usuario es necesario
+                                            </div>
+                                        }
+                                        @if (this.form.controls.username.errors?.['email']) {
+                                            <div>
+                                                el correo del usuario es invalido
+                                            </div>
+                                        }
+                                    </div>
+                                }
                             </div>
                             <div class="form-group">
                                 <input type="password" 
@@ -23,16 +51,20 @@
                                     id="exampleInputPassword1"
                                     placeholder="Contraseña"
                                     formControlName="password">
+                                @if (this.form.controls.password.invalid && (this.form.controls.password.dirty || this.form.controls.password.touched)) {
+                                    <div class="alert alert-danger">
+                                        @if (this.form.controls.password.errors?.['required']) {
+                                            <div>
+                                                la contraseña es necesaria
+                                            </div>
+                                        }
+                                    </div>
+                                }
                             </div>
-                            @if(form.hasError('invalidCredentials')){
-                                <p class="error-msg">
-                                    Las credenciales son incorrectas
-                                </p>
-                            }
                             <div class="mt-3">
                                 <button type="submit"
                                         class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
-                                        [disabled]="form.invalid || processingRequest">
+                                        [disabled]="processingRequest">
                                     INICIAR SESION
                                 </button>
                             </div>
@@ -43,6 +75,7 @@
                                         class="form-check-input"
                                         formControlName="rememberme">
                                         Mantener sesion iniciada
+                                        <i class="input-helper"></i>
                                     </label>
                                 </div>
                                 <a href="#" class="auth-link text-black">Has olvidado tu contraseña?</a>

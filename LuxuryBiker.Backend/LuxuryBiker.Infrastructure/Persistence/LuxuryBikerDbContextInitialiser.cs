@@ -73,7 +73,14 @@ namespace LuxuryBiker.Infrastructure.Persistence
             }
 
             // Default users
-            var administrator = new ApplicationUser { UserName = "administrator@luxuryubiker.com", Email = "administrator@luxuryubiker.com" };
+            var administrator = new ApplicationUser { 
+                UserName = "administrator@luxurybiker.com", 
+                Email = "administrator@luxurybiker.com",
+                Identification = "123456789",
+                Names = "Christian",
+                Active = true,
+                Surnames = "Garzón",
+            };
 
             if (_userManager.Users.All(u => u.UserName != administrator.UserName))
             {

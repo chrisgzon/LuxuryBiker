@@ -1,7 +1,7 @@
 export interface UserModel {
   id: string;
-  fullname: string;
-  username: string;
+  fullName: string;
+  userName: string;
   names: string;
   surnames: string;
   identification: string;

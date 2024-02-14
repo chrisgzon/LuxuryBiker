@@ -10,7 +10,7 @@ import { EMPTY, catchError, finalize } from 'rxjs';
   standalone: true,
   imports: [ ReactiveFormsModule ],
   templateUrl: './login.component.html',
-  styles: ``,
+  styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class LoginComponent {
@@ -18,7 +18,9 @@ export default class LoginComponent {
 
   form = new FormGroup({
     username: new FormControl('', {
-      validators: [Validators.required],
+      validators: [
+        Validators.required, Validators.email
+      ],
       nonNullable: true,
     }),
     password: new FormControl('', {
@@ -36,6 +38,12 @@ export default class LoginComponent {
   ) {}
 
   login() {
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     this.processingRequest = true;
 
     this.authService
@@ -44,18 +52,27 @@ export default class LoginComponent {
         finalize(() => (this.processingRequest = false)),
         catchError((error: HttpErrorResponse) => {
           if (error.status === 404) {
-            this.handleUnauthorized();
+            this.handleUnauthorized(error.error.title);
             return EMPTY;
           }
 
+          this.handleUnexpectedError();
           throw error;
         })
       )
       .subscribe();
   }
 
-  handleUnauthorized() {
-    this.form.setErrors({ invalidCredentials: true });
+  handleUnauthorized(error: string) {
+    this.form.setErrors({ invalidCredentials: true, error: error });
+    this.cdr.markForCheck();
+  }
+
+  handleUnexpectedError() {
+    this.form.setErrors({
+      errorUnexpected: true,
+      error: "Ocurrio un error inesperado, por favor intente de nuevo más tarde" 
+    });
     this.cdr.markForCheck();
   }
 }

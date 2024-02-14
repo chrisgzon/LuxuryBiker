@@ -7,10 +7,10 @@
             </div>
             <div class="profile-name">
                 <p class="name">
-                    Welcome Jane
+                    {{userData?.fullName ?? ""}}
                 </p>
                 <p class="designation">
-                    Super Admin
+                    {{userData?.roles?.[0] ?? ""}}
                 </p>
             </div>
         </div>

@@ -7,28 +7,24 @@ import { Router } from '@angular/router';
 export const AuthInterceptorHttpService: HttpInterceptorFn = (req, next) => {
 
   const router: Router = inject(Router);
-  return inject(AuthService).jwt$.pipe(
-    first(),
-    switchMap((jwt) => {
-      if (jwt) {
-        req = req.clone({
-          setHeaders: {
-            authorization: `Bearer ${ jwt }`
-          }
-        });
+  const jwt: string|null = localStorage.getItem("userData");
+
+  if (jwt) {
+    req = req.clone({
+      setHeaders: {
+        authorization: `Bearer ${ jwt }`
       }
-    
-      return next(req).pipe(
-        catchError((err: HttpErrorResponse) => {
-    
-          if (err.status === 401) {
-            router.navigateByUrl('/login');
-          }
-    
-          return throwError( err );
-    
-        })
-      )
+    });
+  }
+
+  return next(req).pipe(
+    catchError((err: HttpErrorResponse) => {
+
+      if (err.status === 401) {
+        router.navigateByUrl('/login');
+      }
+
+      return throwError(() => err );
     })
-  );
+  )
 }

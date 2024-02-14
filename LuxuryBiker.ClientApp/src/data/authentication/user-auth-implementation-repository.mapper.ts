@@ -7,27 +7,28 @@ export class UserAuthImplementationRepositoryMapper extends Mapper<UserLoggedEnt
     mapFrom(param: UserLoggedEntity): UserLoggedModel {
         return {
             id: param.id,
-            fullname: param.fullname,
-            username: param.username,
+            fullName: `${param.names} ${param.surnames}`,
+            userName: param.userName,
             active: param.active,
             fechaNacimiento: param.fechaNacimiento,
             identification: param.identification,
             names: param.names,
             surnames: param.surnames,
-            token: param.token
+            token: param.token,
+            roles: param.roles
         };
     }
     mapTo(param: UserLoggedModel): UserLoggedEntity {
         return {
             id: param.id,
-            fullname: param.fullname,
-            username: param.username,
+            userName: param.userName,
             active: param.active,
             fechaNacimiento: param.fechaNacimiento,
             identification: param.identification,
             names: param.names,
             surnames: param.surnames,
-            token: param.token
+            token: param.token,
+            roles: param.roles
         }
     }
 }
