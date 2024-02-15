@@ -1,12 +1,11 @@
 ﻿using LuxuryBiker.Application.Common.Interfaces.Services;
-using LuxuryBiker.Infrastructure.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LuxuryBiker.Infrastructure.Services.Identity;
 
-public class IdentityService : IIdentityService<ApplicationUser>
+public class IdentityService : IIdentityService, IApplicationUserService<ApplicationUser>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;

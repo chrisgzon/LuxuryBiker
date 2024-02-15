@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { LoginCredentialsModel } from '@domain/authentication/models/login-credentials.model';
 import { AuthService } from '@services/auth/auth.service';
 import { EMPTY, catchError, finalize } from 'rxjs';
@@ -51,8 +51,8 @@ export default class LoginComponent {
       .pipe(
         finalize(() => (this.processingRequest = false)),
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 404) {
-            this.handleUnauthorized(error.error.title);
+          if (error.status === 400) {
+            this.handleUnauthorized(error.error.errors);
             return EMPTY;
           }
 
@@ -63,8 +63,8 @@ export default class LoginComponent {
       .subscribe();
   }
 
-  handleUnauthorized(error: string) {
-    this.form.setErrors({ invalidCredentials: true, error: error });
+  handleUnauthorized(errors: ValidationErrors) {
+    this.form.setErrors(errors);
     this.cdr.markForCheck();
   }
 

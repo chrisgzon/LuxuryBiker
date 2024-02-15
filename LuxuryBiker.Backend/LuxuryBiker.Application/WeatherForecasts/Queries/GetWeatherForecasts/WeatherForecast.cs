@@ -1,4 +1,4 @@
-namespace LuxuryBiker.Api
+namespace LuxuryBiker.Application.WeatherForecasts.Queries.GetWeatherForecasts
 {
     public class WeatherForecast
     {

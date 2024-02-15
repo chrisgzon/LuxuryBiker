@@ -1,0 +1,25 @@
+﻿@LuxuryBiker.Api_HostAddress = https://localhost:7283
+@BearerToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJkMTcwZWE0Ny0wZjg4LTQzMWEtOTg3OC1kZDQxMzg4MjllMWEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW5pc3RyYXRvckBsdXh1cnliaWtlci5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9naXZlbm5hbWUiOiJDaHJpc3RpYW4gR2FyesOzbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluaXN0cmF0b3IiLCJleHAiOjE3MDgwMjE4NjcsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDIwMC8iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAvIn0.zmcWqOClsuMtvh-YWnm3NOycsq-jIV-MySqxv3ccjnY
+@Username=administrator@LuxuryBiker.com
+@Password=Administrator1!
+
+POST {{LuxuryBiker.Api_HostAddress}}/authentication/Login
+Content-Type: application/json
+
+{
+  "username": "{{Username}}",
+  "password": "{{Password}}",
+  "Rememberme": false
+}
+
+###
+
+GET {{LuxuryBiker.Api_HostAddress}}/authentication/GetProfileCurrentUser
+Authorization: Bearer {{BearerToken}}
+
+###
+
+GET {{LuxuryBiker.Api_HostAddress}}/weatherforecast
+Authorization: Bearer {{BearerToken}}
+
+###

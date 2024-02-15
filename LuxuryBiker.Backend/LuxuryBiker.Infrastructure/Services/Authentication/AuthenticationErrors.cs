@@ -2,7 +2,7 @@
 {
     public static class AuthenticationErrors
     {
-        public static Error InvalidCredentials { get; } = Error.NotFound(
+        public static Error InvalidCredentials { get; } = Error.Validation(
             code: "Authentication.InvalidCredentials",
             description: "usuario y/o contraseña invalidos."
         );

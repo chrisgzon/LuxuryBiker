@@ -61,9 +61,10 @@ namespace LuxuryBiker.Infrastructure
                 .AddEntityFrameworkStores<LuxuryBikerDbContext>()
                 .AddSignInManager<SignInManager<ApplicationUser>>();
 
-            services.AddTransient<IIdentityService<ApplicationUser>, IdentityService>();
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IApplicationUserService<ApplicationUser>, IdentityService>();
             services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanChangeStatusSales, policy => policy.RequireRole(Roles.Administrator)));
+            options.AddPolicy(Policies.CanChangeStatusSales, policy => policy.RequireRole(Roles.Sealer)));
 
             return services;
         }

@@ -13,18 +13,18 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
     public class AuthenticationService : IAuthenticationService<ApplicationUserDTO>
     {
         private readonly JWTSettings _jwtSettings;
-        private readonly IIdentityService<ApplicationUser> _identityService;
+        private readonly IApplicationUserService<ApplicationUser> _applicationUserService;
         private readonly IUser _currentUser;
         private readonly IMapper _mapper;
 
         public AuthenticationService(
             IOptions<JWTSettings> jwtSettings,
-            IIdentityService<ApplicationUser> identityService,
+            IApplicationUserService<ApplicationUser> applicationUserService,
             IUser currentUser,
             IMapper mapper)
         {
             _jwtSettings = jwtSettings.Value;
-            _identityService = identityService;
+            _applicationUserService = applicationUserService;
             _currentUser = currentUser;
             _mapper = mapper;
         }
@@ -32,15 +32,15 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
         public async Task<ErrorOr<ApplicationUserDTO>> Authenticate(string username, string password, bool rememberMe)
         {
             // Verificamos credenciales con Identity
-            ApplicationUser user = await _identityService.GetUserAsync(username);
+            ApplicationUser user = await _applicationUserService.GetUserAsync(username);
 
-            if (user is null || !await _identityService.ValidatePassword(user, password))
+            if (user is null || !await _applicationUserService.ValidatePassword(user, password))
             {
                 return AuthenticationErrors.InvalidCredentials;
             }
 
             ApplicationUserDTO userDTO = _mapper.Map<ApplicationUserDTO>(user);
-            userDTO.Roles = await _identityService.GetRolesAsync(user);
+            userDTO.Roles = await _applicationUserService.GetRolesAsync(user);
             userDTO.Token = GenerateJWT(userDTO, rememberMe);
             return userDTO;
         }
@@ -52,9 +52,9 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
                 return AuthenticationErrors.NotUserlogged;
             }
 
-            ApplicationUser user = await _identityService.GetUserByIdAsync(_currentUser.Id);
+            ApplicationUser user = await _applicationUserService.GetUserByIdAsync(_currentUser.Id);
             ApplicationUserDTO userDTO = _mapper.Map<ApplicationUserDTO>(user);
-            userDTO.Roles = await _identityService.GetRolesAsync(user);
+            userDTO.Roles = await _applicationUserService.GetRolesAsync(user);
             return userDTO;
         }
 
