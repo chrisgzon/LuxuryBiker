@@ -16,7 +16,9 @@ export class AuthService {
 
   private user = new BehaviorSubject<UserLoggedModel | null>(null);
   user$ = this.user.asObservable();
-  isLoggedIn$: Observable<boolean> = this.user$.pipe(map(Boolean));
+  private jwt = new BehaviorSubject<string | null>(null);
+  jwt$ = this.jwt.asObservable();
+  isLoggedIn$: Observable<boolean> = this.jwt$.pipe(map(Boolean));
 
   constructor(
     private userLoginUseCase: UserLoginUseCase,
@@ -29,8 +31,8 @@ export class AuthService {
   login(credentials: LoginCredentialsModel): Observable<never> {
     return this.userLoginUseCase.execute(credentials)
     .pipe(
-      tap((user: UserLoggedModel) => this.saveTokenToLocalStore(user.token)),
-      tap((user: UserLoggedModel) => this.pushNewUser(user)),
+      tap((token: string) => this.saveTokenToLocalStore(token)),
+      tap((token: string) => this.pushNewJWT(token)),
       tap(() => this.redirectToDashboard()),
       ignoreElements()
     );
@@ -41,14 +43,13 @@ export class AuthService {
     this.router.navigateByUrl('/login');
   }
   
-  private getProfileCurrentUser(): Observable<never> {
+  getProfileCurrentUser(): Observable<never> {
     return this.getUserProfileUseCase.execute()
     .pipe(
       tap((userProfile: UserLoggedModel) => this.pushNewUser(userProfile)),
       ignoreElements(),
       catchError((error: HttpErrorResponse) => {
         this.removeUserFromLocalStorage();
-        this.router.navigateByUrl("/login");
         throw error;
       })
     );
@@ -61,25 +62,29 @@ export class AuthService {
   private loadUserFromLocalStorage(): void {
     const jwtFromLocal = this.getToken();
     
-    jwtFromLocal 
-    && this.getProfileCurrentUser().subscribe()
-    && this.pushNewUser({ token: jwtFromLocal } as UserLoggedModel);
+    jwtFromLocal
+    && this.pushNewJWT(jwtFromLocal);
   }
   
   private redirectToDashboard(): void {
     this.router.navigateByUrl('/home');
   }
 
+  private saveTokenToLocalStore(userToken: string): void {
+    localStorage.setItem(USER_LOCAL_STORAGE_KEY, userToken);
+  }
+
   private pushNewUser(userProfile: UserLoggedModel|null) {
     this.user.next(userProfile);
   }
 
-  private saveTokenToLocalStore(userToken: string): void {
-    localStorage.setItem(USER_LOCAL_STORAGE_KEY, userToken);
+  private pushNewJWT(jwt: string|null) {
+    this.jwt.next(jwt);
   }
 
   private removeUserFromLocalStorage(): void {
     localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
     this.pushNewUser(null);
+    this.pushNewJWT(null);
   }
 }

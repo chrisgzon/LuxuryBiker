@@ -29,7 +29,7 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
             _mapper = mapper;
         }
 
-        public async Task<ErrorOr<ApplicationUserDTO>> Authenticate(string username, string password, bool rememberMe)
+        public async Task<ErrorOr<string>> Authenticate(string username, string password, bool rememberMe)
         {
             // Verificamos credenciales con Identity
             ApplicationUser user = await _applicationUserService.GetUserAsync(username);
@@ -39,10 +39,8 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
                 return AuthenticationErrors.InvalidCredentials;
             }
 
-            ApplicationUserDTO userDTO = _mapper.Map<ApplicationUserDTO>(user);
-            userDTO.Roles = await _applicationUserService.GetRolesAsync(user);
-            userDTO.Token = GenerateJWT(userDTO, rememberMe);
-            return userDTO;
+            List<string> roles = await _applicationUserService.GetRolesAsync(user);
+            return GenerateJWT(user, roles, rememberMe);
         }
 
         public async Task<ErrorOr<ApplicationUserDTO>> GetCurrentUserProfile()
@@ -59,7 +57,8 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
         }
 
         private string GenerateJWT(
-            ApplicationUserDTO user,
+            ApplicationUser user,
+            List<string> roles,
             bool rememberme)
         {
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
@@ -73,7 +72,7 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
                 new Claim(ClaimTypes.GivenName, $"{user.Names} {user.Surnames}")
             };
 
-            foreach (var role in user.Roles)
+            foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }

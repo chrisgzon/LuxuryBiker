@@ -1,30 +1,29 @@
 import { inject } from '@angular/core';
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { catchError, first, switchMap, throwError } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { first, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
-import { Router } from '@angular/router';
 
 export const AuthInterceptorHttpService: HttpInterceptorFn = (req, next) => {
 
-  const router: Router = inject(Router);
-  const jwt: string|null = localStorage.getItem("userData");
+  const authService: AuthService = inject(AuthService);
 
-  if (jwt) {
-    req = req.clone({
-      setHeaders: {
-        authorization: `Bearer ${ jwt }`
-      }
-    });
-  }
-
-  return next(req).pipe(
-    catchError((err: HttpErrorResponse) => {
-
-      if (err.status === 401) {
-        router.navigateByUrl('/login');
+  return authService.isLoggedIn$.pipe(
+    first(),
+    switchMap((isLoggedIn) => {
+      if (isLoggedIn === false) {
+        return next(req);
       }
 
-      return throwError(() => err );
+      return authService.jwt$.pipe(
+        first(Boolean),
+        switchMap((jwt) => {
+          const headers = req.headers.append(
+            'Authorization',
+            `Bearer ${jwt}`
+          );
+          return next(req.clone({ headers }));
+        })
+      );
     })
-  )
+  );
 }

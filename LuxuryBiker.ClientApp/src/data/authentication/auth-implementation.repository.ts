@@ -19,10 +19,9 @@ export class AuthImplementationRepository extends AuthRepository {
         super();
     }
 
-    login(params: LoginCredentialsModel): Observable<UserLoggedModel> {
+    login(params: LoginCredentialsModel): Observable<string> {
         return this.http
-            .post<UserLoggedEntity>(`${environment.apiUrl}/Authentication/Login`, params)
-            .pipe(map(this.userMapper.mapFrom));
+            .post<string>(`${environment.apiUrl}/Authentication/Login`, params);
     }
 
     getProfileCurrentUser(): Observable<UserLoggedModel> {

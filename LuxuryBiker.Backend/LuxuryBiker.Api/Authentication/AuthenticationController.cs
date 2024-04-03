@@ -1,8 +1,10 @@
 ﻿using LuxuryBiker.Api.Common;
 using LuxuryBiker.Application.Common.Interfaces.Services;
+using LuxuryBiker.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 using LuxuryBiker.Infrastructure.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace LuxuryBiker.Api.Authentication
 {
@@ -19,9 +21,9 @@ namespace LuxuryBiker.Api.Authentication
         [HttpPost]
         public async Task<IActionResult> Login(AuthenticationModel requestModel)
         {
-            ErrorOr<ApplicationUserDTO> response = await _authenticationService.Authenticate(requestModel.Username, requestModel.Password, requestModel.Rememberme);
+            ErrorOr<string> response = await _authenticationService.Authenticate(requestModel.Username, requestModel.Password, requestModel.Rememberme);
             return response.Match(
-                value => Ok(value),
+                value => Ok(JsonSerializer.Serialize(value)),
                 errors => Problem(errors)
             );
         }

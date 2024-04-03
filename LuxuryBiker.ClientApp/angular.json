@@ -32,7 +32,9 @@
               "src/styles.css",
               "src/presentation/assets/melody/icons/font-awesome/css/all.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/presentation/assets/melody/vendors/js/vendor.bundle.base.js"
+            ]
           },
           "configurations": {
             "production": {

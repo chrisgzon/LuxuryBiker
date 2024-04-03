@@ -17,7 +17,6 @@ namespace LuxuryBiker.Api.WeatherForecast
             _mediator = mediator;
         }
 
-        [Authorize]
         [HttpGet(Name = "GetWeatherForecast")]
         public async Task<IActionResult> Get()
         {

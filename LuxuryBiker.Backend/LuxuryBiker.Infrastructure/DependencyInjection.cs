@@ -64,7 +64,7 @@ namespace LuxuryBiker.Infrastructure
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IApplicationUserService<ApplicationUser>, IdentityService>();
             services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanChangeStatusSales, policy => policy.RequireRole(Roles.Sealer)));
+            options.AddPolicy(Policies.CanChangeStatusSales, policy => policy.RequireRole(Roles.Administrator)));
 
             return services;
         }
