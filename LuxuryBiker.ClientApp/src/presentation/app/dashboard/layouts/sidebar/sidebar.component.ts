@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { UserLoggedModel } from '@domain/authentication/models/user-logged.model';
 import { AuthService } from '../../../services/auth/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: '[layout-sidebar]',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './sidebar.component.html',
   styles: ``
 })

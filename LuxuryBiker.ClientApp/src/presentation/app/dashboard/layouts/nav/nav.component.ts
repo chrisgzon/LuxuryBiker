@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { UserLoggedModel } from '@domain/authentication/models/user-logged.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../services/auth/auth.service';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: '[layout-nav]',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [TranslateModule, RouterLink],
   templateUrl: './nav.component.html',
   styles: ``
 })

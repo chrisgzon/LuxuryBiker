@@ -18,7 +18,6 @@ namespace LuxuryBiker.Domain.Entities.Thirds
             TypeId = typeId;
 
             Created = DateTime.Now;
-            LastModified = DateTime.Now;
         }
 
         public string? Email { get; private set; }
