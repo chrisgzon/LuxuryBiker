@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NavComponent } from '../nav/nav.component';
 import { FooterComponent } from '../footer/footer.component';
-import { AuthService } from '@services/auth/auth.service';
-import { catchError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../services/auth/auth.service';
 
 declare var jQuery: any; 
 
@@ -18,16 +16,9 @@ declare var jQuery: any;
 })
 export default class MasterComponent implements OnInit {
   
-  constructor(private authService: AuthService,
-    private router: Router) {
+  constructor(private authService: AuthService) {
 
     this.authService.getProfileCurrentUser()
-    .pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.router.navigateByUrl("/login");
-        throw error;
-      })
-    )
     .subscribe();
   }
 
@@ -50,5 +41,18 @@ export default class MasterComponent implements OnInit {
         body.toggleClass('sidebar-icon-only');
       }
     });
+
+    jQuery('[data-toggle="minimize"]').on("click", function() {
+      if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
+        body.toggleClass('sidebar-hidden');
+      } else {
+        body.toggleClass('sidebar-icon-only');
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    //checkbox and radios
+    jQuery(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
   }
 }

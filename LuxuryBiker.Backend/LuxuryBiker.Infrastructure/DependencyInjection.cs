@@ -1,7 +1,9 @@
 ﻿using LuxuryBiker.Application.Common.Interfaces;
 using LuxuryBiker.Application.Common.Interfaces.Services;
-using LuxuryBiker.Domain.Constants;
+using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Domain.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Persistence;
+using LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Services.Authentication;
 using LuxuryBiker.Infrastructure.Services.Authentication.JWT;
 using LuxuryBiker.Infrastructure.Services.Identity;
@@ -19,6 +21,7 @@ namespace LuxuryBiker.Infrastructure
         {
             services
                 .AddAuthorization()
+                .AddRespositories()
                 .AddAuthentication(configuration)
                 .AddPersistence(configuration);
 
@@ -63,9 +66,13 @@ namespace LuxuryBiker.Infrastructure
 
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IApplicationUserService<ApplicationUser>, IdentityService>();
-            services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanChangeStatusSales, policy => policy.RequireRole(Roles.Administrator)));
 
+            return services;
+        }
+
+        private static IServiceCollection AddRespositories(this IServiceCollection services)
+        {
+            services.AddScoped<IThirdRepository, ThirdRepository>();
             return services;
         }
     }

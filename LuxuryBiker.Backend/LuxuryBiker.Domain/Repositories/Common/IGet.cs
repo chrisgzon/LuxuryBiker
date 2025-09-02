@@ -2,7 +2,7 @@
 {
     public interface IGet<TEntity, TEntityId>
     {
-        Task<List<TEntity>> GetAsync();
-        Task<List<TEntity>> GetAsync(TEntityId entityId);
+        Task<IEnumerable<TEntity>> GetAsync();
+        Task<TEntity?> GetAsync(TEntityId entityId);
     }
 }

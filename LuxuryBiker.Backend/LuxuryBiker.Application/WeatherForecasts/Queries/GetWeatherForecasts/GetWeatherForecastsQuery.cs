@@ -2,7 +2,6 @@
 
 namespace LuxuryBiker.Application.WeatherForecasts.Queries.GetWeatherForecasts
 {
-    [Authorize(Policy = Policies.CanChangeStatusSales)]
     public record GetWeatherForecastsQuery : IRequest<ErrorOr<IEnumerable<WeatherForecast>>>;
 
     public class GetWeatherForecastsQueryHandler : IRequestHandler<GetWeatherForecastsQuery, ErrorOr<IEnumerable<WeatherForecast>>>

@@ -1,0 +1,130 @@
+<main>
+  <div class="page-header">
+    <h3 class="page-title">
+      {{ 'thirds.pageTitle' | translate }}
+    </h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'thirds.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ 'thirds.cardTitle' | translate }}</h4>
+          <p class="card-description">
+            {{ 'thirds.description' | translate }}
+          </p>
+          @if(showSuccessAlert){
+          <div class="alert alert-success" role="alert">
+            Se ha creado el tercero con el id {{thirdCreatedId}} correctamente. <a [routerLink]="['/dashboard/thirds', thirdCreatedId]">Ver tercero</a>
+          </div>
+          }
+          @if(this.form.errors?.["Thirds.AlreadyExists"]){
+          <div class="alert alert-danger">
+            <div>
+              {{this.form.errors?.["Thirds.AlreadyExists"]}}
+            </div>
+          </div>
+          }
+          @if(form.hasError('errorUnexpected')){
+          <div class="alert alert-danger">
+            <ul>
+              <li></li>
+              {{this.form.errors?.["error"]}}
+            </ul>
+          </div>
+          }
+          <form [formGroup]="form" (ngSubmit)="createThird()" class="forms-sample">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="identification">{{ 'thirds.form.identification' | translate }}</label>
+                <input type="text" class="required form-control" id="identification" name="Identificacion"
+                  placeholder="{{ 'thirds.form.identification' | translate }}" formControlName="identification" />
+                  @if (this.form.controls.identification.invalid && (this.form.controls.identification.dirty ||
+                    this.form.controls.identification.touched) && this.form.controls.identification.errors?.['required']) {
+                    <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                  }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="name">{{ 'thirds.form.name' | translate }}</label>
+                <input type="text" class="required form-control" name="name" id="name"
+                  placeholder="{{ 'thirds.form.name' | translate }}" formControlName="name" />
+                  @if (this.form.controls.name.invalid && (this.form.controls.name.dirty ||
+                    this.form.controls.name.touched) && this.form.controls.name.errors?.['required']) {
+                    <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                  }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="last-name">{{ 'thirds.form.surnames' | translate }}</label>
+                <input type="text" class="required form-control" id="last-name" name="last-name"
+                  placeholder="{{ 'thirds.form.surnames' | translate }}" formControlName="surnames" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="cellPhone">{{ 'thirds.form.cellPhone' | translate }}</label>
+                <input type="text" class="required form-control" id="cellPhone" name="cellPhone"
+                  placeholder="{{ 'thirds.form.cellPhone' | translate }}" formControlName="cellPhone" />
+                  @if (this.form.controls.cellPhone.invalid && (this.form.controls.cellPhone.dirty ||
+                    this.form.controls.cellPhone.touched) && this.form.controls.cellPhone.errors?.['required']) {
+                    <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                  }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="email">{{ 'thirds.form.email' | translate }}</label>
+                <input type="email" class="form-control" id="email" name="email"
+                  placeholder="{{ 'thirds.form.email' | translate }}" formControlName="email" />
+                  @if (this.form.controls.email.invalid && (this.form.controls.email.dirty ||
+                  this.form.controls.email.touched)) {
+                    @if (this.form.controls.email.errors?.['email']) {
+                      <label class="error mt-2 text-danger">{{ 'common.validations.email' | translate }}</label>
+                    }
+                  }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="address">{{ 'thirds.form.address' | translate }}</label>
+                <input type="text" class="form-control" id="address" name="address"
+                  placeholder="{{ 'thirds.form.address' | translate }}" formControlName="address" />
+                  @if (this.form.controls.address.invalid && (this.form.controls.address.dirty ||
+                  this.form.controls.address.touched) && this.form.controls.address.errors?.['required']) {
+                    <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                  }
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label class="col-sm-5" for="typeThird">{{ 'thirds.form.type' | translate }}</label>
+                <div class="col-sm-5">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" name="typeThird" id="typeThirdSupplier" formControlName="typeId" value="1">
+                      {{ 'thirds.form.provider' | translate }}
+                    <i class="input-helper"></i></label>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" name="typeThird" id="typeThirdClient" formControlName="typeId" value="2">
+                      {{ 'thirds.form.client' | translate }}
+                    <i class="input-helper"></i></label>
+                  </div>
+                </div>
+                  @if (this.form.controls.typeId.invalid && (this.form.controls.typeId.dirty ||
+                  this.form.controls.typeId.touched) && this.form.controls.typeId.errors?.['required']) {
+                    <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                  }
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary col-md-2" [disabled]="processingRequest || this.form.invalid">{{ 'common.submitForm'
+              | translate }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

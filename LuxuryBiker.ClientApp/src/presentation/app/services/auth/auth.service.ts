@@ -47,11 +47,7 @@ export class AuthService {
     return this.getUserProfileUseCase.execute()
     .pipe(
       tap((userProfile: UserLoggedModel) => this.pushNewUser(userProfile)),
-      ignoreElements(),
-      catchError((error: HttpErrorResponse) => {
-        this.removeUserFromLocalStorage();
-        throw error;
-      })
+      ignoreElements()
     );
   }
 

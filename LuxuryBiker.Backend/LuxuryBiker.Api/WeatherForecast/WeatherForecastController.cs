@@ -1,7 +1,6 @@
 using LuxuryBiker.Api.Common;
 using LuxuryBiker.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LuxuryBiker.Api.WeatherForecast

@@ -6,7 +6,7 @@
       "@base/*": ["./src/base/*"],
       "@data/*": ["./src/data/*"],
       "@domain/*": ["./src/domain/*"],
-      "@services/*": ["./src/presentation/app/dashboard/services/*"],
+      "@services/*": ["./src/presentation/app/services/*"],
       "@guards/*": ["./src/presentation/app/dashboard/guards/*"],
       "@enviroments/*": ["./src/enviroments/*"]
     },

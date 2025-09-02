@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Domain.Entities.Common;
+using LuxuryBiker.Domain.Entities.Products;
 
 namespace LuxuryBiker.Domain.Entities.Purchases
 {
@@ -8,5 +9,8 @@ namespace LuxuryBiker.Domain.Entities.Purchases
         public int ProductId { get; set; }
         public decimal ProductValue { get; set; }
         public decimal Quantity { get; set; }
+
+        public Product? Product { get; set; }
+        public Purchase? Purchase { get; set; }
     }
 }

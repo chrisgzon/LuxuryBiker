@@ -19,8 +19,12 @@ export const routes: Routes = [
         children: [
             {
                 path: 'home',
-                loadComponent: () => import('./dashboard/pages/home/home.component')
+                loadComponent: () => import('./dashboard/pages/home/home.component'),
+            },
+            {
+                path: 'thirds',
+                loadComponent: () => import('./dashboard/pages/thirds/create-third/create-third.component'),
             }
         ]
-    },
+    }
 ];
