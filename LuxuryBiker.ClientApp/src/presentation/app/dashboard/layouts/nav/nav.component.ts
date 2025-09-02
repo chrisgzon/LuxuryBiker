@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { UserLoggedModel } from '@domain/authentication/models/user-logged.model';
-import { AuthService } from '@services/auth/auth.service';
-import { BehaviorSubject } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../../../services/auth/auth.service';
 
 
 @Component({
   selector: '[layout-nav]',
   standalone: true,
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './nav.component.html',
   styles: ``
 })
 export class NavComponent implements OnInit {
 
   userData:UserLoggedModel|null = {} as UserLoggedModel;
+
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -28,7 +30,10 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
-
     this.authService.logout()
+  }
+  
+  onLanguageChange(selectedLanguage: string) {
+    this.translateService.use(selectedLanguage)
   }
 }

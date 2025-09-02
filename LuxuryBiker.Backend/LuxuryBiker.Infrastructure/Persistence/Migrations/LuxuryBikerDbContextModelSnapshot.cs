@@ -22,7 +22,314 @@ namespace LuxuryBiker.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("LuxuryBiker.Infrastructure.Services.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Products.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<decimal>("Stock")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(28, 2)
+                        .HasColumnType("decimal(28,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("T_PRODUCTS", (string)null);
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Purchases.Purchase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("DatePurchase")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int?>("ThirdId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(28, 2)
+                        .HasColumnType("decimal(28,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThirdId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("T_PURCHASES", (string)null);
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Purchases.PurchaseDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ProductValue")
+                        .HasPrecision(28, 6)
+                        .HasColumnType("decimal(28,6)");
+
+                    b.Property<int>("PurchaseId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(10, 3)
+                        .HasColumnType("decimal(10,3)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.ToTable("T_PURCHASE_DETAILS", (string)null);
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Sales.Sale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int?>("ThirdId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(28, 2)
+                        .HasColumnType("decimal(28,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThirdId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("T_SALES", (string)null);
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Sales.SaleDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ProductValue")
+                        .HasPrecision(28, 2)
+                        .HasColumnType("decimal(28,2)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(10, 3)
+                        .HasColumnType("decimal(10,3)");
+
+                    b.Property<int>("SaleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SaleId");
+
+                    b.ToTable("T_SALE_DETAILS", (string)null);
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Thirds.Third", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool?>("Active")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CellPhone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Identification")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Surnames")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("T_THIRDS", (string)null);
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Thirds.TypeThird", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypeThird");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Users.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -37,15 +344,15 @@ namespace LuxuryBiker.Infrastructure.Persistence.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset?>("DateBirth")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("FechaNacimiento")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Identification")
                         .IsRequired()
@@ -238,6 +545,89 @@ namespace LuxuryBiker.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Purchases.Purchase", b =>
+                {
+                    b.HasOne("LuxuryBiker.Domain.Entities.Thirds.Third", "Third")
+                        .WithMany("Sales")
+                        .HasForeignKey("ThirdId");
+
+                    b.HasOne("LuxuryBiker.Domain.Entities.Users.ApplicationUser", "User")
+                        .WithMany("Purchases")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Third");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Purchases.PurchaseDetail", b =>
+                {
+                    b.HasOne("LuxuryBiker.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Purchases")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LuxuryBiker.Domain.Entities.Purchases.Purchase", "Purchase")
+                        .WithMany("Details")
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Purchase");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Sales.Sale", b =>
+                {
+                    b.HasOne("LuxuryBiker.Domain.Entities.Thirds.Third", "Third")
+                        .WithMany("Purchases")
+                        .HasForeignKey("ThirdId");
+
+                    b.HasOne("LuxuryBiker.Domain.Entities.Users.ApplicationUser", "User")
+                        .WithMany("Sales")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Third");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Sales.SaleDetail", b =>
+                {
+                    b.HasOne("LuxuryBiker.Domain.Entities.Products.Product", "Product")
+                        .WithMany("Sales")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LuxuryBiker.Domain.Entities.Sales.Sale", "Sale")
+                        .WithMany("Details")
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Sale");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Thirds.Third", b =>
+                {
+                    b.HasOne("LuxuryBiker.Domain.Entities.Thirds.TypeThird", "Type")
+                        .WithMany("Thirds")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -249,7 +639,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LuxuryBiker.Infrastructure.Services.Identity.ApplicationUser", null)
+                    b.HasOne("LuxuryBiker.Domain.Entities.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -258,7 +648,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LuxuryBiker.Infrastructure.Services.Identity.ApplicationUser", null)
+                    b.HasOne("LuxuryBiker.Domain.Entities.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -273,7 +663,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LuxuryBiker.Infrastructure.Services.Identity.ApplicationUser", null)
+                    b.HasOne("LuxuryBiker.Domain.Entities.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -282,11 +672,47 @@ namespace LuxuryBiker.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("LuxuryBiker.Infrastructure.Services.Identity.ApplicationUser", null)
+                    b.HasOne("LuxuryBiker.Domain.Entities.Users.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Products.Product", b =>
+                {
+                    b.Navigation("Purchases");
+
+                    b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Purchases.Purchase", b =>
+                {
+                    b.Navigation("Details");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Sales.Sale", b =>
+                {
+                    b.Navigation("Details");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Thirds.Third", b =>
+                {
+                    b.Navigation("Purchases");
+
+                    b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Thirds.TypeThird", b =>
+                {
+                    b.Navigation("Thirds");
+                });
+
+            modelBuilder.Entity("LuxuryBiker.Domain.Entities.Users.ApplicationUser", b =>
+                {
+                    b.Navigation("Purchases");
+
+                    b.Navigation("Sales");
                 });
 #pragma warning restore 612, 618
         }

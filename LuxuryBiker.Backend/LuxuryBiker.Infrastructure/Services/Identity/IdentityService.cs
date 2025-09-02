@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Application.Common.Interfaces.Services;
+using LuxuryBiker.Domain.Entities.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

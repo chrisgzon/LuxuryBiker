@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using LuxuryBiker.Api.Common;
+using LuxuryBiker.Application.Thirds.Commands.CreateThird;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+
+namespace LuxuryBiker.Api.Thirds
+{
+    [ApiController]
+    [Authorize]
+    [Route("[controller]/[action]")]
+    public class ThirdsController : ApiController
+    {
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
+        public ThirdsController(IMediator mediator, IMapper mapper)
+        {
+            _mediator = mediator;
+            _mapper = mapper;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(ThirdModel thirdModel)
+        {
+            ThirdDto dto = _mapper.Map<ThirdDto>(thirdModel);
+            ErrorOr<int> response = await _mediator.Send(new CreateThirdCommand(dto));
+            return response.Match(
+                value => Ok(value),
+                errors => Problem(errors)
+            );
+        }
+    }
+}

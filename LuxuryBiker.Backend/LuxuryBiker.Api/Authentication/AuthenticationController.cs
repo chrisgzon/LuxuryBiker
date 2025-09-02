@@ -1,6 +1,5 @@
 ﻿using LuxuryBiker.Api.Common;
 using LuxuryBiker.Application.Common.Interfaces.Services;
-using LuxuryBiker.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 using LuxuryBiker.Infrastructure.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,6 @@
 ﻿using LuxuryBiker.Domain.Constants;
-using LuxuryBiker.Infrastructure.Services.Identity;
+using LuxuryBiker.Domain.Entities.Thirds;
+using LuxuryBiker.Domain.Entities.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +83,7 @@ namespace LuxuryBiker.Infrastructure.Persistence
                 Surnames = "Garzón",
             };
 
+
             if (_userManager.Users.All(u => u.UserName != administrator.UserName))
             {
                 await _userManager.CreateAsync(administrator, "Administrator1!");
@@ -89,6 +91,19 @@ namespace LuxuryBiker.Infrastructure.Persistence
                 {
                     await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
                 }
+            }
+
+            // Default third types
+            var thirdsType = new List<TypeThird>()
+            {
+                new TypeThird { Active = true, Name = "Provider" },
+                new TypeThird { Active = true, Name = "Client" }
+            };
+
+            if (_context.TypeThird != null && !(_context.TypeThird.Where(x => thirdsType.Select(t => t.Name).Contains(x.Name)).Count() > 0))
+            {
+                await _context.TypeThird.AddRangeAsync(thirdsType);
+                await _context.SaveChangesAsync();
             }
         }
     }

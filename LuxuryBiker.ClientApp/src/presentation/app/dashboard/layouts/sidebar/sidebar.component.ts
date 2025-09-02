@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserLoggedModel } from '@domain/authentication/models/user-logged.model';
-import { AuthService } from '@services/auth/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: '[layout-sidebar]',

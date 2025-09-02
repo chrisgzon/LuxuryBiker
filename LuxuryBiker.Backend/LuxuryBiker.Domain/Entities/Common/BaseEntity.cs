@@ -4,7 +4,7 @@ namespace LuxuryBiker.Domain.Entities.Common
 {
     public abstract class BaseEntity<T>
     {
-        public T Id { get; set; }
+        public T? Id { get; set; }
 
         private readonly List<BaseEvent> _domainEvents = new();
 
@@ -13,6 +13,7 @@ namespace LuxuryBiker.Domain.Entities.Common
 
         public void AddDomainEvent(BaseEvent domainEvent)
         {
+
             _domainEvents.Add(domainEvent);
         }
 

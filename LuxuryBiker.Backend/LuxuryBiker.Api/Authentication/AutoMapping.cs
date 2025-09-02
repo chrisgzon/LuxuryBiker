@@ -1,5 +1,5 @@
-﻿using LuxuryBiker.Infrastructure.Services.Authentication;
-using LuxuryBiker.Infrastructure.Services.Identity;
+﻿using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Infrastructure.Services.Authentication;
 
 namespace LuxuryBiker.Api.Authentication
 {
