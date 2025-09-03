@@ -28,9 +28,9 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds
             return await _context.Thirds.FirstOrDefaultAsync(t => t.Id.Equals(entityId));
         }
 
-        public Task<Third?> GetByIdentification(string identification)
+        public Task<Third?> GetByIdentification(string identification, int typeID)
         {
-            return _context.Thirds.FirstOrDefaultAsync(t =>  t.Identification != null && t.Identification.Equals(identification));
+            return _context.Thirds.FirstOrDefaultAsync(t =>  t.Identification.Equals(identification) && t.TypeId.Equals(typeID));
         }
 
         public Task UpdateAsync(Third entity)

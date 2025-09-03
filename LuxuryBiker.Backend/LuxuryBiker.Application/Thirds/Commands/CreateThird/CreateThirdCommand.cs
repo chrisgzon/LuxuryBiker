@@ -28,6 +28,7 @@ namespace LuxuryBiker.Application.Thirds.Commands.CreateThird
 
             Third entity = _mapper.Map<Third>(request.CreateThirdDto);
             entity.CreatedBy = _user.Id;
+            entity.LastModifiedBy = _user.Id;
             await _repository.CreateAsync(entity);
             return entity.Id;
         }
@@ -37,8 +38,8 @@ namespace LuxuryBiker.Application.Thirds.Commands.CreateThird
             if (string.IsNullOrWhiteSpace(identification))
                 return false;
 
-            Third? thirdExists = await _repository.GetByIdentification(identification);
-            return thirdExists != null && thirdExists.TypeId.Equals(typeID);
+            Third? thirdExists = await _repository.GetByIdentification(identification, typeID);
+            return thirdExists != null;
         }
     }
 }

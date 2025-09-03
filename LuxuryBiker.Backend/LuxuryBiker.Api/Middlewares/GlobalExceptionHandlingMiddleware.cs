@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LuxuryBiker.Application.Common.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
@@ -17,6 +18,26 @@ namespace LuxuryBiker.Api.Middlewares
             try
             {
                 await next(context);
+            }
+            catch (ForbiddenAccessException e)
+            {
+                _logger.LogError(e, e.Message);
+
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+
+                ProblemDetails problem = new()
+                {
+                    Status = (int)HttpStatusCode.Forbidden,
+                    Type = "Forbidden Access",
+                    Title = "Access Error",
+                    Detail = "Unauthorized action requested."
+                };
+
+                string json = JsonSerializer.Serialize(problem);
+
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsync(json);
             }
             catch (Exception e)
             {
