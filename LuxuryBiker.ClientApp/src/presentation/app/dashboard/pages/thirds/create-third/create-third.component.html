@@ -20,7 +20,7 @@
           </p>
           @if(showSuccessAlert){
           <div class="alert alert-success" role="alert">
-            Se ha creado el tercero con el id {{thirdCreatedId}} correctamente. <a [routerLink]="['/dashboard/thirds', thirdCreatedId]">Ver tercero</a>
+            Se ha registrado el tercero con el id {{thirdCreatedId}} correctamente. <a [routerLink]="['/dashboard/thirds', thirdCreatedId]">Ver tercero</a>
           </div>
           }
           @if(this.form.errors?.["Thirds.AlreadyExists"]){
@@ -32,10 +32,7 @@
           }
           @if(form.hasError('errorUnexpected')){
           <div class="alert alert-danger">
-            <ul>
-              <li></li>
               {{this.form.errors?.["error"]}}
-            </ul>
           </div>
           }
           <form [formGroup]="form" (ngSubmit)="createThird()" class="forms-sample">
@@ -75,6 +72,15 @@
                   }
               </div>
               <div class="form-group col-md-4">
+                <label for="address">{{ 'thirds.form.address' | translate }}</label>
+                <input type="text" class="form-control" id="address" name="address"
+                  placeholder="{{ 'thirds.form.address' | translate }}" formControlName="address" />
+                  @if (this.form.controls.address.invalid && (this.form.controls.address.dirty ||
+                  this.form.controls.address.touched) && this.form.controls.address.errors?.['required']) {
+                    <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                  }
+              </div>
+              <div class="form-group col-md-4">
                 <label for="email">{{ 'thirds.form.email' | translate }}</label>
                 <input type="email" class="form-control" id="email" name="email"
                   placeholder="{{ 'thirds.form.email' | translate }}" formControlName="email" />
@@ -85,23 +91,14 @@
                     }
                   }
               </div>
-              <div class="form-group col-md-4">
-                <label for="address">{{ 'thirds.form.address' | translate }}</label>
-                <input type="text" class="form-control" id="address" name="address"
-                  placeholder="{{ 'thirds.form.address' | translate }}" formControlName="address" />
-                  @if (this.form.controls.address.invalid && (this.form.controls.address.dirty ||
-                  this.form.controls.address.touched) && this.form.controls.address.errors?.['required']) {
-                    <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
-                  }
-              </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
-                <label class="col-sm-5" for="typeThird">{{ 'thirds.form.type' | translate }}</label>
+                <label class="col-sm-5" for="typeId">{{ 'thirds.form.type' | translate }}</label>
                 <div class="col-sm-5">
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="typeThird" id="typeThirdSupplier" formControlName="typeId" value="1">
+                      <input type="radio" class="form-check-input" name="typeId" id="typeThirdSupplier" formControlName="typeId" value="1">
                       {{ 'thirds.form.provider' | translate }}
                     <i class="input-helper"></i></label>
                   </div>
@@ -109,18 +106,18 @@
                 <div class="col-sm-5">
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="typeThird" id="typeThirdClient" formControlName="typeId" value="2">
+                      <input type="radio" class="form-check-input" name="typeId" id="typeThirdClient" formControlName="typeId" value="2">
                       {{ 'thirds.form.client' | translate }}
                     <i class="input-helper"></i></label>
                   </div>
                 </div>
                   @if (this.form.controls.typeId.invalid && (this.form.controls.typeId.dirty ||
-                  this.form.controls.typeId.touched) && this.form.controls.typeId.errors?.['required']) {
+                  this.form.controls.typeId.touched) && (this.form.controls.typeId.errors?.['required'] || this.form.controls.typeId.errors?.['min'])) {
                     <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
                   }
               </div>
             </div>
-            <button type="submit" class="btn btn-primary col-md-2" [disabled]="processingRequest || this.form.invalid">{{ 'common.submitForm'
+            <button type="submit" class="btn btn-primary col-md-2" [disabled]="processingRequest">{{ 'common.submitForm'
               | translate }}</button>
           </form>
         </div>

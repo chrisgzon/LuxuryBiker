@@ -3,7 +3,7 @@
     public class ThirdDto
     {
         public string? Email { get; set; }
-        public string? Identification { get; set; }
+        public string Identification { get; set; } = string.Empty;
         public string? Address { get; set; }
         public bool? Active { get; set; }
         public string? CellPhone { get; set; }

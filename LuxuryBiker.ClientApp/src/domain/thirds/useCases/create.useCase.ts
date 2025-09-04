@@ -3,7 +3,7 @@ import { UseCase } from "@base/use-case";
 import { Observable } from "rxjs";
 import { ThirdModel } from "@domain/thirds/models/third.model";
 
-export class ThirdCreateUseCase implements UseCase<ThirdModel, number>{ // TODO: spicify the return type
+export class ThirdCreateUseCase implements UseCase<ThirdModel, number>{
 
     constructor(private thirdsRepository: ThirdsRepository) { }
 

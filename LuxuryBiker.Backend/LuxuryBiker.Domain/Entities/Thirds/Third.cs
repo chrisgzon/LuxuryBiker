@@ -6,7 +6,7 @@ namespace LuxuryBiker.Domain.Entities.Thirds
 {
     public class Third : BaseAuditableEntity<int>
     {
-        public Third(string? email, string? identification, string? address, bool? active, string? cellPhone, string? name, string? surnames, int typeId)
+        public Third(string? email, string identification, string? address, bool? active, string? cellPhone, string? name, string? surnames, int typeId)
         {
             Email = email;
             Identification = identification;
@@ -22,7 +22,7 @@ namespace LuxuryBiker.Domain.Entities.Thirds
         }
 
         public string? Email { get; private set; }
-        public string? Identification { get; private set; }
+        public string Identification { get; private set; }
         public string? Address { get; private set; }
         public bool? Active { get; private set; }
         public string? CellPhone { get; private set; }

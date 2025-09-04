@@ -1,8 +1,10 @@
 ﻿using LuxuryBiker.Application.Common.Interfaces;
 using LuxuryBiker.Application.Common.Interfaces.Services;
 using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Domain.Repositories.Products;
 using LuxuryBiker.Domain.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Persistence;
+using LuxuryBiker.Infrastructure.Persistence.Repositories.Products;
 using LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Services.Authentication;
 using LuxuryBiker.Infrastructure.Services.Authentication.JWT;
@@ -73,6 +75,7 @@ namespace LuxuryBiker.Infrastructure
         private static IServiceCollection AddRespositories(this IServiceCollection services)
         {
             services.AddScoped<IThirdRepository, ThirdRepository>();
+            services.AddScoped<IProductsRepository, ProductsRepository>();
             return services;
         }
     }

@@ -18,7 +18,6 @@ import { catchError, EMPTY, finalize, tap } from 'rxjs';
   standalone: true,
   imports: [TranslateModule, RouterLink, ReactiveFormsModule],
   templateUrl: './create-third.component.html',
-  styleUrl: './create-third.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CreateThirdComponent {
@@ -57,9 +56,7 @@ export default class CreateThirdComponent {
     this.thirdCreatedId = null;
     this.showSuccessAlert = false;
     
-        console.log('Creating third', this.form.value);
     if (this.form.invalid) {
-          console.log('invalid');
       this.form.markAllAsTouched();
       return;
     }
@@ -73,6 +70,9 @@ export default class CreateThirdComponent {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 400) {
           this.handleBadRequest(error.error.errors);
+          return EMPTY;
+        } else if (error.status === 403) {
+          this.handleUnauthorizedAccess();
           return EMPTY;
         }
 
@@ -94,6 +94,15 @@ export default class CreateThirdComponent {
     this.form.setErrors(errors);
     this.cdr.markForCheck();
     this.form.markAllAsTouched();
+  }
+
+  handleUnauthorizedAccess() {
+    this.form.setErrors({
+      errorUnexpected: true,
+      error:
+        'No cuenta con los permisos necesarios para realizar la acción solicitada.',
+    });
+    this.cdr.markForCheck();
   }
 
   handleUnexpectedError() {

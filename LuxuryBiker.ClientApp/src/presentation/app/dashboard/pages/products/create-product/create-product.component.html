@@ -1,0 +1,83 @@
+<main>
+  <div class="page-header">
+    <h3 class="page-title">
+      {{ 'products.pageTitle' | translate }}
+    </h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'products.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ 'products.cardTitle' | translate }}</h4>
+          <p class="card-description">
+            {{ 'thirds.description' | translate }}
+          </p>
+          @if(showSuccessAlert){
+          <div class="alert alert-success" role="alert">
+            {{ 'products.successAlert' | translate: { code: this.productCreatedCode} }} <a [routerLink]="['/products/product', productCreatedCode]">{{
+              'products.viewProduct' | translate }}</a>
+          </div>
+          }
+          @if(this.form.errors?.["Products.AlreadyExists"]){
+          <div class="alert alert-danger">
+            <div>
+              {{this.form.errors?.["Products.AlreadyExists"]}}
+            </div>
+          </div>
+          }
+          @if(form.hasError('errorUnexpected')){
+          <div class="alert alert-danger">
+            {{this.form.errors?.["error"]}}
+          </div>
+          }
+          <form [formGroup]="form" (ngSubmit)="createProduct()" class="forms-sample">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="name">{{ 'products.form.name' | translate }}</label>
+                <input type="text" class="required form-control" id="name" name="name"
+                  placeholder="{{ 'products.form.name' | translate }}" formControlName="name" />
+                @if (this.form.controls.name.invalid && (this.form.controls.name.dirty ||
+                this.form.controls.name.touched) && this.form.controls.name.errors?.['required']) {
+                <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="reference">{{ 'products.form.reference' | translate }}</label>
+                <input type="text" class="required form-control" name="reference" id="reference"
+                  placeholder="{{ 'products.form.reference' | translate }}" formControlName="reference" />
+                @if (this.form.controls.reference.invalid && (this.form.controls.reference.dirty ||
+                this.form.controls.reference.touched) && this.form.controls.reference.errors?.['required']) {
+                <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="description">{{ 'products.form.description' | translate }}</label>
+                <input type="text" class="required form-control" id="description" name="description"
+                  placeholder="{{ 'products.form.description' | translate }}" formControlName="description" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group row col-md-2">
+                <label class="col-sm-5" for="typeId">{{ 'products.form.status' | translate }}</label>
+                  <div class="form-check col-md-4">
+                    <label class="form-check-label">
+                      <input type="checkbox" class="form-check-input" name="status" formControlName="status" />
+                      {{ 'common.active' | translate }}
+                    <i class="input-helper"></i></label>
+                  </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary col-md-2" [disabled]="processingRequest">{{ 'common.submitForm'
+              | translate }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

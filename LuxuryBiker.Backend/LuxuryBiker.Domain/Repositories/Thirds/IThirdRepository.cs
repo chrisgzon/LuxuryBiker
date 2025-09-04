@@ -5,6 +5,6 @@ namespace LuxuryBiker.Domain.Repositories.Thirds
 {
     public interface IThirdRepository : IRepositoryBase<Third, int>
     {
-        Task<Third?> GetByIdentification(string identification);
+        Task<Third?> GetByIdentification(string identification, int typeID);
     }
 }

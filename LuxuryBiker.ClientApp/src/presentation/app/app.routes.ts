@@ -23,7 +23,21 @@ export const routes: Routes = [
             },
             {
                 path: 'thirds',
-                loadComponent: () => import('./dashboard/pages/thirds/create-third/create-third.component'),
+                children: [
+                    {
+                        path: 'create',
+                        loadComponent: () => import('./dashboard/pages/thirds/create-third/create-third.component'),
+                    }
+                ],
+            },
+            {
+                path: 'products',
+                children: [
+                    {
+                        path: 'create',
+                        loadComponent: () => import('./dashboard/pages/products/create-product/create-product.component'),
+                    }
+                ]
             }
         ]
     }
