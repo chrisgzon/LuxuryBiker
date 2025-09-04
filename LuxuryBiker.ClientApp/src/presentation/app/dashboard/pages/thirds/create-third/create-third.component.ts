@@ -18,7 +18,6 @@ import { catchError, EMPTY, finalize, tap } from 'rxjs';
   standalone: true,
   imports: [TranslateModule, RouterLink, ReactiveFormsModule],
   templateUrl: './create-third.component.html',
-  styleUrl: './create-third.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CreateThirdComponent {

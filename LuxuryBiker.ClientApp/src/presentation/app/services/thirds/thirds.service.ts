@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ThirdModel } from '@domain/thirds/models/third.model';
 import { ThirdCreateUseCase } from '@domain/thirds/useCases/create.useCase';
-import { ignoreElements, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

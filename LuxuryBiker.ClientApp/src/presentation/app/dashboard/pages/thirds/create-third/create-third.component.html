@@ -20,7 +20,7 @@
           </p>
           @if(showSuccessAlert){
           <div class="alert alert-success" role="alert">
-            Se ha creado el tercero con el id {{thirdCreatedId}} correctamente. <a [routerLink]="['/dashboard/thirds', thirdCreatedId]">Ver tercero</a>
+            Se ha registrado el tercero con el id {{thirdCreatedId}} correctamente. <a [routerLink]="['/dashboard/thirds', thirdCreatedId]">Ver tercero</a>
           </div>
           }
           @if(this.form.errors?.["Thirds.AlreadyExists"]){

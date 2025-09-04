@@ -24,12 +24,25 @@
     <a class="nav-link" data-toggle="collapse" href="#sidebar-persons" aria-expanded="false"
       aria-controls="sidebar-persons">
       <i class="fas fa-user menu-icon"></i>
-      <span class="menu-title">Personas</span>
+      <span class="menu-title">Terceros</span>
       <i class="menu-arrow"></i>
     </a>
     <div class="collapse" id="sidebar-persons">
       <ul class="nav flex-column sub-menu">
-        <li class="nav-item"> <a class="nav-link" [routerLink]="['/thirds']">Crear Persona</a></li>
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/thirds/create']">Registrar Proveedor/Cliente</a></li>
+      </ul>
+    </div>
+  </li>
+  <li class="nav-item d-none d-lg-block">
+    <a class="nav-link" data-toggle="collapse" href="#sidebar-products" aria-expanded="false"
+      aria-controls="sidebar-products">
+      <i class="fas fa-cubes menu-icon"></i>
+      <span class="menu-title">Productos</span>
+      <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="sidebar-products">
+      <ul class="nav flex-column sub-menu">
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/products/create']">Registrar Producto</a></li>
       </ul>
     </div>
   </li>

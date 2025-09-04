@@ -10,16 +10,22 @@ import { thirdCreateUseCaseProvider, thirdsImplementationRepositoryProvider } fr
 
 import { TranslateModule } from '@ngx-translate/core';
 import { provideTranslation } from './config/i18n/translate-loader.config';
+import { productCreateUseCaseProvider, productsImplementationRepositoryProvider } from '@data/products';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(withInterceptors([AuthInterceptorHttpService])),
+    importProvidersFrom(TranslateModule.forRoot(provideTranslation())),
+    // auth service
     userLoginUseCaseProvider,
     getUserProfileUseCaseProvider,
     authImplementationRespositoryProvider,
+    // thirds service
     thirdCreateUseCaseProvider,
     thirdsImplementationRepositoryProvider,
-    importProvidersFrom(TranslateModule.forRoot(provideTranslation())),
+    // products service
+    productCreateUseCaseProvider,
+    productsImplementationRepositoryProvider
   ]
 };
