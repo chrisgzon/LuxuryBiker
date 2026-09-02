@@ -1,1 +1,147 @@
-<p>{{ 'home.initialText' | translate }}</p>
+<main>
+  @if (loading) {
+    <app-loader />
+  }
+  <div class="page-header">
+    <h3 class="page-title">{{ 'dashboard.pageTitle' | translate }}</h3>
+  </div>
+
+  @if (loadError) {
+    <div class="alert alert-danger">{{ 'common.loadError' | translate }}</div>
+  }
+
+  @if (data) {
+    <!-- KPIs -->
+    <div class="row">
+      <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-title text-muted mb-1">{{ 'dashboard.salesToday' | translate }}</p>
+            <h3 class="mb-0">{{ data.salesToday | currency:'COP':'symbol-narrow':'1.0-0' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-title text-muted mb-1">
+              {{ 'dashboard.purchasesMonth' | translate }} ({{ data.currentMonthName }})
+            </p>
+            <h3 class="mb-0">{{ data.purchasesThisMonth | currency:'COP':'symbol-narrow':'1.0-0' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-title text-muted mb-1">
+              {{ 'dashboard.salesMonth' | translate }} ({{ data.currentMonthName }})
+            </p>
+            <h3 class="mb-0">{{ data.salesThisMonth | currency:'COP':'symbol-narrow':'1.0-0' }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compras vs Ventas (mensual) -->
+    <div class="row">
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">{{ 'dashboard.monthlyChartTitle' | translate }} — {{ data.year }}</h4>
+            <div class="d-flex mb-2" style="gap: 1rem;">
+              <span><span class="legend-swatch legend-purchases"></span> {{ 'dashboard.purchases' | translate }}</span>
+              <span><span class="legend-swatch legend-sales"></span> {{ 'dashboard.sales' | translate }}</span>
+            </div>
+            <div class="chart-wrap">
+              <svg [attr.viewBox]="'0 0 ' + chartW + ' ' + chartH" preserveAspectRatio="xMidYMid meet"
+                class="dashboard-chart">
+                <line [attr.x1]="pad" [attr.y1]="baselineY" [attr.x2]="chartW - pad" [attr.y2]="baselineY"
+                  class="chart-axis" />
+                @for (bar of purchaseBars; track $index) {
+                  <rect [attr.x]="bar.x" [attr.y]="bar.y" [attr.width]="bar.w" [attr.height]="bar.h"
+                    class="bar-purchases" />
+                }
+                @for (bar of saleBars; track $index) {
+                  <rect [attr.x]="bar.x" [attr.y]="bar.y" [attr.width]="bar.w" [attr.height]="bar.h"
+                    class="bar-sales" />
+                }
+                @for (label of monthLabels; track $index) {
+                  <text [attr.x]="label.x" [attr.y]="baselineY + 16" text-anchor="middle" class="chart-label">
+                    {{ label.text }}
+                  </text>
+                }
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ventas últimos 15 días -->
+    <div class="row">
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">{{ 'dashboard.dailyChartTitle' | translate }}</h4>
+            <div class="chart-wrap">
+              <svg [attr.viewBox]="'0 0 ' + chartW + ' ' + chartH" preserveAspectRatio="xMidYMid meet"
+                class="dashboard-chart">
+                <line [attr.x1]="pad" [attr.y1]="baselineY" [attr.x2]="chartW - pad" [attr.y2]="baselineY"
+                  class="chart-axis" />
+                <polyline [attr.points]="dailyLine" class="line-sales" />
+                @for (point of dailyPoints; track $index) {
+                  <circle [attr.cx]="point.x" [attr.cy]="point.y" r="3" class="line-dot">
+                    <title>{{ point.date | date:'d/M' }}: {{ point.total | currency:'COP':'symbol-narrow':'1.0-0' }}</title>
+                  </circle>
+                  <text [attr.x]="point.x" [attr.y]="baselineY + 16" text-anchor="middle" class="chart-label">
+                    {{ point.date | date:'d/M' }}
+                  </text>
+                }
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productos más vendidos -->
+    <div class="row">
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">{{ 'dashboard.topProductsTitle' | translate }} — {{ data.year }}</h4>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>{{ 'purchases.form.code' | translate }}</th>
+                    <th>{{ 'products.form.name' | translate }}</th>
+                    <th class="text-end">{{ 'products.form.stock' | translate }}</th>
+                    <th class="text-end">{{ 'dashboard.quantitySold' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (product of data.topSellingProducts; track product.productId) {
+                    <tr>
+                      <td>{{ product.code }}</td>
+                      <td>{{ product.name }}</td>
+                      <td class="text-end">{{ product.stock }}</td>
+                      <td class="text-end">{{ product.quantitySold }}</td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="4" class="text-center text-muted py-4">
+                        {{ 'dashboard.noSales' | translate }}
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</main>

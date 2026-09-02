@@ -6,6 +6,7 @@ import { ProductModel } from '@domain/products/models/product.model';
 export class ProductImplementationRepositoryMapper extends Mapper<ProductEntity, ProductModel> {
     mapFrom(param: ProductEntity): ProductModel {
         return {
+            id: param.id,
             code: param.code,
             name: param.name,
             description: param.description,
@@ -17,6 +18,7 @@ export class ProductImplementationRepositoryMapper extends Mapper<ProductEntity,
     }
     mapTo(param: ProductModel): ProductEntity {
         return {
+            id: param.id ?? 0,
             code: param.code,
             name: param.name,
             description: param.description,

@@ -8,5 +8,10 @@ namespace LuxuryBiker.Domain.Entities.Thirds
             code: "Thirds.AlreadyExists",
             description: "El Tercero con la identificación ingresada ya se encuentra registrado en el sistema."
         );
+
+        public static Error NotFound { get; } = Error.NotFound(
+            code: "Thirds.NotFound",
+            description: "El tercero indicado no existe."
+        );
     }
 }

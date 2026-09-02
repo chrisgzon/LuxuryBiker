@@ -7,7 +7,7 @@ using MediatR;
 
 namespace LuxuryBiker.Application.Thirds.Commands.CreateThird
 {
-    [Authorize(Roles = $"{Roles.Administrator}, {Roles.Sealer}")]
+    [Authorize(Roles = $"{Roles.Administrator}, {Roles.Seller}")]
     public record CreateThirdCommand(ThirdDto CreateThirdDto) : IRequest<ErrorOr<int>>;
     internal class CreateThirdCommandhandler : IRequestHandler<CreateThirdCommand, ErrorOr<int>>
     {

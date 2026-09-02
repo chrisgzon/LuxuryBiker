@@ -1,0 +1,107 @@
+<main>
+  @if (loading) {
+    <app-loader />
+  }
+  <div class="page-header">
+    <h3 class="page-title">{{ 'thirds.list.pageTitle' | translate }}</h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'thirds.list.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="card-title mb-0">{{ 'thirds.list.cardTitle' | translate }}</h4>
+            <a class="btn btn-primary btn-sm" [routerLink]="['/thirds/create']">
+              {{ 'thirds.list.createNew' | translate }}
+            </a>
+          </div>
+
+          <div class="form-group col-md-4 px-0">
+            <label for="typeFilter">{{ 'thirds.form.type' | translate }}</label>
+            <select id="typeFilter" class="form-control" (change)="onFilterChange($any($event.target).value)">
+              <option value="">{{ 'thirds.list.allTypes' | translate }}</option>
+              <option value="1">{{ 'thirds.form.provider' | translate }}</option>
+              <option value="2">{{ 'thirds.form.client' | translate }}</option>
+            </select>
+          </div>
+
+          @if (loadError) {
+            <div class="alert alert-danger">{{ 'common.loadError' | translate }}</div>
+          }
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>{{ 'thirds.form.identification' | translate }}</th>
+                  <th>{{ 'thirds.form.name' | translate }}</th>
+                  <th>{{ 'thirds.form.cellPhone' | translate }}</th>
+                  <th>{{ 'thirds.form.email' | translate }}</th>
+                  <th>{{ 'thirds.form.type' | translate }}</th>
+                  <th>{{ 'products.form.status' | translate }}</th>
+                  <th class="text-end">{{ 'common.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (third of page?.items ?? []; track third.id) {
+                  <tr>
+                    <td>{{ third.identification }}</td>
+                    <td>{{ third.fullName }}</td>
+                    <td>{{ third.cellPhone }}</td>
+                    <td>{{ third.email }}</td>
+                    <td>{{ third.typeName }}</td>
+                    <td>
+                      @if (third.active) {
+                        <span class="badge badge-success">{{ 'common.active' | translate }}</span>
+                      } @else {
+                        <span class="badge badge-secondary">{{ 'common.inactive' | translate }}</span>
+                      }
+                    </td>
+                    <td class="text-end">
+                      <a class="btn btn-sm btn-outline-primary" [routerLink]="['/thirds/edit', third.id]">
+                        {{ 'common.edit' | translate }}
+                      </a>
+                    </td>
+                  </tr>
+                } @empty {
+                  @if (!loading) {
+                    <tr>
+                      <td colspan="7" class="text-center text-muted py-4">
+                        {{ 'thirds.list.empty' | translate }}
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+
+          @if (page && page.totalPages > 1) {
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="text-muted">
+                {{ 'common.pagination.page' | translate }} {{ page.pageNumber }} / {{ page.totalPages }}
+                ({{ page.totalCount }})
+              </span>
+              <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                  [disabled]="!page.hasPreviousPage" (click)="previousPage()">
+                  {{ 'common.pagination.previous' | translate }}
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                  [disabled]="!page.hasNextPage" (click)="nextPage()">
+                  {{ 'common.pagination.next' | translate }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

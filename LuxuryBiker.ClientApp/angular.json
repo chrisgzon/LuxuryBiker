@@ -29,11 +29,16 @@
               }
             ],
             "styles": [
-              "src/styles.css",
-              "src/presentation/assets/melody/icons/font-awesome/css/all.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/presentation/assets/melody/icons/font-awesome/css/all.min.css",
+              "src/presentation/assets/melody/vendors/css/vendor.bundle.base.css",
+              "src/presentation/assets/melody/vendors/css/vendor.bundle.addons.css",
+              "src/styles.css"
             ],
             "scripts": [
-              "src/presentation/assets/melody/vendors/js/vendor.bundle.base.js"
+              "src/presentation/assets/melody/vendors/js/vendor.bundle.base.js",
+              "src/presentation/assets/melody/vendors/js/vendor.bundle.addons.js",
+              "src/presentation/assets/melody/js/customJS.js"
             ]
           },
           "configurations": {
@@ -41,8 +46,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "6mb",
+                  "maximumError": "8mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -50,7 +55,13 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -98,5 +109,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

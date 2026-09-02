@@ -362,9 +362,14 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# Ignoramos migraciones
-/LuxuryBiker.WebApplication/LuxuryBiker.Data.Model/Migrations
-**/appsettings.json
-**/appsettings.development.json
-**/assets/
+# Secrets locales (NO se versionan). El appsettings.json base sí se versiona.
+**/appsettings.Development.json
+**/appsettings.*.Local.json
 .vscode/
+
+# Angular
+**/.angular/
+**/dist/
+
+# Local environment secrets (docker-compose)
+.env

@@ -1,0 +1,101 @@
+<main>
+  @if (loading) {
+    <app-loader />
+  }
+  <div class="page-header">
+    <h3 class="page-title">{{ 'purchases.list.pageTitle' | translate }}</h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'purchases.list.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="card-title mb-0">{{ 'purchases.list.cardTitle' | translate }}</h4>
+            <a class="btn btn-primary btn-sm" [routerLink]="['/purchases/register']">
+              {{ 'purchases.list.createNew' | translate }}
+            </a>
+          </div>
+
+          @if (loadError) {
+            <div class="alert alert-danger">{{ 'common.loadError' | translate }}</div>
+          }
+          @if (actionError) {
+            <div class="alert alert-danger">{{ actionError }}</div>
+          }
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>{{ 'purchases.form.code' | translate }}</th>
+                  <th>{{ 'purchases.form.third' | translate }}</th>
+                  <th class="text-end">{{ 'purchases.form.quantity' | translate }}</th>
+                  <th>{{ 'purchases.form.date' | translate }}</th>
+                  <th class="text-end">{{ 'purchases.form.total' | translate }}</th>
+                  <th>{{ 'products.form.status' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (purchase of page?.items ?? []; track purchase.id) {
+                  <tr>
+                    <td>{{ purchase.code }}</td>
+                    <td>{{ purchase.supplierName }}</td>
+                    <td class="text-end">{{ purchase.productsQuantity }}</td>
+                    <td>{{ purchase.date | date:'mediumDate' }}</td>
+                    <td class="text-end">{{ purchase.total | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                    <td>
+                      @if (purchase.status) {
+                        <button type="button" class="btn btn-sm btn-success"
+                          [disabled]="togglingId === purchase.id" (click)="toggleStatus(purchase)">
+                          <i class="fa fa-check"></i> {{ 'sales.list.statusValid' | translate }}
+                        </button>
+                      } @else {
+                        <button type="button" class="btn btn-sm btn-danger"
+                          [disabled]="togglingId === purchase.id" (click)="toggleStatus(purchase)">
+                          <i class="fa fa-times"></i> {{ 'sales.list.statusCancelled' | translate }}
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                } @empty {
+                  @if (!loading) {
+                    <tr>
+                      <td colspan="6" class="text-center text-muted py-4">
+                        {{ 'purchases.list.empty' | translate }}
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+
+          @if (page && page.totalPages > 1) {
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="text-muted">
+                {{ 'common.pagination.page' | translate }} {{ page.pageNumber }} / {{ page.totalPages }}
+                ({{ page.totalCount }})
+              </span>
+              <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                  [disabled]="!page.hasPreviousPage" (click)="previousPage()">
+                  {{ 'common.pagination.previous' | translate }}
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                  [disabled]="!page.hasNextPage" (click)="nextPage()">
+                  {{ 'common.pagination.next' | translate }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

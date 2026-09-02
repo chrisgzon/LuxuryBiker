@@ -1,7 +1,7 @@
 import { AuthRepository } from "@domain/authentication/repositories/auth-repository";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from "@enviroments/enviroment";
+import { environment } from "@environments/environment";
 import { LoginCredentialsModel } from "@domain/authentication/models/login-credentials.model";
 import { Observable, map } from "rxjs";
 import { UserLoggedModel } from "@domain/authentication/models/user-logged.model";

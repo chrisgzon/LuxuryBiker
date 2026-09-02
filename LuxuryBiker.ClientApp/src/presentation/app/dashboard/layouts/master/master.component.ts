@@ -4,13 +4,13 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NavComponent } from '../nav/nav.component';
 import { FooterComponent } from '../footer/footer.component';
 import { AuthService } from '../../../services/auth/auth.service';
-
-declare var jQuery: any; 
+import { SettingsComponent } from "../settings/settings.component";
+import { ToastContainerComponent } from "../../../shared/toast/toast-container.component";
 
 @Component({
   selector: 'app-master',
   standalone: true,
-  imports: [ RouterModule, SidebarComponent, NavComponent, FooterComponent ],
+  imports: [RouterModule, SidebarComponent, NavComponent, FooterComponent, SettingsComponent, ToastContainerComponent],
   templateUrl: './master.component.html',
   styles: ``
 })
@@ -24,35 +24,11 @@ export default class MasterComponent implements OnInit {
 
   ngOnInit(): void {
     
-    let body = jQuery('body');
-    let sidebar = jQuery('.sidebar');
-
-    // Close other submenu in sidebar on opening any
-    sidebar.on('show.bs.collapse', '.collapse', function() {
-      sidebar.find('.collapse.show').collapse('hide');
-    });
-
-
-    //Change sidebar and content-wrapper height
-    jQuery('[data-toggle="minimize"]').on("click", function() {
-      if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
-        body.toggleClass('sidebar-hidden');
-      } else {
-        body.toggleClass('sidebar-icon-only');
-      }
-    });
-
-    jQuery('[data-toggle="minimize"]').on("click", function() {
-      if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
-        body.toggleClass('sidebar-hidden');
-      } else {
-        body.toggleClass('sidebar-icon-only');
-      }
-    });
+    melodyJs.misc();
+    melodyJs.offCanvas();
+    melodyJs.settings();
   }
 
   ngAfterViewInit(): void {
-    //checkbox and radios
-    jQuery(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
   }
 }

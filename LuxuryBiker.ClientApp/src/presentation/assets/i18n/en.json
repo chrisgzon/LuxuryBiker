@@ -1,0 +1,146 @@
+{
+    "common": {
+        "mandatory": "Mandatory",
+        "submitForm": "Submit",
+        "language": "Language",
+        "validations": {
+            "required": "This field is required",
+            "email": "Invalid email",
+            "minLength": "Minimum characters not reached",
+            "maxLength": "Maximum exceeded characters"
+        },
+        "active": "Active",
+        "inactive": "Inactive",
+        "logout": "Logout",
+        "actions": "Actions",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "loadError": "Something went wrong while loading the data. Please try again.",
+        "pagination": {
+            "page": "Page",
+            "previous": "Previous",
+            "next": "Next"
+        }
+    },
+    "home": {
+        "initialText": "home works!",
+        "pageTitle": "Home"
+    },
+    "dashboard": {
+        "pageTitle": "Admin dashboard",
+        "salesToday": "Sales (today)",
+        "purchasesMonth": "Purchases this month",
+        "salesMonth": "Sales this month",
+        "monthlyChartTitle": "Purchases and sales (monthly)",
+        "dailyChartTitle": "Sales (last 15 days)",
+        "topProductsTitle": "Top selling products",
+        "quantitySold": "Quantity sold",
+        "purchases": "Purchases",
+        "sales": "Sales",
+        "noSales": "No sales registered this year yet."
+    },
+    "thirds": {
+        "pageTitle": "Register supplier-client",
+        "cardTitle": "Register new supplier/client",
+        "description": "Module for the registration of new supplier/client",
+        "form": {
+            "type": "Third type",
+            "selectFirstOption": "Select",
+            "provider": "Supplier",
+            "client": "Client",
+            "identification": "Identification",
+            "name": "Name",
+            "surnames": "Surnames",
+            "cellPhone": "Cell Phone",
+            "email": "Email",
+            "address": "Address/City/Neighborhood"
+        },
+        "list": {
+            "pageTitle": "Suppliers / Clients",
+            "cardTitle": "Suppliers and clients list",
+            "createNew": "New third party",
+            "allTypes": "All types",
+            "empty": "No third parties registered."
+        },
+        "edit": {
+            "pageTitle": "Edit third party",
+            "cardTitle": "Edit supplier/client details"
+        }
+    },
+    "products": {
+        "pageTitle": "Register product",
+        "cardTitle": "Register a new product",
+        "description": "Module designed to register a new product available in the inventory",
+        "form": {
+            "name": "Product Name",
+            "description": "Description",
+            "reference": "Reference",
+            "status": "Status",
+            "code": "Code",
+            "stock": "Stock",
+            "value": "Value"
+        },
+        "successAlert": "The product has been registered with the code: {{code}}",
+        "viewProduct": "See product",
+        "list": {
+            "pageTitle": "Products",
+            "cardTitle": "Products list",
+            "createNew": "New product",
+            "empty": "No products registered."
+        },
+        "edit": {
+            "pageTitle": "Edit Product",
+            "cardTitle": "Edit product details"
+        }
+    },
+    "purchases": {
+        "pageTitle": "Register Purchase",
+        "cardTitle": "Register a new Purchase",
+        "description": "Module to register a new purchase from a supplier",
+        "form": {
+            "code": "Code",
+            "date": "Purchase date",
+            "third": "Supplier",
+            "product": "Product",
+            "quantity": "Quantity",
+            "price": "Unit Price",
+            "applyIva": "Add VAT ({{rate}}%)",
+            "addLine": "Add",
+            "subtotal": "Subtotal",
+            "iva": "VAT ({{rate}}%)",
+            "total": "Total",
+            "noLines": "No products added to the purchase yet."
+        },
+        "successAlert": "The purchase has been registered with code: {{code}}.",
+        "viewPurchase": "See purchase details",
+        "list": {
+            "pageTitle": "Purchases",
+            "cardTitle": "Purchases list",
+            "createNew": "New purchase",
+            "empty": "No purchases registered.",
+            "confirmValidate": "Validating the purchase will add each product's quantity to stock. Continue?",
+            "confirmCancel": "Cancelling the purchase will subtract each product's quantity from stock. Continue?"
+        }
+    },
+    "sales": {
+        "pageTitle": "Register Sale",
+        "cardTitle": "Register a new Sale",
+        "description": "Module to register a new sale to a client",
+        "successAlert": "The sale has been registered with code: {{code}}.",
+        "form": {
+            "client": "Client",
+            "noClient": "No client (walk-in sale)"
+        },
+        "list": {
+            "pageTitle": "Sales",
+            "cardTitle": "Sales list",
+            "createNew": "New sale",
+            "empty": "No sales registered.",
+            "statusValid": "Valid",
+            "statusCancelled": "Cancelled",
+            "confirmValidate": "Validating the sale will subtract each product's quantity from stock. Continue?",
+            "confirmCancel": "Cancelling the sale will return each product's quantity to stock. Continue?"
+        }
+    }
+}

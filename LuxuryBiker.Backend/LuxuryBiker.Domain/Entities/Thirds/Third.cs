@@ -33,5 +33,20 @@ namespace LuxuryBiker.Domain.Entities.Thirds
         public TypeThird? Type { get; set; }
         public IEnumerable<Sale>? Purchases { get; set; }
         public IEnumerable<Purchase>? Sales { get; set; }
+
+        /// <summary>Actualiza los datos editables del tercero.</summary>
+        public void Update(string? email, string identification, string? address, bool? active,
+            string? cellPhone, string? name, string? surnames, int typeId)
+        {
+            Email = email;
+            Identification = identification;
+            Address = address;
+            Active = active;
+            CellPhone = cellPhone;
+            Name = name;
+            Surnames = surnames;
+            TypeId = typeId;
+            LastModified = DateTime.Now;
+        }
     }
 }

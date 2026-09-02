@@ -1,0 +1,154 @@
+<main>
+  @if (loadingFormData || processingRequest) {
+    <app-loader />
+  }
+  <div class="page-header">
+    <h3 class="page-title">{{ 'purchases.pageTitle' | translate }}</h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item"><a routerLink="/purchases/list">{{ 'purchases.list.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'purchases.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ 'purchases.cardTitle' | translate }}</h4>
+          <p class="card-description">{{ 'purchases.description' | translate }}</p>
+
+          @if (showSuccessAlert) {
+            <div class="alert alert-success" role="alert">
+              {{ 'purchases.successAlert' | translate: { code: createdCode } }}
+              <a [routerLink]="['/purchases/list']">{{ 'purchases.list.pageTitle' | translate }}</a>
+            </div>
+          }
+          @if (generalError) {
+            <div class="alert alert-danger" role="alert">{{ generalError }}</div>
+          }
+
+          <!-- Cabecera -->
+          <form [formGroup]="header" class="forms-sample">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="datePurchase">{{ 'purchases.form.date' | translate }}</label>
+                <input type="date" id="datePurchase" class="form-control" formControlName="datePurchase"
+                  [max]="maxDate" />
+                @if (header.controls.datePurchase.touched && header.controls.datePurchase.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-5">
+                <label for="supplierId">{{ 'purchases.form.third' | translate }}</label>
+                <select id="supplierId" class="form-control" formControlName="supplierId">
+                  <option [ngValue]="0" disabled>{{ 'thirds.form.selectFirstOption' | translate }}</option>
+                  @for (supplier of suppliers; track supplier.id) {
+                    <option [ngValue]="supplier.id">{{ supplier.label }}</option>
+                  }
+                </select>
+                @if (header.controls.supplierId.touched && header.controls.supplierId.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-3 d-flex align-items-end">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" formControlName="applyIva" />
+                    {{ 'purchases.form.applyIva' | translate: { rate: ivaRate } }}
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Editor de línea -->
+          <form [formGroup]="lineForm" (ngSubmit)="addLine()" class="forms-sample border-top pt-3 mt-2">
+            <div class="form-row align-items-end">
+              <div class="form-group col-md-5">
+                <label for="productId">{{ 'purchases.form.product' | translate }}</label>
+                <select id="productId" class="form-control" formControlName="productId">
+                  <option [ngValue]="0" disabled>{{ 'thirds.form.selectFirstOption' | translate }}</option>
+                  @for (product of products; track product.id) {
+                    <option [ngValue]="product.id">{{ product.name }} ({{ product.code }}) — stock: {{ product.stock }}</option>
+                  }
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="productValue">{{ 'purchases.form.price' | translate }}</label>
+                <input id="productValue" class="form-control" formControlName="productValue" currencyMask />
+              </div>
+              <div class="form-group col-md-2">
+                <label for="quantity">{{ 'purchases.form.quantity' | translate }}</label>
+                <input id="quantity" type="number" min="1" class="form-control" formControlName="quantity" />
+              </div>
+              <div class="form-group col-md-2">
+                <button type="submit" class="btn btn-success btn-block" [disabled]="lineForm.invalid">
+                  {{ 'purchases.form.addLine' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Detalle -->
+          <div class="table-responsive mt-3">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{{ 'purchases.form.product' | translate }}</th>
+                  <th class="text-end">{{ 'purchases.form.price' | translate }}</th>
+                  <th class="text-end">{{ 'purchases.form.quantity' | translate }}</th>
+                  <th class="text-end">{{ 'purchases.form.subtotal' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (line of lines; track line.productId; let i = $index) {
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="removeLine(i)">
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </td>
+                    <td>{{ line.productName }} <span class="text-muted">({{ line.productCode }})</span></td>
+                    <td class="text-end">{{ line.productValue | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                    <td class="text-end">{{ line.quantity }}</td>
+                    <td class="text-end">{{ line.subtotal | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                      {{ 'purchases.form.noLines' | translate }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="4" class="text-end">{{ 'purchases.form.subtotal' | translate }}</th>
+                  <th class="text-end">{{ subtotal | currency:'COP':'symbol-narrow':'1.0-0' }}</th>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-end">{{ 'purchases.form.iva' | translate: { rate: ivaRate } }}</th>
+                  <th class="text-end">{{ ivaAmount | currency:'COP':'symbol-narrow':'1.0-0' }}</th>
+                </tr>
+                <tr>
+                  <th colspan="4" class="text-end">{{ 'purchases.form.total' | translate }}</th>
+                  <th class="text-end">{{ total | currency:'COP':'symbol-narrow':'1.0-0' }}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <button type="button" class="btn btn-primary col-md-3"
+            [disabled]="processingRequest || lines.length === 0" (click)="registerPurchase()">
+            {{ 'common.submitForm' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Application.Common.Exceptions;
+﻿using FluentValidation;
+using LuxuryBiker.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -38,6 +39,29 @@ namespace LuxuryBiker.Api.Middlewares
                 context.Response.ContentType = "application/json";
 
                 await context.Response.WriteAsync(json);
+            }
+            catch (ValidationException e)
+            {
+                _logger.LogWarning(e, e.Message);
+
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+                var errors = e.Errors
+                    .GroupBy(failure => failure.PropertyName)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Select(failure => failure.ErrorMessage).Distinct().ToArray());
+
+                ValidationProblemDetails problem = new(errors)
+                {
+                    Status = (int)HttpStatusCode.BadRequest,
+                    Type = "Validation Error",
+                    Title = "One or more validation errors occurred."
+                };
+
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsync(JsonSerializer.Serialize(problem));
             }
             catch (Exception e)
             {

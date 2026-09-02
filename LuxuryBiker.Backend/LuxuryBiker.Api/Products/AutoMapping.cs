@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Application.Products.Commands.CreateProduct;
+using LuxuryBiker.Application.Products.Commands.UpdateProduct;
 
 namespace LuxuryBiker.Api.Products
 {
@@ -7,6 +8,7 @@ namespace LuxuryBiker.Api.Products
         public AutoMapping()
         {
             CreateMap<ProductModel, CreateProductDto>().ReverseMap();
+            CreateMap<UpdateProductModel, UpdateProductDto>().ReverseMap();
         }
     }
 }

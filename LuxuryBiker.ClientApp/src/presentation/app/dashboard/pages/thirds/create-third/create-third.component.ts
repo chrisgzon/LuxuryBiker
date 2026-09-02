@@ -11,13 +11,16 @@ import { RouterLink } from '@angular/router';
 import { ThirdModel } from '@domain/thirds/models/third.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { ThirdsService } from '@services/thirds/thirds.service';
+import { ToastService } from '@shared/toast/toast.service';
 import { catchError, EMPTY, finalize, tap } from 'rxjs';
+import { LoaderComponent } from "@loader/loader.component";
 
 @Component({
   selector: 'app-create-third',
   standalone: true,
-  imports: [TranslateModule, RouterLink, ReactiveFormsModule],
+  imports: [TranslateModule, RouterLink, ReactiveFormsModule, LoaderComponent],
   templateUrl: './create-third.component.html',
+  styleUrl: './create-third.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CreateThirdComponent {
@@ -35,7 +38,7 @@ export default class CreateThirdComponent {
     name: new FormControl('', {
       validators: [Validators.required],
     }),
-    surnames: new FormControl('', {}),
+    surnames: new FormControl(''),
     cellPhone: new FormControl('', {
       validators: [Validators.required],
     }),
@@ -49,6 +52,7 @@ export default class CreateThirdComponent {
 
   constructor(
     private thirdsService: ThirdsService,
+    private toast: ToastService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -86,6 +90,7 @@ export default class CreateThirdComponent {
   thirdCreated(thirdId: number) {
     this.thirdCreatedId = thirdId;
     this.showSuccessAlert = true;
+    this.toast.success('Tercero registrado correctamente.');
     this.form.reset();
     this.cdr.markForCheck();
   }
@@ -97,20 +102,16 @@ export default class CreateThirdComponent {
   }
 
   handleUnauthorizedAccess() {
-    this.form.setErrors({
-      errorUnexpected: true,
-      error:
-        'No cuenta con los permisos necesarios para realizar la acción solicitada.',
-    });
+    const message = 'No cuenta con los permisos necesarios para realizar la acción solicitada.';
+    this.form.setErrors({ errorUnexpected: true, error: message });
+    this.toast.error(message);
     this.cdr.markForCheck();
   }
 
   handleUnexpectedError() {
-    this.form.setErrors({
-      errorUnexpected: true,
-      error:
-        'Ocurrio un error inesperado, por favor intente de nuevo más tarde',
-    });
+    const message = 'Ocurrio un error inesperado, por favor intente de nuevo más tarde';
+    this.form.setErrors({ errorUnexpected: true, error: message });
+    this.toast.error(message);
     this.cdr.markForCheck();
   }
 }
