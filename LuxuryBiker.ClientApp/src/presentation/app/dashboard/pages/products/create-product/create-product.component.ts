@@ -15,13 +15,16 @@ import { RouterLink } from '@angular/router';
 import { ProductModel } from '@domain/products/models/product.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductsService } from '@services/products/products.service';
+import { ToastService } from '@shared/toast/toast.service';
 import { catchError, EMPTY, finalize, tap } from 'rxjs';
+import { LoaderComponent } from "@loader/loader.component";
 
 @Component({
   selector: 'app-create-product',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslateModule, RouterLink],
+  imports: [ReactiveFormsModule, TranslateModule, RouterLink, LoaderComponent],
   templateUrl: './create-product.component.html',
+  styleUrl: './create-product.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CreateProductComponent {
@@ -38,6 +41,7 @@ export default class CreateProductComponent {
 
   constructor(
     private productsService: ProductsService,
+    private toast: ToastService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -75,6 +79,7 @@ export default class CreateProductComponent {
   productCreated(productCode: string) {
     this.productCreatedCode = productCode;
     this.showSuccessAlert = true;
+    this.toast.success(`Producto registrado con el código ${productCode}.`);
     this.form.reset();
     this.cdr.markForCheck();
   }
@@ -86,20 +91,16 @@ export default class CreateProductComponent {
   }
 
   handleUnauthorizedAccess() {
-    this.form.setErrors({
-      errorUnexpected: true,
-      error:
-        'No cuenta con los permisos necesarios para realizar la acción solicitada.',
-    });
+    const message = 'No cuenta con los permisos necesarios para realizar la acción solicitada.';
+    this.form.setErrors({ errorUnexpected: true, error: message });
+    this.toast.error(message);
     this.cdr.markForCheck();
   }
 
   handleUnexpectedError() {
-    this.form.setErrors({
-      errorUnexpected: true,
-      error:
-        'Ocurrio un error inesperado, por favor intente de nuevo más tarde',
-    });
+    const message = 'Ocurrio un error inesperado, por favor intente de nuevo más tarde';
+    this.form.setErrors({ errorUnexpected: true, error: message });
+    this.toast.error(message);
     this.cdr.markForCheck();
   }
 }

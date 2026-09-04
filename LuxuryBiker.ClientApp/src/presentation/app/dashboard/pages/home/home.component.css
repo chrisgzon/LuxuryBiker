@@ -1,0 +1,56 @@
+.chart-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dashboard-chart {
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+  display: block;
+}
+
+.chart-axis {
+  stroke: #d9d9d9;
+  stroke-width: 1;
+}
+
+.chart-label {
+  font-size: 10px;
+  fill: #9a9a9a;
+}
+
+.bar-purchases {
+  fill: #0b94f7;
+}
+
+.bar-sales {
+  fill: #46c35f;
+}
+
+.line-sales {
+  fill: none;
+  stroke: #46c35f;
+  stroke-width: 2;
+}
+
+.line-dot {
+  fill: #46c35f;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.legend-purchases {
+  background: #0b94f7;
+}
+
+.legend-sales {
+  background: #46c35f;
+}

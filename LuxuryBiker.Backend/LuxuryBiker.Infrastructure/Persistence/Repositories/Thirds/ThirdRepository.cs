@@ -9,7 +9,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds
         private readonly LuxuryBikerDbContext _context;
         public ThirdRepository(LuxuryBikerDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public Task CreateAsync(Third entity)
@@ -18,9 +18,9 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds
             return _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Third>> GetAsync()
+        public async Task<IEnumerable<Third>> GetAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Thirds.AsNoTracking().Include(t => t.Type).ToListAsync();
         }
 
         public async Task<Third?> GetAsync(int entityId)
@@ -30,12 +30,34 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds
 
         public Task<Third?> GetByIdentification(string identification, int typeID)
         {
-            return _context.Thirds.FirstOrDefaultAsync(t =>  t.Identification.Equals(identification) && t.TypeId.Equals(typeID));
+            return _context.Thirds.FirstOrDefaultAsync(t => t.Identification.Equals(identification) && t.TypeId.Equals(typeID));
+        }
+
+        public async Task<(IReadOnlyList<Third> Items, int TotalCount)> GetPagedAsync(
+            int pageNumber, int pageSize, int? typeId, CancellationToken cancellationToken)
+        {
+            IQueryable<Third> query = _context.Thirds.AsNoTracking().Include(t => t.Type);
+
+            if (typeId.HasValue)
+            {
+                query = query.Where(t => t.TypeId == typeId.Value);
+            }
+
+            int totalCount = await query.CountAsync(cancellationToken);
+
+            List<Third> items = await query
+                .OrderByDescending(t => t.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return (items, totalCount);
         }
 
         public Task UpdateAsync(Third entity)
         {
-            throw new NotImplementedException();
-        }        
+            _context.Thirds.Update(entity);
+            return _context.SaveChangesAsync();
+        }
     }
 }

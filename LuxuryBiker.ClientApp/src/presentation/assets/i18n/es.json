@@ -1,0 +1,145 @@
+{
+    "common": {
+        "mandatory": "Obligatorio",
+        "submitForm": "Registrar",
+        "language": "Idioma",
+        "validations": {
+            "required": "Este campo es obligatorio",
+            "email": "Correo electrónico inválido",
+            "minLength": "Mínimo de caracteres no alcanzado",
+            "maxLength": "Máximo de caracteres excedido"
+        },
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "logout": "Cerrar sesión",
+        "actions": "Acciones",
+        "edit": "Editar",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "loadError": "Ocurrió un error al cargar la información. Intente nuevamente.",
+        "pagination": {
+            "page": "Página",
+            "previous": "Anterior",
+            "next": "Siguiente"
+        }
+    },
+    "home": {
+        "initialText": "Inicio trabajando!",
+        "pageTitle": "Inicio"
+    },
+    "dashboard": {
+        "pageTitle": "Panel de administración",
+        "salesToday": "Ventas (hoy)",
+        "purchasesMonth": "Compras del mes",
+        "salesMonth": "Ventas del mes",
+        "monthlyChartTitle": "Compras y ventas (mensual)",
+        "dailyChartTitle": "Ventas (últimos 15 días)",
+        "topProductsTitle": "Productos más vendidos",
+        "quantitySold": "Cantidad vendida",
+        "purchases": "Compras",
+        "sales": "Ventas",
+        "noSales": "Aún no hay ventas registradas este año."
+    },
+    "thirds": {
+        "pageTitle": "Registrar Proveedor-Cliente",
+        "cardTitle": "Registrar un nuevo Proveedor/Cliente",
+        "description": "Modulo diseñado para registrar un nuevo Proveedor/Cliente",
+        "form": {
+            "type": "Tipo de tercero",
+            "provider": "Proveedor",
+            "client": "Cliente",
+            "identification": "Identificación",
+            "name": "Nombres",
+            "surnames": "Apellidos",
+            "cellPhone": "Celular",
+            "email": "Correo electrónico",
+            "address": "Dirección/Ciudad/Barrio"
+        },
+        "list": {
+            "pageTitle": "Proveedores / Clientes",
+            "cardTitle": "Listado de proveedores y clientes",
+            "createNew": "Nuevo tercero",
+            "allTypes": "Todos los tipos",
+            "empty": "No hay terceros registrados."
+        },
+        "edit": {
+            "pageTitle": "Editar Tercero",
+            "cardTitle": "Editar los datos del proveedor/cliente"
+        }
+    },
+    "products": {
+        "pageTitle": "Registrar Producto",
+        "cardTitle": "Registrar un nuevo Producto",
+        "description": "Modulo diseñado para registrar un nuevo producto disponible en el inventario",
+        "form": {
+            "name": "Nombre Producto",
+            "description": "Descripción producto",
+            "reference": "Referencia del producto (Codigo Unico)",
+            "status": "Estado",
+            "code": "Código",
+            "stock": "Stock",
+            "value": "Valor"
+        },
+        "successAlert": "El producto ha sido registrado con el código: {{code}}",
+        "viewProduct": "Ver producto",
+        "list": {
+            "pageTitle": "Productos",
+            "cardTitle": "Listado de productos",
+            "createNew": "Nuevo producto",
+            "empty": "No hay productos registrados."
+        },
+        "edit": {
+            "pageTitle": "Editar Producto",
+            "cardTitle": "Editar los datos del producto"
+        }
+    },
+    "purchases": {
+        "pageTitle": "Registrar Compra",
+        "cardTitle": "Registrar una nueva Compra",
+        "description": "Módulo diseñado para registrar una nueva compra realizada a un proveedor",
+        "form": {
+            "code": "Código",
+            "date": "Fecha de compra",
+            "third": "Proveedor",
+            "product": "Producto",
+            "quantity": "Cantidad",
+            "price": "Precio Unitario",
+            "applyIva": "Calcular IVA ({{rate}}%)",
+            "addLine": "Agregar",
+            "subtotal": "Subtotal",
+            "iva": "IVA ({{rate}}%)",
+            "total": "Total a pagar",
+            "noLines": "Aún no se han agregado productos a la compra."
+        },
+        "successAlert": "La compra ha sido registrada con el código: {{code}}.",
+        "viewPurchase": "Ver detalles compra",
+        "list": {
+            "pageTitle": "Compras",
+            "cardTitle": "Listado de compras",
+            "createNew": "Nueva compra",
+            "empty": "No hay compras registradas.",
+            "confirmValidate": "Al validar la compra se sumará al stock la cantidad de cada producto. ¿Continuar?",
+            "confirmCancel": "Al cancelar la compra se restará del stock la cantidad de cada producto. ¿Continuar?"
+        }
+    },
+    "sales": {
+        "pageTitle": "Registrar Venta",
+        "cardTitle": "Registrar una nueva Venta",
+        "description": "Módulo diseñado para registrar una nueva venta a un cliente",
+        "successAlert": "La venta ha sido registrada con el código: {{code}}.",
+        "form": {
+            "client": "Cliente",
+            "noClient": "Sin cliente (venta al público)"
+        },
+        "list": {
+            "pageTitle": "Ventas",
+            "cardTitle": "Listado de ventas",
+            "createNew": "Nueva venta",
+            "empty": "No hay ventas registradas.",
+            "statusValid": "Válida",
+            "statusCancelled": "Cancelada",
+            "confirmValidate": "Al validar la venta se restará del stock la cantidad de cada producto. ¿Continuar?",
+            "confirmCancel": "Al cancelar la venta se reintegrará al stock la cantidad de cada producto. ¿Continuar?"
+        }
+    }
+}

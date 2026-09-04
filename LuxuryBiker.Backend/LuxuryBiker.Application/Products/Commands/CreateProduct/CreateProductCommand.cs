@@ -6,7 +6,7 @@ using LuxuryBiker.Domain.Repositories.Products;
 
 namespace LuxuryBiker.Application.Products.Commands.CreateProduct
 {
-    [Authorize(Roles = $"{Roles.Administrator}, {Roles.Sealer}")]
+    [Authorize(Roles = $"{Roles.Administrator}, {Roles.Seller}")]
     public record CreateProductCommand(CreateProductDto CreateProductDto) : IRequest<ErrorOr<string>>;
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ErrorOr<string>>
     {

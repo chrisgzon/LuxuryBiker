@@ -1,0 +1,110 @@
+<main>
+  @if (loading || processingRequest) {
+    <app-loader />
+  }
+  <div class="page-header">
+    <h3 class="page-title">{{ 'thirds.edit.pageTitle' | translate }}</h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item"><a routerLink="/thirds/list">{{ 'thirds.list.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'thirds.edit.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ 'thirds.edit.cardTitle' | translate }}</h4>
+
+          @if (loadError) {
+            <div class="alert alert-danger">{{ 'common.loadError' | translate }}</div>
+          }
+          @if (form.hasError('errorUnexpected')) {
+            <div class="alert alert-danger">{{ form.errors?.['error'] }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="save()" class="forms-sample">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="identification">{{ 'thirds.form.identification' | translate }}</label>
+                <input type="text" class="form-control" id="identification" formControlName="identification" />
+                @if (form.controls.identification.touched && form.controls.identification.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="name">{{ 'thirds.form.name' | translate }}</label>
+                <input type="text" class="form-control" id="name" formControlName="name" />
+                @if (form.controls.name.touched && form.controls.name.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="surnames">{{ 'thirds.form.surnames' | translate }}</label>
+                <input type="text" class="form-control" id="surnames" formControlName="surnames" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="cellPhone">{{ 'thirds.form.cellPhone' | translate }}</label>
+                <input type="text" class="form-control" id="cellPhone" formControlName="cellPhone" />
+                @if (form.controls.cellPhone.touched && form.controls.cellPhone.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="address">{{ 'thirds.form.address' | translate }}</label>
+                <input type="text" class="form-control" id="address" formControlName="address" />
+                @if (form.controls.address.touched && form.controls.address.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="email">{{ 'thirds.form.email' | translate }}</label>
+                <input type="email" class="form-control" id="email" formControlName="email" />
+                @if (form.controls.email.touched && form.controls.email.errors?.['email']) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.email' | translate }}</label>
+                }
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="d-block">{{ 'thirds.form.type' | translate }}</label>
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label">
+                    <input type="radio" class="form-check-input" [value]="1" formControlName="typeId" />
+                    {{ 'thirds.form.provider' | translate }}
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label">
+                    <input type="radio" class="form-check-input" [value]="2" formControlName="typeId" />
+                    {{ 'thirds.form.client' | translate }}
+                  </label>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="d-block">{{ 'products.form.status' | translate }}</label>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" formControlName="active" />
+                    {{ 'common.active' | translate }}
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary col-md-2" [disabled]="processingRequest">
+              {{ 'common.save' | translate }}
+            </button>
+            <a class="btn btn-light col-md-2 ml-2" [routerLink]="['/thirds/list']">
+              {{ 'common.cancel' | translate }}
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

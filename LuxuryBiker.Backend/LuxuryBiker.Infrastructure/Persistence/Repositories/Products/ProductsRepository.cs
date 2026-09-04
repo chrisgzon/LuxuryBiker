@@ -9,7 +9,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Products
         private readonly LuxuryBikerDbContext _context;
         public ProductsRepository(LuxuryBikerDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public Task CreateAsync(Product entity)
@@ -18,14 +18,14 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Products
             return _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Product>> GetAsync()
+        public async Task<IEnumerable<Product>> GetAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Products.AsNoTracking().ToListAsync();
         }
 
-        public Task<Product?> GetAsync(int entityId)
+        public async Task<Product?> GetAsync(int entityId)
         {
-            throw new NotImplementedException();
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == entityId);
         }
 
         public async Task<Product?> GetByReference(string reference)
@@ -33,9 +33,42 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Products
             return await _context.Products.FirstOrDefaultAsync(p => p.Reference.ToUpper().Equals(reference.ToUpper()));
         }
 
+        public async Task<(IReadOnlyList<Product> Items, int TotalCount)> GetPagedAsync(
+            int pageNumber, int pageSize, bool onlyActive, CancellationToken cancellationToken)
+        {
+            IQueryable<Product> query = _context.Products.AsNoTracking();
+
+            if (onlyActive)
+            {
+                query = query.Where(p => p.Status == true);
+            }
+
+            int totalCount = await query.CountAsync(cancellationToken);
+
+            List<Product> items = await query
+                .OrderByDescending(p => p.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return (items, totalCount);
+        }
+
+        public async Task<IReadOnlyList<Product>> GetByIdsAsync(
+            IEnumerable<int> ids, CancellationToken cancellationToken)
+        {
+            var idSet = ids.ToList();
+            // Rastreados a propósito: el handler de compra muta stock/valor y esos
+            // cambios deben confirmarse junto con la compra.
+            return await _context.Products
+                .Where(p => idSet.Contains(p.Id))
+                .ToListAsync(cancellationToken);
+        }
+
         public Task UpdateAsync(Product entity)
         {
-            throw new NotImplementedException();
+            _context.Products.Update(entity);
+            return _context.SaveChangesAsync();
         }
     }
 }

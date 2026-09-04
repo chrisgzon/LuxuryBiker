@@ -7,9 +7,12 @@
       "@data/*": ["./src/data/*"],
       "@domain/*": ["./src/domain/*"],
       "@services/*": ["./src/presentation/app/services/*"],
+      "@shared/*": ["./src/presentation/app/shared/*"],
       "@guards/*": ["./src/presentation/app/dashboard/guards/*"],
-      "@enviroments/*": ["./src/enviroments/*"]
+      "@environments/*": ["./src/environments/*"],
+      "@loader/*": ["./src/presentation/app/dashboard/layouts/loader/*"]
     },
+    "allowJs": true,
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,

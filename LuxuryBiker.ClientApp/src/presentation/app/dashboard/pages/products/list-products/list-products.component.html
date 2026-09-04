@@ -1,0 +1,98 @@
+<main>
+  @if (loading) {
+    <app-loader />
+  }
+  <div class="page-header">
+    <h3 class="page-title">{{ 'products.list.pageTitle' | translate }}</h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'products.list.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="card-title mb-0">{{ 'products.list.cardTitle' | translate }}</h4>
+            <a class="btn btn-primary btn-sm" [routerLink]="['/products/create']">
+              {{ 'products.list.createNew' | translate }}
+            </a>
+          </div>
+
+          @if (loadError) {
+            <div class="alert alert-danger">{{ 'common.loadError' | translate }}</div>
+          }
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>{{ 'products.form.code' | translate }}</th>
+                  <th>{{ 'products.form.name' | translate }}</th>
+                  <th>{{ 'products.form.reference' | translate }}</th>
+                  <th class="text-end">{{ 'products.form.stock' | translate }}</th>
+                  <th class="text-end">{{ 'products.form.value' | translate }}</th>
+                  <th>{{ 'products.form.status' | translate }}</th>
+                  <th class="text-end">{{ 'common.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (product of page?.items ?? []; track product.id) {
+                  <tr>
+                    <td>{{ product.code }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.reference }}</td>
+                    <td class="text-end">{{ product.stock }}</td>
+                    <td class="text-end">{{ product.value | currency:'COP':'symbol-narrow':'1.0-0' }}</td>
+                    <td>
+                      @if (product.status) {
+                        <span class="badge badge-success">{{ 'common.active' | translate }}</span>
+                      } @else {
+                        <span class="badge badge-secondary">{{ 'common.inactive' | translate }}</span>
+                      }
+                    </td>
+                    <td class="text-end">
+                      <a class="btn btn-sm btn-outline-primary" [routerLink]="['/products/edit', product.id]">
+                        {{ 'common.edit' | translate }}
+                      </a>
+                    </td>
+                  </tr>
+                } @empty {
+                  @if (!loading) {
+                    <tr>
+                      <td colspan="7" class="text-center text-muted py-4">
+                        {{ 'products.list.empty' | translate }}
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+
+          @if (page && page.totalPages > 1) {
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="text-muted">
+                {{ 'common.pagination.page' | translate }} {{ page.pageNumber }} / {{ page.totalPages }}
+                ({{ page.totalCount }})
+              </span>
+              <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                  [disabled]="!page.hasPreviousPage" (click)="previousPage()">
+                  {{ 'common.pagination.previous' | translate }}
+                </button>
+                <button type="button" class="btn btn-outline-primary btn-sm"
+                  [disabled]="!page.hasNextPage" (click)="nextPage()">
+                  {{ 'common.pagination.next' | translate }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

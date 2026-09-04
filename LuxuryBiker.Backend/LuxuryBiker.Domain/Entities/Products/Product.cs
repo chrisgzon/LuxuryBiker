@@ -52,5 +52,46 @@ namespace LuxuryBiker.Domain.Entities.Products
 
             this.Code = $"{initialCode}{SeparatorCode}{this.Reference.Replace(" ", String.Empty).Replace(SeparatorCode, string.Empty).ToUpper()}";
         }
+
+        /// <summary>Actualiza los datos editables del producto y regenera el código interno.</summary>
+        public void UpdateDetails(string name, string reference, string? description, bool? status)
+        {
+            Name = name;
+            Reference = reference;
+            Description = description;
+            Status = status;
+            SetInternalCode();
+            LastModified = DateTime.Now;
+        }
+
+        /// <summary>Aumenta el inventario disponible (registro de una compra validada).</summary>
+        public void IncreaseStock(decimal quantity)
+        {
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "La cantidad debe ser mayor que cero.");
+
+            Stock = (Stock ?? 0) + quantity;
+            LastModified = DateTime.Now;
+        }
+
+        /// <summary>Disminuye el inventario disponible (registro de una venta validada).</summary>
+        public void DecreaseStock(decimal quantity)
+        {
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "La cantidad debe ser mayor que cero.");
+
+            Stock = (Stock ?? 0) - quantity;
+            LastModified = DateTime.Now;
+        }
+
+        /// <summary>Registra el último valor de compra del producto.</summary>
+        public void RegisterPurchaseValue(decimal value)
+        {
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(value), "El valor no puede ser negativo.");
+
+            Value = value;
+            LastModified = DateTime.Now;
+        }
     }
 }

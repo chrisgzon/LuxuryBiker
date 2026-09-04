@@ -20,7 +20,8 @@
       <span class="menu-title">Dashboard</span>
     </a>
   </li>
-  <li class="nav-item d-none d-lg-block">
+  @if (canManage) {
+  <li class="nav-item">
     <a class="nav-link" data-toggle="collapse" href="#sidebar-persons" aria-expanded="false"
       aria-controls="sidebar-persons">
       <i class="fas fa-user menu-icon"></i>
@@ -29,11 +30,12 @@
     </a>
     <div class="collapse" id="sidebar-persons">
       <ul class="nav flex-column sub-menu">
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/thirds/list']">Listar Proveedores/Clientes</a></li>
         <li class="nav-item"> <a class="nav-link" [routerLink]="['/thirds/create']">Registrar Proveedor/Cliente</a></li>
       </ul>
     </div>
   </li>
-  <li class="nav-item d-none d-lg-block">
+  <li class="nav-item">
     <a class="nav-link" data-toggle="collapse" href="#sidebar-products" aria-expanded="false"
       aria-controls="sidebar-products">
       <i class="fas fa-cubes menu-icon"></i>
@@ -42,8 +44,38 @@
     </a>
     <div class="collapse" id="sidebar-products">
       <ul class="nav flex-column sub-menu">
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/products/list']">Listar Productos</a></li>
         <li class="nav-item"> <a class="nav-link" [routerLink]="['/products/create']">Registrar Producto</a></li>
       </ul>
     </div>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="collapse" href="#sidebar-purchases" aria-expanded="false"
+      aria-controls="sidebar-purchases">
+      <i class="fas fa-cubes menu-icon"></i>
+      <span class="menu-title">Compras</span>
+      <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="sidebar-purchases">
+      <ul class="nav flex-column sub-menu">
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/purchases/list']">Listar Compras</a></li>
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/purchases/register']">Registrar Compra</a></li>
+      </ul>
+    </div>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="collapse" href="#sidebar-sales" aria-expanded="false"
+      aria-controls="sidebar-sales">
+      <i class="fas fa-shopping-cart menu-icon"></i>
+      <span class="menu-title">Ventas</span>
+      <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="sidebar-sales">
+      <ul class="nav flex-column sub-menu">
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/sales/list']">Listar Ventas</a></li>
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/sales/register']">Registrar Venta</a></li>
+      </ul>
+    </div>
+  </li>
+  }
 </ul>

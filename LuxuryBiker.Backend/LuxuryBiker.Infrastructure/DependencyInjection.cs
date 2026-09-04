@@ -2,9 +2,13 @@
 using LuxuryBiker.Application.Common.Interfaces.Services;
 using LuxuryBiker.Domain.Entities.Users;
 using LuxuryBiker.Domain.Repositories.Products;
+using LuxuryBiker.Domain.Repositories.Purchases;
+using LuxuryBiker.Domain.Repositories.Sales;
 using LuxuryBiker.Domain.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Persistence;
 using LuxuryBiker.Infrastructure.Persistence.Repositories.Products;
+using LuxuryBiker.Infrastructure.Persistence.Repositories.Purchases;
+using LuxuryBiker.Infrastructure.Persistence.Repositories.Sales;
 using LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Services.Authentication;
 using LuxuryBiker.Infrastructure.Services.Authentication.JWT;
@@ -76,6 +80,8 @@ namespace LuxuryBiker.Infrastructure
         {
             services.AddScoped<IThirdRepository, ThirdRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<IPurchasesRepository, PurchasesRepository>();
+            services.AddScoped<ISalesRepository, SalesRepository>();
             return services;
         }
     }

@@ -1,4 +1,7 @@
 <main>
+  @if (processingRequest) {
+    <app-loader />
+  }
   <div class="page-header">
     <h3 class="page-title">
       {{ 'thirds.pageTitle' | translate }}

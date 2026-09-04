@@ -23582,7 +23582,7 @@
     height: 100%;
     border-radius: 100%;
     border: 10px solid transparent;
-    border-top-color: #F5A623;
+    border-top-color: var(--primary);
   }
   
   .circle-loader:before {

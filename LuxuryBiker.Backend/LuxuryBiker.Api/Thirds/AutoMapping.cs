@@ -1,4 +1,5 @@
 ﻿using LuxuryBiker.Application.Thirds.Commands.CreateThird;
+using LuxuryBiker.Application.Thirds.Commands.UpdateThird;
 
 namespace LuxuryBiker.Api.Thirds
 {
@@ -8,6 +9,9 @@ namespace LuxuryBiker.Api.Thirds
         {
             CreateMap<ThirdModel, ThirdDto>().ReverseMap();
             CreateMap<ThirdTypeModel, ThirdTypeDto>().ReverseMap();
+            CreateMap<UpdateThirdModel, UpdateThirdDto>()
+                .ForMember(dest => dest.TypeId,
+                           opt => opt.MapFrom(src => src.Type != null ? src.Type.Id : 0));
         }
     }
 }

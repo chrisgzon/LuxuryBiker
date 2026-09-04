@@ -1,0 +1,71 @@
+<main>
+  @if (loading || processingRequest) {
+    <app-loader />
+  }
+  <div class="page-header">
+    <h3 class="page-title">{{ 'products.edit.pageTitle' | translate }}</h3>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/home">{{ 'home.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item"><a routerLink="/products/list">{{ 'products.list.pageTitle' | translate }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ 'products.edit.pageTitle' | translate }}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ 'products.edit.cardTitle' | translate }}</h4>
+
+          @if (loadError) {
+            <div class="alert alert-danger">{{ 'common.loadError' | translate }}</div>
+          }
+          @if (form.hasError('errorUnexpected')) {
+            <div class="alert alert-danger">{{ form.errors?.['error'] }}</div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="save()" class="forms-sample">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="name">{{ 'products.form.name' | translate }}</label>
+                <input type="text" class="form-control" id="name" formControlName="name" />
+                @if (form.controls.name.touched && form.controls.name.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="reference">{{ 'products.form.reference' | translate }}</label>
+                <input type="text" class="form-control" id="reference" formControlName="reference" />
+                @if (form.controls.reference.touched && form.controls.reference.invalid) {
+                  <label class="error mt-2 text-danger">{{ 'common.validations.required' | translate }}</label>
+                }
+              </div>
+              <div class="form-group col-md-4">
+                <label for="description">{{ 'products.form.description' | translate }}</label>
+                <input type="text" class="form-control" id="description" formControlName="description" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" formControlName="status" />
+                    {{ 'common.active' | translate }}
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary col-md-2" [disabled]="processingRequest">
+              {{ 'common.save' | translate }}
+            </button>
+            <a class="btn btn-light col-md-2 ml-2" [routerLink]="['/products/list']">
+              {{ 'common.cancel' | translate }}
+            </a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
