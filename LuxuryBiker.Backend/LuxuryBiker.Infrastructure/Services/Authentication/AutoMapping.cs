@@ -1,5 +1,5 @@
-﻿using LuxuryBiker.Application.Common.Models;
-using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Application.Common.Models;
+using LuxuryBiker.Infrastructure.Identity;
 
 namespace LuxuryBiker.Infrastructure.Services.Authentication
 {

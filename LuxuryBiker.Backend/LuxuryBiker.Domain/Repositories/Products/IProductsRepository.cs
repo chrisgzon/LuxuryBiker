@@ -1,5 +1,6 @@
-﻿using LuxuryBiker.Domain.Entities.Products;
+using LuxuryBiker.Domain.Entities.Products;
 using LuxuryBiker.Domain.Repositories.Common;
+using LuxuryBiker.Domain.Common;
 
 namespace LuxuryBiker.Domain.Repositories.Products
 {
@@ -7,13 +8,13 @@ namespace LuxuryBiker.Domain.Repositories.Products
     {
         Task<Product?> GetByReference(string reference);
 
-        Task<(IReadOnlyList<Product> Items, int TotalCount)> GetPagedAsync(
+        Task<Page<Product>> GetPagedAsync(
             int pageNumber, int pageSize, bool onlyActive, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Devuelve los productos indicados <b>rastreados por el contexto</b>, para que
-        /// los cambios de stock/valor se confirmen junto con la compra que los origina.
+        /// Carga los productos indicados con intención de modificarlos: los cambios que
+        /// se les apliquen se persisten junto con la operación que los origina.
         /// </summary>
-        Task<IReadOnlyList<Product>> GetByIdsAsync(IEnumerable<int> ids, CancellationToken cancellationToken);
+        Task<IReadOnlyList<Product>> GetForUpdateAsync(IEnumerable<int> ids, CancellationToken cancellationToken);
     }
 }

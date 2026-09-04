@@ -1,6 +1,7 @@
-﻿using LuxuryBiker.Domain.Entities.Thirds;
+using LuxuryBiker.Domain.Entities.Thirds;
 using LuxuryBiker.Domain.Repositories.Thirds;
 using Microsoft.EntityFrameworkCore;
+using LuxuryBiker.Domain.Common;
 
 namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds
 {
@@ -33,7 +34,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds
             return _context.Thirds.FirstOrDefaultAsync(t => t.Identification.Equals(identification) && t.TypeId.Equals(typeID));
         }
 
-        public async Task<(IReadOnlyList<Third> Items, int TotalCount)> GetPagedAsync(
+        public async Task<Page<Third>> GetPagedAsync(
             int pageNumber, int pageSize, int? typeId, CancellationToken cancellationToken)
         {
             IQueryable<Third> query = _context.Thirds.AsNoTracking().Include(t => t.Type);
@@ -51,7 +52,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 
-            return (items, totalCount);
+            return new Page<Third>(items, totalCount);
         }
 
         public Task UpdateAsync(Third entity)

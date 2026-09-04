@@ -37,7 +37,7 @@ namespace LuxuryBiker.Application.Sales.Commands.ChangeSaleStatus
 
             var lines = (sale.Details ?? Enumerable.Empty<SaleDetail>()).ToList();
             var productIds = lines.Select(l => l.ProductId).Distinct().ToList();
-            IReadOnlyList<Product> products = await _productsRepository.GetByIdsAsync(productIds, cancellationToken);
+            IReadOnlyList<Product> products = await _productsRepository.GetForUpdateAsync(productIds, cancellationToken);
             var productsById = products.ToDictionary(p => p.Id);
 
             // Una venta validada descuenta del stock; cancelarla lo reintegra

@@ -48,7 +48,7 @@ namespace LuxuryBiker.Application.Purchases.Commands.CreatePurchase
             }
 
             var productIds = dto.Details.Select(d => d.ProductId).Distinct().ToList();
-            IReadOnlyList<Product> products = await _productsRepository.GetByIdsAsync(productIds, cancellationToken);
+            IReadOnlyList<Product> products = await _productsRepository.GetForUpdateAsync(productIds, cancellationToken);
 
             var productsById = products.ToDictionary(p => p.Id);
             if (products.Count != productIds.Count)

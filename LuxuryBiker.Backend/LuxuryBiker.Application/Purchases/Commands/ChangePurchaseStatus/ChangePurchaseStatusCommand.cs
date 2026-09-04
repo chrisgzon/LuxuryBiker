@@ -38,7 +38,7 @@ namespace LuxuryBiker.Application.Purchases.Commands.ChangePurchaseStatus
 
             var lines = (purchase.Details ?? Enumerable.Empty<PurchaseDetail>()).ToList();
             var productIds = lines.Select(l => l.ProductId).Distinct().ToList();
-            IReadOnlyList<Product> products = await _productsRepository.GetByIdsAsync(productIds, cancellationToken);
+            IReadOnlyList<Product> products = await _productsRepository.GetForUpdateAsync(productIds, cancellationToken);
             var productsById = products.ToDictionary(p => p.Id);
 
             // Una compra validada suma al stock; cancelarla lo revierte

@@ -1,5 +1,6 @@
-﻿using LuxuryBiker.Domain.Entities.Thirds;
+using LuxuryBiker.Domain.Entities.Thirds;
 using LuxuryBiker.Domain.Repositories.Common;
+using LuxuryBiker.Domain.Common;
 
 namespace LuxuryBiker.Domain.Repositories.Thirds
 {
@@ -7,7 +8,7 @@ namespace LuxuryBiker.Domain.Repositories.Thirds
     {
         Task<Third?> GetByIdentification(string identification, int typeID);
 
-        Task<(IReadOnlyList<Third> Items, int TotalCount)> GetPagedAsync(
+        Task<Page<Third>> GetPagedAsync(
             int pageNumber, int pageSize, int? typeId, CancellationToken cancellationToken);
     }
 }

@@ -2,8 +2,13 @@
 using LuxuryBiker.Domain.Entities.Sales;
 using Microsoft.AspNetCore.Identity;
 
-namespace LuxuryBiker.Domain.Entities.Users
+namespace LuxuryBiker.Infrastructure.Identity
 {
+    /// <summary>
+    /// Usuario de ASP.NET Identity. Vive en Infrastructure porque hereda de
+    /// <see cref="IdentityUser"/>: la identidad es un detalle de infraestructura y el
+    /// dominio solo conoce el <c>UserId</c> que guarda en compras y ventas.
+    /// </summary>
     public class ApplicationUser : IdentityUser
     {
         public string Names { get; set; } = string.Empty;
@@ -11,7 +16,8 @@ namespace LuxuryBiker.Domain.Entities.Users
         public string Identification { get; set; } = string.Empty;
         public bool Active { get; set; }
         public DateTimeOffset? DateBirth { get; set; }
-        public IEnumerable<Purchase>? Purchases { get; set; }
-        public IEnumerable<Sale>? Sales { get; set; }
+
+        public ICollection<Purchase>? Purchases { get; set; }
+        public ICollection<Sale>? Sales { get; set; }
     }
 }

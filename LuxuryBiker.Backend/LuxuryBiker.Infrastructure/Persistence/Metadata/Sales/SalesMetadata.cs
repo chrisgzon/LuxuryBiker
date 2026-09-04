@@ -1,4 +1,4 @@
-﻿using LuxuryBiker.Domain.Entities.Sales;
+using LuxuryBiker.Domain.Entities.Sales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,7 +17,6 @@ namespace LuxuryBiker.Infrastructure.Persistence.Metadata.Sales
             entityBuilder.Property(x => x.ThirdId).IsRequired(false);
             entityBuilder.Property(x => x.Total).HasPrecision(28, 2);
 
-            entityBuilder.HasOne(x => x.User).WithMany(x => x.Sales).HasForeignKey(x => x.UserId).IsRequired();
             entityBuilder.HasOne(x => x.Third).WithMany(x => x.Purchases).HasForeignKey(x => x.ThirdId).IsRequired(false);
         }
     }

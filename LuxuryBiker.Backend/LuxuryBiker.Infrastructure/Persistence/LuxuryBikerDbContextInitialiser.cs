@@ -1,6 +1,6 @@
-﻿using LuxuryBiker.Domain.Constants;
+using LuxuryBiker.Domain.Constants;
 using LuxuryBiker.Domain.Entities.Thirds;
-using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -93,18 +93,37 @@ namespace LuxuryBiker.Infrastructure.Persistence
                 }
             }
 
-            // Default third types
-            var thirdsType = new List<TypeThird>()
-            {
-                new TypeThird { Active = true, Name = "Provider" },
-                new TypeThird { Active = true, Name = "Client" }
-            };
+            // Tipos de tercero: los ids son parte del contrato (ThirdTypes.Provider/Client),
+            // así que se insertan explícitamente y no dependen del orden de inserción.
+            await EnsureThirdTypeAsync(ThirdTypes.Provider, "Provider");
+            await EnsureThirdTypeAsync(ThirdTypes.Client, "Client");
+        }
 
-            if (_context.TypeThird != null && !(_context.TypeThird.Where(x => thirdsType.Select(t => t.Name).Contains(x.Name)).Count() > 0))
+        /// <summary>
+        /// Inserta el tipo de tercero con un id fijo si no existe. Es idempotente por tipo
+        /// (antes, si faltaba solo uno de los dos, no se creaba ninguno) y evita que el id
+        /// dependa del orden en que se siembran las filas.
+        /// </summary>
+        private async Task EnsureThirdTypeAsync(int id, string name)
+        {
+            if (await _context.TypeThird.AnyAsync(x => x.Id == id))
             {
-                await _context.TypeThird.AddRangeAsync(thirdsType);
-                await _context.SaveChangesAsync();
+                return;
             }
+
+            if (await _context.TypeThird.AnyAsync(x => x.Name == name))
+            {
+                _logger.LogWarning(
+                    "El tipo de tercero '{Name}' existe con un id distinto del esperado ({ExpectedId}). " +
+                    "Los combos de compras y ventas usan ese id, revise los datos.", name, id);
+                return;
+            }
+
+            // La PK es IDENTITY: para fijar el id hay que habilitar IDENTITY_INSERT.
+            await _context.Database.ExecuteSqlRawAsync(
+                "SET IDENTITY_INSERT T_TYPE_THIRD ON; " +
+                "INSERT INTO T_TYPE_THIRD (Id, Name, Active) VALUES ({0}, {1}, 1); " +
+                "SET IDENTITY_INSERT T_TYPE_THIRD OFF;", id, name);
         }
     }
 }

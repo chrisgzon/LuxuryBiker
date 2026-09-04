@@ -1,4 +1,5 @@
-﻿using LuxuryBiker.Domain.Entities.Purchases;
+using LuxuryBiker.Domain.Entities.Purchases;
+using LuxuryBiker.Domain.Common;
 
 namespace LuxuryBiker.Domain.Repositories.Purchases
 {
@@ -19,7 +20,7 @@ namespace LuxuryBiker.Domain.Repositories.Purchases
         /// <summary>Confirma cambios pendientes del contexto (compra + ajustes de stock).</summary>
         Task SaveChangesAsync(CancellationToken cancellationToken);
 
-        Task<(IReadOnlyList<Purchase> Items, int TotalCount)> GetPagedAsync(
+        Task<Page<Purchase>> GetPagedAsync(
             int pageNumber, int pageSize, DateTimeOffset? dateFrom, DateTimeOffset? dateTo,
             CancellationToken cancellationToken);
     }

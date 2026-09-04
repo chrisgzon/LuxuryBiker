@@ -1,8 +1,12 @@
 # Análisis de calidad — DDD y arquitectura hexagonal
 
 > Backend `LuxuryBiker.Backend`. Análisis sobre el estado tras el PR #3.
-> Fecha: 2026-09-04. Los puntos marcados ✅ se corrigieron en la rama
-> `refactor/ddd-hexagonal`; los marcados 📋 quedan documentados como deuda.
+> Fecha: 2026-09-04.
+>
+> - ✅ **(a)** corregido en la rama `refactor/ddd-hexagonal` (PR #4).
+> - ✅ **(b)** corregido en la rama `refactor/ddd-debt`, que aborda la deuda que el
+>   PR #4 había dejado documentada.
+> - 📋 pendiente.
 
 ## Cómo se evaluó
 
@@ -67,22 +71,26 @@ Application, que es donde se usa de verdad.
 > puro (sin `INotification`) y un puerto `IDomainEventDispatcher` implementado en
 > Infrastructure sobre MediatR.
 
-### 1.4 📋 `Domain` depende de ASP.NET Identity — **ALTO, no corregido**
+### 1.4 ✅ (b) `Domain` dependía de ASP.NET Identity — **ALTO**
 
 `ApplicationUser : IdentityUser` obliga a `LuxuryBiker.Domain.csproj` a referenciar
 `Microsoft.AspNetCore.Identity.EntityFrameworkCore`. Es la violación hexagonal más
 profunda que queda: una entidad del núcleo hereda de un tipo de infraestructura.
 
-**Por qué no se tocó**: separar `ApplicationUser` (dominio) de la entidad de Identity
-implica un modelo de usuario propio, ajustar `IdentityDbContext`, el `IdentityService` y
-**una migración de esquema**. Es un cambio con riesgo real que merece su propia rama y su
-propia validación contra datos existentes.
+**Corregido**: `ApplicationUser` se movió a `Infrastructure/Identity/`, y `Purchase` y
+`Sale` perdieron la navegación `User` (que **no se usaba en ninguna consulta**) quedándose
+solo con `UserId`. La relación se configura ahora desde el lado de Identity, en
+`ApplicationUserMetadata` (`HasMany(u => u.Purchases).WithOne().HasForeignKey(p => p.UserId)`),
+así que el esquema y las claves foráneas son idénticos.
 
-**Camino sugerido**: dejar la identidad como detalle de Infrastructure
-(`ApplicationIdentityUser : IdentityUser`) y que el dominio tenga su propio `User`
-referenciado solo por `UserId` (que es lo único que `Purchase`/`Sale` usan hoy).
+El paquete `Microsoft.AspNetCore.Identity.EntityFrameworkCore` salió de `Domain.csproj` y
+se declaró en `Infrastructure`, que es donde vive la identidad.
 
-### 1.5 📋 Los puertos de repositorio filtran semántica del adaptador — **BAJO**
+> Se temía que hiciera falta una migración. No: `has-pending-model-changes` confirma que
+> renombrar el tipo CLR no altera el modelo relacional, porque la tabla sigue siendo
+> `AspNetUsers` y las FK no cambian.
+
+### 1.5 ✅ (b) Los puertos de repositorio filtraban semántica del adaptador — **BAJO**
 
 Dos ejemplos:
 
@@ -94,8 +102,15 @@ Dos ejemplos:
   puerto de lectura, pero convendría un tipo `Page<T>` propio del dominio en lugar de una
   tupla.
 
-Funciona y es pragmático, pero conviene saber que la abstracción no es hermética: hoy el
-contrato asume una unidad de trabajo estilo EF.
+**Corregido**:
+
+- Se añadió `Domain/Common/Page<T>` y los cuatro `GetPagedAsync` devuelven `Page<T>` en
+  lugar de una tupla anónima. Al ser un *record* posicional, los handlers que
+  deconstruían el resultado siguen compilando sin cambios.
+- `GetByIdsAsync` pasó a llamarse **`GetForUpdateAsync`**, y su documentación describe la
+  intención ("cargar con intención de modificar; los cambios se persisten junto con la
+  operación que los origina") en lugar del mecanismo de EF. El detalle de *change
+  tracking* queda donde corresponde: en el comentario del adaptador.
 
 ---
 
@@ -155,20 +170,33 @@ Dos casos:
   reimplementando una regla del producto. **Corregido**: se añadió
   `Product.HasStockFor(quantity)` y el handler ahora pregunta al agregado.
 
-### 2.5 📋 `ThirdTypes.Provider = 1` acoplado al orden del *seed* — **MEDIO, no corregido**
+### 2.5 ✅ (b) `ThirdTypes.Provider = 1` acoplado al orden del *seed* — **MEDIO**
 
 `Domain/Constants/ThirdTypes.cs` fija los ids 1 y 2 asumiendo el orden en que
 `LuxuryBikerDbContextInitialiser` inserta los tipos de tercero. Si alguien reordena el
 *seed* o siembra en otro entorno, los combos de compras y ventas se cruzan en silencio.
 
-**Sugerencia**: sembrar con ids explícitos (`HasData` con `Id` fijo) o buscar por nombre.
+Había además un segundo fallo: la condición de siembra era *"si no existe ninguno de los
+dos"*, así que si faltaba **solo uno**, no se creaba ninguno.
+
+**Corregido**: `EnsureThirdTypeAsync(id, name)` siembra cada tipo por separado con su id
+explícito (habilitando `IDENTITY_INSERT` para la inserción) y es idempotente por tipo. Si
+encuentra el nombre asociado a otro id, registra un `warning` claro en vez de dejar que
+los combos de compras y ventas se crucen en silencio.
 
 ### 2.6 📋 El agregado no impide stock negativo — **BAJO, decisión de negocio**
 
 `Product.DecreaseStock` resta sin comprobar disponibilidad; quien protege hoy es el
-handler de venta. Se dejó así a propósito: `ChangePurchaseStatus` **necesita** poder dejar
-el stock negativo al revertir una compra ya vendida. Si se quiere blindar, hay que
-modelar antes qué debe pasar en ese escenario.
+handler de venta (`Product.HasStockFor`). Se deja así a propósito porque **blindarlo exige
+una decisión de negocio, no técnica**: hay dos flujos que descuentan stock y no está claro
+que deban comportarse igual.
+
+- Registrar una venta → hoy **sí** se valida (400 `Sales.InsufficientStock`).
+- Revalidar una venta cancelada (`ChangeStatus`) → hoy **no** se valida. Si el stock bajó
+  entretanto, revalidar deja el inventario en negativo.
+- Cancelar una compra ya vendida → **necesita** poder dejar el stock negativo.
+
+Hasta decidir qué debe pasar al revalidar, blindar el agregado rompería el tercer caso.
 
 ---
 
@@ -206,16 +234,23 @@ Todo lo marcado ✅ se validó:
 | `Sale.Register` | venta 2 × 250 000 → `VLB2`; stock 5 → 3 |
 | `ChangeStatus` venta y compra | cancelar venta → stock 5; cancelar compra → stock 2 |
 | `Dashboard/GetData` (puerto nuevo) | KPIs y series correctas, respetando `Status = true` |
+| **(b)** `has-pending-model-changes` tras mover Identity | *No changes* — mover `ApplicationUser` fuera del dominio tampoco toca el esquema |
+| **(b)** *Seed* sobre base de datos nueva | `T_TYPE_THIRD` queda con `1 Provider` / `2 Client`; el combo de proveedores resuelve `typeId 1` → `Provider` |
+| **(b)** Listados con `Page<T>` | productos, terceros, compras y ventas paginan correctamente |
+| **(b)** Escritura end-to-end | compra `CLB3` (stock 2 → 6) y venta `VLB3` (→ 5, valor 50 000); dashboard coherente |
 
 Que EF no detecte cambios de modelo es el dato importante: **encapsular el dominio no
 alteró el esquema**, así que el refactor es seguro de desplegar sobre la base existente.
 
 ---
 
-## 5. Orden sugerido para lo pendiente
+## 5. Pendiente
 
-1. **1.4** — desacoplar `ApplicationUser` de ASP.NET Identity (rama propia, con migración).
-2. **2.5** — fijar los ids de `TypeThird` en el *seed*.
-3. **1.5** — introducir un `Page<T>` de dominio y sacar la semántica de *tracking* de los
-   puertos.
-4. **2.6** — decidir la política de stock negativo antes de blindar el agregado.
+Solo queda **2.6**, y es una decisión de negocio: ¿qué debe ocurrir al **revalidar una
+venta cancelada** si mientras tanto el stock bajó? Según se responda:
+
+- *Bloquear* → `ChangeSaleStatus` valida disponibilidad y devuelve 400, igual que el alta.
+- *Permitir* → se documenta que el inventario puede quedar negativo y se deja como está.
+
+Una vez decidido, el agregado puede blindarse con métodos que expresen la intención
+(p. ej. `Product.Sell(...)` frente a `Product.RevertPurchase(...)`).

@@ -1,6 +1,7 @@
-﻿using LuxuryBiker.Domain.Entities.Products;
+using LuxuryBiker.Domain.Entities.Products;
 using LuxuryBiker.Domain.Repositories.Products;
 using Microsoft.EntityFrameworkCore;
+using LuxuryBiker.Domain.Common;
 
 namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Products
 {
@@ -33,7 +34,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Products
             return await _context.Products.FirstOrDefaultAsync(p => p.Reference.ToUpper().Equals(reference.ToUpper()));
         }
 
-        public async Task<(IReadOnlyList<Product> Items, int TotalCount)> GetPagedAsync(
+        public async Task<Page<Product>> GetPagedAsync(
             int pageNumber, int pageSize, bool onlyActive, CancellationToken cancellationToken)
         {
             IQueryable<Product> query = _context.Products.AsNoTracking();
@@ -51,10 +52,10 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Products
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 
-            return (items, totalCount);
+            return new Page<Product>(items, totalCount);
         }
 
-        public async Task<IReadOnlyList<Product>> GetByIdsAsync(
+        public async Task<IReadOnlyList<Product>> GetForUpdateAsync(
             IEnumerable<int> ids, CancellationToken cancellationToken)
         {
             var idSet = ids.ToList();

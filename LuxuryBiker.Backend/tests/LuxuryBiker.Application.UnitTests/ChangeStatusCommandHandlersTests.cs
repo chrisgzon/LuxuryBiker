@@ -18,7 +18,7 @@ namespace LuxuryBiker.Application.UnitTests
         private readonly Mock<IProductsRepository> _productsRepository = new();
 
         private void HaveProducts(params Product[] products) =>
-            _productsRepository.Setup(r => r.GetByIdsAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<CancellationToken>()))
+            _productsRepository.Setup(r => r.GetForUpdateAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(products.ToList());
 
         [Fact]

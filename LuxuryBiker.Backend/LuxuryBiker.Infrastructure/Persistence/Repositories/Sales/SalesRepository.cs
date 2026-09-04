@@ -1,6 +1,7 @@
-﻿using LuxuryBiker.Domain.Entities.Sales;
+using LuxuryBiker.Domain.Entities.Sales;
 using LuxuryBiker.Domain.Repositories.Sales;
 using Microsoft.EntityFrameworkCore;
+using LuxuryBiker.Domain.Common;
 
 namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Sales
 {
@@ -39,7 +40,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Sales
             return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<(IReadOnlyList<Sale> Items, int TotalCount)> GetPagedAsync(
+        public async Task<Page<Sale>> GetPagedAsync(
             int pageNumber, int pageSize, DateTimeOffset? dateFrom, DateTimeOffset? dateTo,
             CancellationToken cancellationToken)
         {
@@ -66,7 +67,7 @@ namespace LuxuryBiker.Infrastructure.Persistence.Repositories.Sales
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 
-            return (items, totalCount);
+            return new Page<Sale>(items, totalCount);
         }
     }
 }

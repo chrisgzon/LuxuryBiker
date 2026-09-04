@@ -1,6 +1,5 @@
-﻿using LuxuryBiker.Domain.Entities.Common;
+using LuxuryBiker.Domain.Entities.Common;
 using LuxuryBiker.Domain.Entities.Thirds;
-using LuxuryBiker.Domain.Entities.Users;
 
 namespace LuxuryBiker.Domain.Entities.Purchases
 {
@@ -55,7 +54,6 @@ namespace LuxuryBiker.Domain.Entities.Purchases
         public decimal Total { get; private set; }
         public bool? Status { get; private set; }
 
-        public ApplicationUser? User { get; private set; }
         public Third? Third { get; private set; }
         public IReadOnlyCollection<PurchaseDetail> Details => _details;
 

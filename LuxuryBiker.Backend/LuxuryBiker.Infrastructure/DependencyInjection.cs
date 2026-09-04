@@ -1,5 +1,5 @@
 using LuxuryBiker.Application.Common.Interfaces.Services;
-using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Infrastructure.Identity;
 using LuxuryBiker.Domain.Repositories.Products;
 using LuxuryBiker.Domain.Repositories.Purchases;
 using LuxuryBiker.Domain.Repositories.Reporting;

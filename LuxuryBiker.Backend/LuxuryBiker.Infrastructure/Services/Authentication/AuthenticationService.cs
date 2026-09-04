@@ -1,7 +1,7 @@
 using AutoMapper;
 using LuxuryBiker.Application.Common.Interfaces.Services;
 using LuxuryBiker.Application.Common.Models;
-using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Infrastructure.Identity;
 using LuxuryBiker.Infrastructure.Services.Authentication.JWT;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

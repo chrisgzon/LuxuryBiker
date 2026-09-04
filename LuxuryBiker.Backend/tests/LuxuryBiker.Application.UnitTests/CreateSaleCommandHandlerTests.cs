@@ -36,7 +36,7 @@ namespace LuxuryBiker.Application.UnitTests
         public async Task Registers_sale_and_decreases_stock()
         {
             var product = TestData.Product(id: 1, stock: 10m);
-            _productsRepository.Setup(r => r.GetByIdsAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<CancellationToken>()))
+            _productsRepository.Setup(r => r.GetForUpdateAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<Product> { product });
 
             var dto = new CreateSaleDto
@@ -69,7 +69,7 @@ namespace LuxuryBiker.Application.UnitTests
         public async Task Fails_when_stock_is_insufficient()
         {
             var product = TestData.Product(id: 1, stock: 3m);
-            _productsRepository.Setup(r => r.GetByIdsAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<CancellationToken>()))
+            _productsRepository.Setup(r => r.GetForUpdateAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<Product> { product });
 
             var dto = new CreateSaleDto

@@ -1,8 +1,9 @@
-﻿using LuxuryBiker.Domain.Entities.Products;
+using LuxuryBiker.Domain.Entities.Products;
 using LuxuryBiker.Domain.Entities.Purchases;
 using LuxuryBiker.Domain.Entities.Sales;
 using LuxuryBiker.Domain.Entities.Thirds;
-using LuxuryBiker.Domain.Entities.Users;
+using LuxuryBiker.Infrastructure.Identity;
+using LuxuryBiker.Infrastructure.Persistence.Metadata.Identity;
 using LuxuryBiker.Infrastructure.Persistence.Metadata.Products;
 using LuxuryBiker.Infrastructure.Persistence.Metadata.Purchases;
 using LuxuryBiker.Infrastructure.Persistence.Metadata.Sales;
@@ -51,6 +52,9 @@ namespace LuxuryBiker.Infrastructure.Persistence
             #endregion
             #region Products
             ProductsMetadata.SetEntityBuilder(builder.Entity<Product>());
+            #endregion
+            #region Identity
+            ApplicationUserMetadata.SetEntityBuilder(builder.Entity<ApplicationUser>());
             #endregion
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
