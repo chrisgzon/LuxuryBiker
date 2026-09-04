@@ -1,5 +1,5 @@
-using LuxuryBiker.Application.Common;
 using LuxuryBiker.Application.Common.Interfaces.Services;
+using LuxuryBiker.Domain.Common;
 using LuxuryBiker.Domain.Constants;
 using LuxuryBiker.Domain.Entities.Products;
 using LuxuryBiker.Domain.Entities.Purchases;
@@ -15,8 +15,6 @@ namespace LuxuryBiker.Application.Purchases.Commands.CreatePurchase
     public class CreatePurchaseCommandHandler
         : IRequestHandler<CreatePurchaseCommand, ErrorOr<CreatePurchaseResult>>
     {
-        private const string CodePrefix = "CLB";
-
         private readonly IPurchasesRepository _purchasesRepository;
         private readonly IProductsRepository _productsRepository;
         private readonly IThirdRepository _thirdRepository;
@@ -59,22 +57,15 @@ namespace LuxuryBiker.Application.Purchases.Commands.CreatePurchase
                 return PurchasesErrors.ProductNotFound(missingProductId);
             }
 
-            string code = CodeGenerator.Next(CodePrefix, await _purchasesRepository.GetLastCodeAsync(cancellationToken));
+            string code = DocumentNumber.Next(
+                DocumentNumber.PurchasePrefix, await _purchasesRepository.GetLastCodeAsync(cancellationToken));
 
-            var purchase = new Purchase(_user.Id, dto.ThirdId, dto.DatePurchase, code)
-            {
-                CreatedBy = _user.Id,
-                LastModifiedBy = _user.Id
-            };
+            var details = dto.Details.Select(d => new PurchaseDetail(d.ProductId, d.ProductValue, d.Quantity));
 
-            var details = dto.Details.Select(d => new PurchaseDetail
-            {
-                ProductId = d.ProductId,
-                ProductValue = d.ProductValue,
-                Quantity = d.Quantity
-            });
-
-            purchase.SetDetails(details, dto.ApplyIva, Taxes.IvaRate);
+            var purchase = Purchase.Register(
+                _user.Id, dto.ThirdId, dto.DatePurchase, code, details, dto.ApplyIva, Taxes.IvaRate);
+            purchase.CreatedBy = _user.Id;
+            purchase.LastModifiedBy = _user.Id;
 
             // Ajuste de inventario: la compra aumenta el stock y actualiza el último valor
             // de compra de cada producto (comportamiento del sistema legado).

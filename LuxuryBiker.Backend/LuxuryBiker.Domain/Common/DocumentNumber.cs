@@ -1,13 +1,16 @@
 using System.Text.RegularExpressions;
 
-namespace LuxuryBiker.Application.Common
+namespace LuxuryBiker.Domain.Common
 {
     /// <summary>
-    /// Genera el siguiente código correlativo a partir del último ("CLB12" -> "CLB13"),
-    /// tomando el primer grupo de dígitos del código anterior.
+    /// Numeración correlativa de los documentos comerciales ("CLB12" -> "CLB13").
+    /// Es una regla de negocio, por eso vive en el dominio y no en la capa de aplicación.
     /// </summary>
-    public static class CodeGenerator
+    public static class DocumentNumber
     {
+        public const string PurchasePrefix = "CLB";
+        public const string SalePrefix = "VLB";
+
         public static string Next(string prefix, string? lastCode)
         {
             int lastNumber = 0;

@@ -4,11 +4,18 @@ using LuxuryBiker.Domain.Entities.Users;
 
 namespace LuxuryBiker.Domain.Entities.Sales
 {
+    /// <summary>
+    /// Raíz del agregado Venta. Las líneas solo se pueden añadir a través de la fábrica,
+    /// de modo que <see cref="Total"/> siempre es coherente con el detalle.
+    /// </summary>
     public class Sale : BaseAuditableEntity<int>
     {
-        public Sale() { }
+        private readonly List<SaleDetail> _details = new();
 
-        public Sale(string? userId, int? thirdId, DateTimeOffset date, string code)
+        /// <summary>Constructor para EF Core.</summary>
+        private Sale() { }
+
+        private Sale(string? userId, int? thirdId, DateTimeOffset date, string code)
         {
             UserId = userId;
             ThirdId = thirdId;
@@ -19,37 +26,53 @@ namespace LuxuryBiker.Domain.Entities.Sales
             LastModified = DateTime.Now;
         }
 
-        public string? Code { get; set; }
-        public DateTimeOffset Date { get; set; }
-        public int? ThirdId { get; set; } // client who buys from the company
-        public string? UserId { get; set; } // user that registers the sale
-        public bool? Status { get; set; }
-        public decimal Total { get; set; }
-
-        public ApplicationUser? User { get; set; }
-        public Third? Third { get; set; }
-        public IEnumerable<SaleDetail>? Details { get; set; }
-
-        /// <summary>
-        /// Asigna las líneas de la venta y recalcula el total: suma de
-        /// <c>Cantidad * Valor</c> por línea, más el IVA si aplica.
-        /// </summary>
-        public void SetDetails(IEnumerable<SaleDetail> details, bool applyIva, decimal ivaRate)
+        public static Sale Register(
+            string? userId,
+            int? thirdId,
+            DateTimeOffset date,
+            string code,
+            IEnumerable<SaleDetail> details,
+            bool applyIva,
+            decimal ivaRate)
         {
-            var lines = details.ToList();
-            Details = lines;
+            if (string.IsNullOrWhiteSpace(code))
+                throw new ArgumentException("El código de la venta es obligatorio.", nameof(code));
 
-            decimal subtotal = lines.Sum(line => line.Quantity * line.ProductValue);
-            decimal iva = applyIva ? subtotal * (ivaRate / 100m) : 0m;
+            var lines = details?.ToList() ?? throw new ArgumentNullException(nameof(details));
+            if (lines.Count == 0)
+                throw new ArgumentException("La venta debe incluir al menos una línea.", nameof(details));
 
-            Total = subtotal + iva;
+            var sale = new Sale(userId, thirdId, date, code);
+            sale._details.AddRange(lines);
+            sale.RecalculateTotal(applyIva, ivaRate);
+            return sale;
         }
+
+        public string? Code { get; private set; }
+        public DateTimeOffset Date { get; private set; }
+        public int? ThirdId { get; private set; }   // cliente que compra a la empresa
+        public string? UserId { get; private set; } // usuario que registra la venta
+        public bool? Status { get; private set; }
+        public decimal Total { get; private set; }
+
+        public ApplicationUser? User { get; private set; }
+        public Third? Third { get; private set; }
+        public IReadOnlyCollection<SaleDetail> Details => _details;
 
         /// <summary>Invierte el estado (validada &lt;-&gt; cancelada).</summary>
         public void ToggleStatus()
         {
             Status = !(Status ?? true);
             LastModified = DateTime.Now;
+        }
+
+        /// <summary>Suma de las líneas más el IVA cuando aplica.</summary>
+        private void RecalculateTotal(bool applyIva, decimal ivaRate)
+        {
+            decimal subtotal = _details.Sum(line => line.Subtotal);
+            decimal iva = applyIva ? subtotal * (ivaRate / 100m) : 0m;
+
+            Total = subtotal + iva;
         }
     }
 }

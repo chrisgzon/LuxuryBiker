@@ -27,8 +27,9 @@ namespace LuxuryBiker.Application.UnitTests
             var product = TestData.Product(id: 1, stock: 5m);
             HaveProducts(product);
 
-            var sale = new Sale("user-1", null, DateTimeOffset.Now, "VLB3") { Id = 7 };
-            sale.SetDetails(new[] { new SaleDetail { ProductId = 1, ProductValue = 100m, Quantity = 2m } }, false, Taxes.IvaRate);
+            var sale = Sale.Register("user-1", null, DateTimeOffset.Now, "VLB3",
+                new[] { new SaleDetail(productId: 1, productValue: 100m, quantity: 2m) }, applyIva: false, Taxes.IvaRate);
+            sale.Id = 7;
 
             var salesRepository = new Mock<ISalesRepository>();
             salesRepository.Setup(r => r.GetByIdWithDetailsAsync(7, It.IsAny<CancellationToken>())).ReturnsAsync(sale);
@@ -62,8 +63,9 @@ namespace LuxuryBiker.Application.UnitTests
             var product = TestData.Product(id: 1, stock: 5m);
             HaveProducts(product);
 
-            var purchase = new Purchase("user-1", null, DateTimeOffset.Now, "CLB3") { Id = 4 };
-            purchase.SetDetails(new[] { new PurchaseDetail { ProductId = 1, ProductValue = 100m, Quantity = 2m } }, false, Taxes.IvaRate);
+            var purchase = Purchase.Register("user-1", null, DateTimeOffset.Now, "CLB3",
+                new[] { new PurchaseDetail(productId: 1, productValue: 100m, quantity: 2m) }, applyIva: false, Taxes.IvaRate);
+            purchase.Id = 4;
 
             var purchasesRepository = new Mock<IPurchasesRepository>();
             purchasesRepository.Setup(r => r.GetByIdWithDetailsAsync(4, It.IsAny<CancellationToken>())).ReturnsAsync(purchase);

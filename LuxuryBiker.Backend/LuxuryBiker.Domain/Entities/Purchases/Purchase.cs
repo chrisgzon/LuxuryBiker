@@ -4,11 +4,18 @@ using LuxuryBiker.Domain.Entities.Users;
 
 namespace LuxuryBiker.Domain.Entities.Purchases
 {
+    /// <summary>
+    /// Raíz del agregado Compra. Las líneas solo se pueden añadir a través de la fábrica,
+    /// de modo que <see cref="Total"/> siempre es coherente con el detalle.
+    /// </summary>
     public class Purchase : BaseAuditableEntity<int>
     {
-        public Purchase() { }
+        private readonly List<PurchaseDetail> _details = new();
 
-        public Purchase(string? userId, int? thirdId, DateTimeOffset datePurchase, string code)
+        /// <summary>Constructor para EF Core.</summary>
+        private Purchase() { }
+
+        private Purchase(string? userId, int? thirdId, DateTimeOffset datePurchase, string code)
         {
             UserId = userId;
             ThirdId = thirdId;
@@ -19,37 +26,53 @@ namespace LuxuryBiker.Domain.Entities.Purchases
             LastModified = DateTime.Now;
         }
 
-        public string? Code { get; set; }
-        public DateTimeOffset DatePurchase { get; set; }
-        public string? UserId { get; set; } // user than register the purchase
-        public int? ThirdId { get; set; } // supplier than sells to the company
-        public decimal Total { get; set; }
-        public bool? Status { get; set; }
-
-        public ApplicationUser? User { get; set; }
-        public Third? Third { get; set; }
-        public IEnumerable<PurchaseDetail>? Details { get; set; }
-
-        /// <summary>
-        /// Asigna las líneas de la compra y recalcula el total: suma de
-        /// <c>Cantidad * Valor</c> por línea, más el IVA si aplica.
-        /// </summary>
-        public void SetDetails(IEnumerable<PurchaseDetail> details, bool applyIva, decimal ivaRate)
+        public static Purchase Register(
+            string? userId,
+            int? thirdId,
+            DateTimeOffset datePurchase,
+            string code,
+            IEnumerable<PurchaseDetail> details,
+            bool applyIva,
+            decimal ivaRate)
         {
-            var lines = details.ToList();
-            Details = lines;
+            if (string.IsNullOrWhiteSpace(code))
+                throw new ArgumentException("El código de la compra es obligatorio.", nameof(code));
 
-            decimal subtotal = lines.Sum(line => line.Quantity * line.ProductValue);
-            decimal iva = applyIva ? subtotal * (ivaRate / 100m) : 0m;
+            var lines = details?.ToList() ?? throw new ArgumentNullException(nameof(details));
+            if (lines.Count == 0)
+                throw new ArgumentException("La compra debe incluir al menos una línea.", nameof(details));
 
-            Total = subtotal + iva;
+            var purchase = new Purchase(userId, thirdId, datePurchase, code);
+            purchase._details.AddRange(lines);
+            purchase.RecalculateTotal(applyIva, ivaRate);
+            return purchase;
         }
+
+        public string? Code { get; private set; }
+        public DateTimeOffset DatePurchase { get; private set; }
+        public string? UserId { get; private set; }   // usuario que registra la compra
+        public int? ThirdId { get; private set; }     // proveedor que vende a la empresa
+        public decimal Total { get; private set; }
+        public bool? Status { get; private set; }
+
+        public ApplicationUser? User { get; private set; }
+        public Third? Third { get; private set; }
+        public IReadOnlyCollection<PurchaseDetail> Details => _details;
 
         /// <summary>Invierte el estado (validada &lt;-&gt; cancelada).</summary>
         public void ToggleStatus()
         {
             Status = !(Status ?? true);
             LastModified = DateTime.Now;
+        }
+
+        /// <summary>Suma de las líneas más el IVA cuando aplica.</summary>
+        private void RecalculateTotal(bool applyIva, decimal ivaRate)
+        {
+            decimal subtotal = _details.Sum(line => line.Subtotal);
+            decimal iva = applyIva ? subtotal * (ivaRate / 100m) : 0m;
+
+            Total = subtotal + iva;
         }
     }
 }

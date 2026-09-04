@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LuxuryBiker.Application.Common.Interfaces.Services;
+﻿using LuxuryBiker.Application.Common.Interfaces.Services;
 using LuxuryBiker.Domain.Constants;
 using LuxuryBiker.Domain.Entities.Products;
 using LuxuryBiker.Domain.Repositories.Products;
@@ -11,24 +10,24 @@ namespace LuxuryBiker.Application.Products.Commands.CreateProduct
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ErrorOr<string>>
     {
         private readonly IProductsRepository _repository;
-        private readonly IMapper _mapper;
         private readonly IUser _user;
-        public CreateProductCommandHandler(IProductsRepository repository, IMapper mapper, IUser user)
+        public CreateProductCommandHandler(IProductsRepository repository, IUser user)
         {
             _repository = repository;
-            _mapper = mapper;
             _user = user;
         }
         public async Task<ErrorOr<string>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            bool exists = await this.ValidateProductExists(request.CreateProductDto.Reference);
+            CreateProductDto dto = request.CreateProductDto;
+
+            bool exists = await this.ValidateProductExists(dto.Reference);
             if (exists)
                 return ProductsErrors.Exists;
 
-            Product entity = _mapper.Map<Product>(request.CreateProductDto);
+            Product entity = Product.Create(dto.Name, dto.Reference, dto.Description, dto.Status);
             entity.CreatedBy = _user.Id;
             entity.LastModifiedBy = _user.Id;
-            entity.SetInternalCode();
+
             await _repository.CreateAsync(entity);
             return entity.Code!;
         }

@@ -1,6 +1,10 @@
-﻿namespace LuxuryBiker.Infrastructure.Services.Authentication
+namespace LuxuryBiker.Application.Common.Models
 {
-    public class ApplicationUserDTO
+    /// <summary>
+    /// Perfil del usuario autenticado que la API devuelve al cliente.
+    /// Vive en Application para que la capa de presentación no dependa de Infrastructure.
+    /// </summary>
+    public class AuthenticatedUserDto
     {
         public string Id { get; set; } = string.Empty;
         public string Names { get; set; } = string.Empty;
@@ -11,6 +15,6 @@
         public string Email { get; set; } = string.Empty;
         public DateTimeOffset? FechaNacimiento { get; set; }
         public string Token { get; set; } = string.Empty;
-        public List<string> Roles { get; set; } = new List<string>();
+        public List<string> Roles { get; set; } = new();
     }
 }

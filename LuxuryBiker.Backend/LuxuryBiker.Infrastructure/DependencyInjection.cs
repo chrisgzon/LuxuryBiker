@@ -1,13 +1,14 @@
-﻿using LuxuryBiker.Application.Common.Interfaces;
 using LuxuryBiker.Application.Common.Interfaces.Services;
 using LuxuryBiker.Domain.Entities.Users;
 using LuxuryBiker.Domain.Repositories.Products;
 using LuxuryBiker.Domain.Repositories.Purchases;
+using LuxuryBiker.Domain.Repositories.Reporting;
 using LuxuryBiker.Domain.Repositories.Sales;
 using LuxuryBiker.Domain.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Persistence;
 using LuxuryBiker.Infrastructure.Persistence.Repositories.Products;
 using LuxuryBiker.Infrastructure.Persistence.Repositories.Purchases;
+using LuxuryBiker.Infrastructure.Persistence.Repositories.Reporting;
 using LuxuryBiker.Infrastructure.Persistence.Repositories.Sales;
 using LuxuryBiker.Infrastructure.Persistence.Repositories.Thirds;
 using LuxuryBiker.Infrastructure.Services.Authentication;
@@ -41,7 +42,6 @@ namespace LuxuryBiker.Infrastructure
                 options.UseSqlServer(configuration.GetConnectionString("LuxuryBiker")!);
             });
 
-            services.AddScoped<ILuxuryBikerDbContext>(provider => provider.GetRequiredService<LuxuryBikerDbContext>());
             services.AddScoped<LuxuryBikerDbContextInitialiser>();
 
             return services;
@@ -51,7 +51,7 @@ namespace LuxuryBiker.Infrastructure
         {
             services.Configure<JWTSettings>(configuration.GetSection(JWTSettings.Section));
 
-            services.AddTransient<IAuthenticationService<ApplicationUserDTO>, AuthenticationService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             services
                 .ConfigureOptions<JwtBearerTokenValidationConfiguration>()
@@ -82,6 +82,7 @@ namespace LuxuryBiker.Infrastructure
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IPurchasesRepository, PurchasesRepository>();
             services.AddScoped<ISalesRepository, SalesRepository>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();
             return services;
         }
     }

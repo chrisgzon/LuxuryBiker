@@ -1,5 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using LuxuryBiker.Application.Common.Interfaces.Services;
+using LuxuryBiker.Application.Common.Models;
 using LuxuryBiker.Domain.Entities.Users;
 using LuxuryBiker.Infrastructure.Services.Authentication.JWT;
 using Microsoft.Extensions.Options;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace LuxuryBiker.Infrastructure.Services.Authentication
 {
-    public class AuthenticationService : IAuthenticationService<ApplicationUserDTO>
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly JWTSettings _jwtSettings;
         private readonly IApplicationUserService<ApplicationUser> _applicationUserService;
@@ -43,7 +44,7 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
             return GenerateJWT(user, roles, rememberMe);
         }
 
-        public async Task<ErrorOr<ApplicationUserDTO>> GetCurrentUserProfile()
+        public async Task<ErrorOr<AuthenticatedUserDto>> GetCurrentUserProfile()
         {
             if (string.IsNullOrEmpty(_currentUser.Id))
             {
@@ -51,7 +52,7 @@ namespace LuxuryBiker.Infrastructure.Services.Authentication
             }
 
             ApplicationUser user = await _applicationUserService.GetUserByIdAsync(_currentUser.Id);
-            ApplicationUserDTO userDTO = _mapper.Map<ApplicationUserDTO>(user);
+            AuthenticatedUserDto userDTO = _mapper.Map<AuthenticatedUserDto>(user);
             userDTO.Roles = await _applicationUserService.GetRolesAsync(user);
             return userDTO;
         }
