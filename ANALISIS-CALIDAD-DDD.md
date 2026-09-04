@@ -184,7 +184,7 @@ explícito (habilitando `IDENTITY_INSERT` para la inserción) y es idempotente p
 encuentra el nombre asociado a otro id, registra un `warning` claro en vez de dejar que
 los combos de compras y ventas se crucen en silencio.
 
-### 2.6 📋 El agregado no impide stock negativo — **BAJO, decisión de negocio**
+### 2.6 ✅ (b) El agregado no impedía stock negativo — **BAJO, decisión de negocio**
 
 `Product.DecreaseStock` resta sin comprobar disponibilidad; quien protege hoy es el
 handler de venta (`Product.HasStockFor`). Se deja así a propósito porque **blindarlo exige
@@ -196,7 +196,21 @@ que deban comportarse igual.
   entretanto, revalidar deja el inventario en negativo.
 - Cancelar una compra ya vendida → **necesita** poder dejar el stock negativo.
 
-Hasta decidir qué debe pasar al revalidar, blindar el agregado rompería el tercer caso.
+**Decisión tomada** (producto): al revalidar una venta cancelada se **bloquea** si no hay
+inventario, igual que al registrarla.
+
+**Corregido**: `DecreaseStock` desaparece y se sustituye por dos métodos que expresan la
+intención, porque los dos flujos que descuentan no son el mismo caso de negocio:
+
+- `Product.Sell(quantity)` — exige disponibilidad; lanza si dejaría el stock en negativo.
+  Los handlers comprueban antes con `HasStockFor` para devolver un 400 legible, y la
+  guarda del agregado protege el invariante si alguien se salta esa comprobación.
+- `Product.RevertPurchase(quantity)` — **admite** dejar el stock en negativo, porque la
+  mercancía de la compra cancelada puede haberse vendido ya y el descuadre debe quedar
+  visible en vez de bloquear la operación.
+
+`ChangeSaleStatus` valida la disponibilidad **antes** de invertir el estado, de modo que un
+rechazo no deja el agregado modificado a medias.
 
 ---
 
@@ -238,6 +252,9 @@ Todo lo marcado ✅ se validó:
 | **(b)** *Seed* sobre base de datos nueva | `T_TYPE_THIRD` queda con `1 Provider` / `2 Client`; el combo de proveedores resuelve `typeId 1` → `Provider` |
 | **(b)** Listados con `Page<T>` | productos, terceros, compras y ventas paginan correctamente |
 | **(b)** Escritura end-to-end | compra `CLB3` (stock 2 → 6) y venta `VLB3` (→ 5, valor 50 000); dashboard coherente |
+| **(b)** Revalidar venta sin stock | necesita 2 y hay 1 → `400 Sales.InsufficientStock`; el estado y el inventario quedan intactos |
+| **(b)** Revalidar venta con stock | necesita 1 y hay 1 → 200, stock 1 → 0 |
+| **(b)** Cancelar compra ya vendida | stock 0 → −2, permitido a propósito |
 
 Que EF no detecte cambios de modelo es el dato importante: **encapsular el dominio no
 alteró el esquema**, así que el refactor es seguro de desplegar sobre la base existente.
@@ -246,11 +263,9 @@ alteró el esquema**, así que el refactor es seguro de desplegar sobre la base 
 
 ## 5. Pendiente
 
-Solo queda **2.6**, y es una decisión de negocio: ¿qué debe ocurrir al **revalidar una
-venta cancelada** si mientras tanto el stock bajó? Según se responda:
+Ninguno de los puntos detectados en este análisis queda abierto.
 
-- *Bloquear* → `ChangeSaleStatus` valida disponibilidad y devuelve 400, igual que el alta.
-- *Permitir* → se documenta que el inventario puede quedar negativo y se deja como está.
-
-Una vez decidido, el agregado puede blindarse con métodos que expresen la intención
-(p. ej. `Product.Sell(...)` frente a `Product.RevertPurchase(...)`).
+Fuera del alcance de este informe siguen vivas otras deudas ya recogidas en
+`CONTEXTO-MIGRACION.md` §6 (numeración de documentos sin bloqueo ante concurrencia, alta
+inline de terceros/productos desde los formularios de compra y venta, gráficas del
+dashboard en SVG a mano, y el aviso NU1903 de AutoMapper).

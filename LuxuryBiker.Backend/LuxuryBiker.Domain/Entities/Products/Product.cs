@@ -61,24 +61,52 @@ namespace LuxuryBiker.Domain.Entities.Products
         /// <summary>Indica si hay inventario suficiente para despachar la cantidad pedida.</summary>
         public bool HasStockFor(decimal quantity) => (Stock ?? 0m) >= quantity;
 
-        /// <summary>Aumenta el inventario disponible (registro de una compra validada).</summary>
+        /// <summary>
+        /// Ingresa inventario: compra validada o venta cancelada (la mercancía vuelve).
+        /// </summary>
         public void IncreaseStock(decimal quantity)
         {
-            if (quantity <= 0)
-                throw new ArgumentOutOfRangeException(nameof(quantity), "La cantidad debe ser mayor que cero.");
+            EnsurePositive(quantity);
 
             Stock = (Stock ?? 0) + quantity;
             LastModified = DateTime.Now;
         }
 
-        /// <summary>Disminuye el inventario disponible (registro de una venta validada).</summary>
-        public void DecreaseStock(decimal quantity)
+        /// <summary>
+        /// Descuenta inventario por una venta. Exige disponibilidad: una venta nunca puede
+        /// dejar el stock en negativo. Los llamadores comprueban antes con
+        /// <see cref="HasStockFor"/> para devolver un error de negocio legible; esta guarda
+        /// protege el invariante si alguien se salta esa comprobación.
+        /// </summary>
+        public void Sell(decimal quantity)
         {
-            if (quantity <= 0)
-                throw new ArgumentOutOfRangeException(nameof(quantity), "La cantidad debe ser mayor que cero.");
+            EnsurePositive(quantity);
+
+            if (!HasStockFor(quantity))
+                throw new InvalidOperationException(
+                    $"Stock insuficiente para '{Name}': disponible {Stock ?? 0m}, solicitado {quantity}.");
 
             Stock = (Stock ?? 0) - quantity;
             LastModified = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Revierte el ingreso de una compra que se cancela. A diferencia de
+        /// <see cref="Sell"/> admite dejar el stock en negativo, porque la mercancía de esa
+        /// compra puede haberse vendido ya y el descuadre debe quedar visible.
+        /// </summary>
+        public void RevertPurchase(decimal quantity)
+        {
+            EnsurePositive(quantity);
+
+            Stock = (Stock ?? 0) - quantity;
+            LastModified = DateTime.Now;
+        }
+
+        private static void EnsurePositive(decimal quantity)
+        {
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "La cantidad debe ser mayor que cero.");
         }
 
         /// <summary>Registra el último valor de compra del producto.</summary>

@@ -58,6 +58,53 @@ namespace LuxuryBiker.Application.UnitTests
         }
 
         [Fact]
+        public async Task Revalidating_a_sale_is_blocked_when_stock_is_insufficient()
+        {
+            var product = TestData.Product(id: 1, stock: 1m);
+            HaveProducts(product);
+
+            var sale = Sale.Register("user-1", null, DateTimeOffset.Now, "VLB9",
+                new[] { new SaleDetail(productId: 1, productValue: 100m, quantity: 3m) }, applyIva: false, Taxes.IvaRate);
+            sale.Id = 9;
+            sale.ToggleStatus(); // queda cancelada
+
+            var salesRepository = new Mock<ISalesRepository>();
+            salesRepository.Setup(r => r.GetByIdWithDetailsAsync(9, It.IsAny<CancellationToken>())).ReturnsAsync(sale);
+
+            var handler = new ChangeSaleStatusCommandHandler(salesRepository.Object, _productsRepository.Object);
+            var result = await handler.Handle(new ChangeSaleStatusCommand(9), CancellationToken.None);
+
+            result.IsError.Should().BeTrue();
+            result.FirstError.Code.Should().Be("Sales.InsufficientStock");
+            sale.Status.Should().BeFalse();  // el estado no se invirtió
+            product.Stock.Should().Be(1m);   // el inventario no se tocó
+            salesRepository.Verify(r => r.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Revalidating_a_sale_discounts_stock_when_there_is_enough()
+        {
+            var product = TestData.Product(id: 1, stock: 5m);
+            HaveProducts(product);
+
+            var sale = Sale.Register("user-1", null, DateTimeOffset.Now, "VLB9",
+                new[] { new SaleDetail(productId: 1, productValue: 100m, quantity: 3m) }, applyIva: false, Taxes.IvaRate);
+            sale.Id = 9;
+            sale.ToggleStatus(); // queda cancelada
+
+            var salesRepository = new Mock<ISalesRepository>();
+            salesRepository.Setup(r => r.GetByIdWithDetailsAsync(9, It.IsAny<CancellationToken>())).ReturnsAsync(sale);
+            salesRepository.Setup(r => r.SaveChangesAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+
+            var handler = new ChangeSaleStatusCommandHandler(salesRepository.Object, _productsRepository.Object);
+            var result = await handler.Handle(new ChangeSaleStatusCommand(9), CancellationToken.None);
+
+            result.IsError.Should().BeFalse();
+            result.Value.Status.Should().BeTrue();
+            product.Stock.Should().Be(2m); // 5 - 3
+        }
+
+        [Fact]
         public async Task Cancelling_a_validated_purchase_removes_stock()
         {
             var product = TestData.Product(id: 1, stock: 5m);

@@ -51,7 +51,7 @@ namespace LuxuryBiker.Application.Purchases.Commands.ChangePurchaseStatus
                 if (nowValidated)
                     product.IncreaseStock(line.Quantity);
                 else
-                    product.DecreaseStock(line.Quantity);
+                    product.RevertPurchase(line.Quantity);
             }
 
             await _purchasesRepository.SaveChangesAsync(cancellationToken);

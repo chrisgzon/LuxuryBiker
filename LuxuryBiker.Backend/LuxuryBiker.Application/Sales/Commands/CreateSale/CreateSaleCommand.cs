@@ -80,7 +80,7 @@ namespace LuxuryBiker.Application.Sales.Commands.CreateSale
             // La venta validada descuenta del inventario (comportamiento del sistema legado).
             foreach (var line in dto.Details)
             {
-                productsById[line.ProductId].DecreaseStock(line.Quantity);
+                productsById[line.ProductId].Sell(line.Quantity);
             }
 
             await _salesRepository.CreateAsync(sale, cancellationToken);

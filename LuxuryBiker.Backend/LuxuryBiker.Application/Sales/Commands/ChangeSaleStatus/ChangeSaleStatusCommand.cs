@@ -32,13 +32,31 @@ namespace LuxuryBiker.Application.Sales.Commands.ChangeSaleStatus
             if (sale is null)
                 return SalesErrors.NotFound;
 
-            sale.ToggleStatus();
-            bool nowValidated = sale.Status == true;
-
             var lines = (sale.Details ?? Enumerable.Empty<SaleDetail>()).ToList();
             var productIds = lines.Select(l => l.ProductId).Distinct().ToList();
             IReadOnlyList<Product> products = await _productsRepository.GetForUpdateAsync(productIds, cancellationToken);
             var productsById = products.ToDictionary(p => p.Id);
+
+            bool willBeValidated = !(sale.Status ?? true);
+
+            // Revalidar una venta vuelve a descontar inventario, así que se exige
+            // disponibilidad igual que al registrarla. Se comprueba antes de invertir el
+            // estado para no dejar el agregado modificado si hay que rechazar.
+            if (willBeValidated)
+            {
+                foreach (var group in lines.GroupBy(l => l.ProductId))
+                {
+                    if (!productsById.TryGetValue(group.Key, out Product? product))
+                        continue;
+
+                    decimal requested = group.Sum(l => l.Quantity);
+                    if (!product.HasStockFor(requested))
+                        return SalesErrors.InsufficientStock(product.Name, product.Stock ?? 0m, requested);
+                }
+            }
+
+            sale.ToggleStatus();
+            bool nowValidated = sale.Status == true;
 
             // Una venta validada descuenta del stock; cancelarla lo reintegra
             // (equivalente al trigger tr_updStockVentaChangeStatus del legado).
@@ -48,7 +66,7 @@ namespace LuxuryBiker.Application.Sales.Commands.ChangeSaleStatus
                     continue;
 
                 if (nowValidated)
-                    product.DecreaseStock(line.Quantity);
+                    product.Sell(line.Quantity);
                 else
                     product.IncreaseStock(line.Quantity);
             }
