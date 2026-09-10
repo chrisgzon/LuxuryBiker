@@ -1,6 +1,6 @@
 ﻿using LuxuryBiker.Api.Common;
 using LuxuryBiker.Application.Common.Interfaces.Services;
-using LuxuryBiker.Infrastructure.Services.Authentication;
+using LuxuryBiker.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -11,8 +11,9 @@ namespace LuxuryBiker.Api.Authentication
     [Route("[controller]/[action]")]
     public class AuthenticationController : ApiController
     {
-        private readonly IAuthenticationService<ApplicationUserDTO> _authenticationService;
-        public AuthenticationController(IAuthenticationService<ApplicationUserDTO> authenticationService)
+        private readonly IAuthenticationService _authenticationService;
+
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
         }
@@ -20,7 +21,9 @@ namespace LuxuryBiker.Api.Authentication
         [HttpPost]
         public async Task<IActionResult> Login(AuthenticationModel requestModel)
         {
-            ErrorOr<string> response = await _authenticationService.Authenticate(requestModel.Username, requestModel.Password, requestModel.Rememberme);
+            ErrorOr<string> response = await _authenticationService.Authenticate(
+                requestModel.Username, requestModel.Password, requestModel.Rememberme);
+
             return response.Match(
                 value => Ok(JsonSerializer.Serialize(value)),
                 errors => Problem(errors)
@@ -31,7 +34,8 @@ namespace LuxuryBiker.Api.Authentication
         [HttpGet]
         public async Task<IActionResult> GetProfileCurrentUser()
         {
-            ErrorOr<ApplicationUserDTO> response = await _authenticationService.GetCurrentUserProfile();
+            ErrorOr<AuthenticatedUserDto> response = await _authenticationService.GetCurrentUserProfile();
+
             return response.Match(
                 value => Ok(value),
                 errors => Problem(errors)

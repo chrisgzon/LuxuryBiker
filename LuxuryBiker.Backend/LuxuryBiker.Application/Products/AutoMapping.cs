@@ -8,9 +8,8 @@ namespace LuxuryBiker.Application.Products
     {
         public AutoMapping()
         {
-            CreateMap<CreateProductDto, Product>()
-            .ConstructUsing(src => new Product(src.Name, null, src.Reference, src.Description, src.Status, null, null));
-
+            // El alta de producto se construye con `Product.Create`, no por mapeo:
+            // así el agregado nunca existe sin código interno.
             CreateMap<Product, ProductBriefDto>();
         }
     }

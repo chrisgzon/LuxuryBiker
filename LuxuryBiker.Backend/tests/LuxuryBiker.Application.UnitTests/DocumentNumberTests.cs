@@ -1,10 +1,10 @@
 using FluentAssertions;
-using LuxuryBiker.Application.Common;
+using LuxuryBiker.Domain.Common;
 using Xunit;
 
 namespace LuxuryBiker.Application.UnitTests
 {
-    public class CodeGeneratorTests
+    public class DocumentNumberTests
     {
         [Theory]
         [InlineData("CLB", null, "CLB1")]
@@ -14,7 +14,7 @@ namespace LuxuryBiker.Application.UnitTests
         [InlineData("CLB", "sin-numeros", "CLB1")]
         public void Next_returns_the_incremented_code(string prefix, string? lastCode, string expected)
         {
-            CodeGenerator.Next(prefix, lastCode).Should().Be(expected);
+            DocumentNumber.Next(prefix, lastCode).Should().Be(expected);
         }
     }
 }

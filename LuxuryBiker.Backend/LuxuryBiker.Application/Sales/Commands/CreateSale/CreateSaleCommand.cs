@@ -1,5 +1,5 @@
-using LuxuryBiker.Application.Common;
 using LuxuryBiker.Application.Common.Interfaces.Services;
+using LuxuryBiker.Domain.Common;
 using LuxuryBiker.Domain.Constants;
 using LuxuryBiker.Domain.Entities.Products;
 using LuxuryBiker.Domain.Entities.Sales;
@@ -15,8 +15,6 @@ namespace LuxuryBiker.Application.Sales.Commands.CreateSale
     public class CreateSaleCommandHandler
         : IRequestHandler<CreateSaleCommand, ErrorOr<CreateSaleResult>>
     {
-        private const string CodePrefix = "VLB";
-
         private readonly ISalesRepository _salesRepository;
         private readonly IProductsRepository _productsRepository;
         private readonly IThirdRepository _thirdRepository;
@@ -65,28 +63,19 @@ namespace LuxuryBiker.Application.Sales.Commands.CreateSale
             {
                 decimal requested = group.Sum(d => d.Quantity);
                 Product product = productsById[group.Key];
-                decimal available = product.Stock ?? 0m;
-
-                if (requested > available)
-                    return SalesErrors.InsufficientStock(product.Name, available, requested);
+                if (!product.HasStockFor(requested))
+                    return SalesErrors.InsufficientStock(product.Name, product.Stock ?? 0m, requested);
             }
 
-            string code = CodeGenerator.Next(CodePrefix, await _salesRepository.GetLastCodeAsync(cancellationToken));
+            string code = DocumentNumber.Next(
+                DocumentNumber.SalePrefix, await _salesRepository.GetLastCodeAsync(cancellationToken));
 
-            var sale = new Sale(_user.Id, dto.ThirdId, DateTimeOffset.Now, code)
-            {
-                CreatedBy = _user.Id,
-                LastModifiedBy = _user.Id
-            };
+            var details = dto.Details.Select(d => new SaleDetail(d.ProductId, d.ProductValue, d.Quantity));
 
-            var details = dto.Details.Select(d => new SaleDetail
-            {
-                ProductId = d.ProductId,
-                ProductValue = d.ProductValue,
-                Quantity = d.Quantity
-            });
-
-            sale.SetDetails(details, dto.ApplyIva, Taxes.IvaRate);
+            var sale = Sale.Register(
+                _user.Id, dto.ThirdId, DateTimeOffset.Now, code, details, dto.ApplyIva, Taxes.IvaRate);
+            sale.CreatedBy = _user.Id;
+            sale.LastModifiedBy = _user.Id;
 
             // La venta validada descuenta del inventario (comportamiento del sistema legado).
             foreach (var line in dto.Details)
